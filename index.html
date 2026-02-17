@@ -5,46 +5,174 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oren - أورين</title>
     <style>
-        :root { --main: #00d2ff; --sec: #9d50bb; }
-        * { box-sizing: border-box; transition: 0.3s; font-family: 'Segoe UI', sans-serif; }
-        body { margin: 0; background: #0f0c29; background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); height: 100vh; display: flex; justify-content: center; align-items: center; color: white; overflow: hidden; }
-        .container { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; border: 1px solid rgba(255,255,255,0.1); position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-        .logo { font-size: 45px; font-weight: 900; background: linear-gradient(to right, var(--main), var(--sec)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px; letter-spacing: 2px; }
-        .lang-toggle { position: absolute; top: 15px; left: 15px; background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 10px; cursor: pointer; font-size: 12px; border: 1px solid rgba(255,255,255,0.1); }
-        .tabs { display: flex; justify-content: space-around; margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .tab { padding: 10px; cursor: pointer; opacity: 0.5; font-weight: bold; font-size: 14px; }
-        .tab.active { opacity: 1; border-bottom: 3px solid var(--main); color: var(--main); }
-        input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: white; outline: none; font-size: 14px; }
-        input:focus { border-color: var(--main); }
-        button { width: 100%; padding: 15px; border-radius: 10px; border: none; background: linear-gradient(to right, var(--main), var(--sec)); color: white; font-weight: bold; cursor: pointer; margin-top: 15px; font-size: 16px; box-shadow: 0 5px 15px rgba(0,210,255,0.3); }
-        button:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,210,255,0.5); }
-        button:disabled { background: #555; cursor: not-allowed; }
+        :root {
+            --primary: #9d50bb;
+            --secondary: #6e48aa;
+            --accent: #00d2ff;
+            --bg: #0f0c29;
+        }
+        * { box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        
+        body {
+            margin: 0;
+            background: var(--bg);
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            overflow: hidden;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: 30px;
+            width: 90%;
+            max-width: 420px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .logo {
+            font-size: 50px;
+            font-weight: 900;
+            background: linear-gradient(to right, var(--accent), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+            letter-spacing: 3px;
+        }
+
+        .subtitle { color: rgba(255, 255, 255, 0.6); font-size: 14px; margin-bottom: 30px; }
+
+        .tabs {
+            display: flex;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            margin-bottom: 25px;
+            padding: 5px;
+        }
+        .tab {
+            flex: 1;
+            padding: 12px;
+            cursor: pointer;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: 0.3s;
+            opacity: 0.6;
+        }
+        .tab.active {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            opacity: 1;
+            box-shadow: 0 5px 15px rgba(157, 80, 187, 0.4);
+        }
+
+        .input-group { position: relative; margin-bottom: 15px; }
+        
+        input {
+            width: 100%;
+            padding: 15px 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            outline: none;
+            font-size: 15px;
+            text-align: center;
+        }
+        input:focus {
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.2);
+        }
+
+        .main-btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 15px;
+            border: none;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 10px 20px rgba(110, 72, 170, 0.3);
+        }
+        .main-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(110, 72, 170, 0.5); }
+
+        .google-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: transparent;
+            color: white;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .google-btn img { width: 20px; }
+        .google-btn:hover { background: rgba(255, 255, 255, 0.05); }
+
+        .lang-switch {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.1);
+            padding: 5px 12px;
+            border-radius: 10px;
+        }
+
         .hidden { display: none; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="lang-toggle" id="btnLang">English</div>
+    <div class="lang-switch" id="langBtn">English</div>
     <div class="logo">OREN</div>
-    
+    <div class="subtitle" id="subTitle">مستقبلك يبدأ من هنا</div>
+
     <div class="tabs">
         <div class="tab active" id="tabL" data-ar="دخول" data-en="Login">دخول</div>
         <div class="tab" id="tabR" data-ar="حساب جديد" data-en="Sign Up">حساب جديد</div>
     </div>
 
     <div id="formL">
-        <input type="email" id="lEmail" placeholder="البريد الإلكتروني / Email">
-        <input type="password" id="lPass" placeholder="كلمة المرور / Password">
-        <button id="btnLogin" data-ar="دخول" data-en="Login">دخول</button>
+        <div class="input-group">
+            <input type="email" id="lEmail" placeholder="البريد الإلكتروني">
+        </div>
+        <div class="input-group">
+            <input type="password" id="lPass" placeholder="كلمة المرور">
+        </div>
+        <button class="main-btn" id="btnLogin" data-ar="تسجيل الدخول" data-en="Login">تسجيل الدخول</button>
     </div>
 
     <div id="formR" class="hidden">
-        <input type="text" id="rName" placeholder="الاسم بالكامل / Full Name">
-        <input type="email" id="rEmail" placeholder="البريد الإلكتروني / Email">
-        <input type="tel" id="rPhone" placeholder="رقم الهاتف / Phone">
-        <button id="btnReg" data-ar="إنشاء حساب" data-en="Create Account">إنشاء حساب</button>
+        <input type="text" id="rName" placeholder="الاسم بالكامل" style="margin-bottom: 10px;">
+        <input type="email" id="rEmail" placeholder="البريد الإلكتروني" style="margin-bottom: 10px;">
+        <input type="tel" id="rPhone" placeholder="رقم الهاتف" style="margin-bottom: 10px;">
+        <input type="password" id="rPass" placeholder="كلمة مرور قوية" style="margin-bottom: 10px;">
+        <button class="main-btn" id="btnReg" data-ar="إنشاء حساب" data-en="Create Account">إنشاء حساب</button>
     </div>
+
+    <button class="google-btn">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="google">
+        <span data-ar="متابعة باستخدام جوجل" data-en="Continue with Google">متابعة باستخدام جوجل</span>
+    </button>
 </div>
 
 <script type="module">
@@ -64,62 +192,50 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // --- نظام اللغات ---
-    let currentLang = 'ar';
-    const btnLang = document.getElementById('btnLang');
-    btnLang.onclick = () => {
-        currentLang = currentLang === 'ar' ? 'en' : 'ar';
-        document.body.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
-        btnLang.innerText = currentLang === 'ar' ? 'English' : 'عربي';
-        document.querySelectorAll('[data-ar]').forEach(el => {
-            el.innerText = el.getAttribute('data-' + currentLang);
-        });
-    };
-
-    // --- التبديل بين الدخول والتسجيل ---
+    // Switching Logic
     const tL = document.getElementById('tabL'), tR = document.getElementById('tabR');
     const fL = document.getElementById('formL'), fR = document.getElementById('formR');
 
     tL.onclick = () => {
-        fL.classList.remove('hidden'); fR.classList.add('hidden');
         tL.classList.add('active'); tR.classList.remove('active');
+        fL.classList.remove('hidden'); fR.classList.add('hidden');
     };
     tR.onclick = () => {
-        fR.classList.remove('hidden'); fL.classList.add('hidden');
         tR.classList.add('active'); tL.classList.remove('active');
+        fR.classList.remove('hidden'); fL.classList.add('hidden');
     };
 
-    // --- التسجيل الفعلي في Realtime Database ---
+    // Firebase Registration
     document.getElementById('btnReg').onclick = async () => {
         const name = document.getElementById('rName').value;
         const email = document.getElementById('rEmail').value;
         const phone = document.getElementById('rPhone').value;
+        const pass = document.getElementById('rPass').value;
 
-        if(!name || !email || !phone) {
-            alert(currentLang === 'ar' ? "برجاء إكمال البيانات!" : "Please fill all fields!");
-            return;
-        }
+        if(!name || !email || !pass) return alert("من فضلك املأ كافة الخانات!");
 
         const btn = document.getElementById('btnReg');
-        btn.disabled = true;
-        btn.innerText = currentLang === 'ar' ? "جاري الحفظ..." : "Saving...";
+        btn.disabled = true; btn.innerText = "...";
 
         try {
-            const usersRef = ref(db, 'users');
-            const newUserRef = push(usersRef);
-            await set(newUserRef, {
-                name, email, phone, timestamp: new Date().toLocaleString()
-            });
-            alert(currentLang === 'ar' ? "تم التسجيل في أورين بنجاح! 🎉" : "Registered successfully in Oren! 🎉");
+            const newUserRef = push(ref(db, 'users'));
+            await set(newUserRef, { name, email, phone, password: pass, date: new Date().toLocaleString() });
+            alert("تم إنشاء حسابك في أورين بنجاح! 🎉");
             location.reload();
-        } catch (e) {
-            alert("Error: " + e.message);
-            btn.disabled = false;
-            btn.innerText = currentLang === 'ar' ? "إنشاء حساب" : "Create Account";
-        }
+        } catch (e) { alert("خطأ: " + e.message); btn.disabled = false; }
     };
 
-    document.getElementById('btnLogin').onclick = () => alert("Login feature coming soon! / ميزة الدخول قريباً");
+    // Language Toggle
+    let lang = 'ar';
+    document.getElementById('langBtn').onclick = () => {
+        lang = lang === 'ar' ? 'en' : 'ar';
+        document.body.dir = lang === 'ar' ? 'rtl' : 'ltr';
+        document.getElementById('langBtn').innerText = lang === 'ar' ? 'English' : 'عربي';
+        document.querySelectorAll('[data-ar]').forEach(el => el.innerText = el.getAttribute('data-' + lang));
+        document.getElementById('lEmail').placeholder = lang === 'ar' ? 'البريد الإلكتروني' : 'Email';
+        document.getElementById('lPass').placeholder = lang === 'ar' ? 'كلمة المرور' : 'Password';
+        // Add more placeholders if needed
+    };
 </script>
 
 </body>
