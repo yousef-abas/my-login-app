@@ -7,15 +7,18 @@
     <style>
         :root { --main: #00d2ff; --sec: #9d50bb; }
         * { box-sizing: border-box; transition: 0.3s; font-family: 'Segoe UI', sans-serif; }
-        body { margin: 0; background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); height: 100vh; display: flex; justify-content: center; align-items: center; color: white; }
-        .container { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; border: 1px solid rgba(255,255,255,0.1); position: relative; }
-        .logo { font-size: 45px; font-weight: 900; background: linear-gradient(to right, var(--main), var(--sec)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px; }
-        .lang-toggle { position: absolute; top: 15px; left: 15px; background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 10px; cursor: pointer; font-size: 12px; }
-        .tabs { display: flex; justify-content: space-around; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .tab { padding: 10px; cursor: pointer; opacity: 0.5; font-weight: bold; }
+        body { margin: 0; background: #0f0c29; background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); height: 100vh; display: flex; justify-content: center; align-items: center; color: white; overflow: hidden; }
+        .container { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; border: 1px solid rgba(255,255,255,0.1); position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .logo { font-size: 45px; font-weight: 900; background: linear-gradient(to right, var(--main), var(--sec)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px; letter-spacing: 2px; }
+        .lang-toggle { position: absolute; top: 15px; left: 15px; background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 10px; cursor: pointer; font-size: 12px; border: 1px solid rgba(255,255,255,0.1); }
+        .tabs { display: flex; justify-content: space-around; margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .tab { padding: 10px; cursor: pointer; opacity: 0.5; font-weight: bold; font-size: 14px; }
         .tab.active { opacity: 1; border-bottom: 3px solid var(--main); color: var(--main); }
-        input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.2); color: white; outline: none; }
-        button { width: 100%; padding: 15px; border-radius: 10px; border: none; background: linear-gradient(to right, var(--main), var(--sec)); color: white; font-weight: bold; cursor: pointer; margin-top: 15px; font-size: 16px; }
+        input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: white; outline: none; font-size: 14px; }
+        input:focus { border-color: var(--main); }
+        button { width: 100%; padding: 15px; border-radius: 10px; border: none; background: linear-gradient(to right, var(--main), var(--sec)); color: white; font-weight: bold; cursor: pointer; margin-top: 15px; font-size: 16px; box-shadow: 0 5px 15px rgba(0,210,255,0.3); }
+        button:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,210,255,0.5); }
+        button:disabled { background: #555; cursor: not-allowed; }
         .hidden { display: none; }
     </style>
 </head>
@@ -24,15 +27,18 @@
 <div class="container">
     <div class="lang-toggle" id="btnLang">English</div>
     <div class="logo">OREN</div>
+    
     <div class="tabs">
         <div class="tab active" id="tabL" data-ar="دخول" data-en="Login">دخول</div>
-        <div class="tab" id="tabR" data-ar="تسجيل" data-en="Sign Up">تسجيل</div>
+        <div class="tab" id="tabR" data-ar="حساب جديد" data-en="Sign Up">حساب جديد</div>
     </div>
+
     <div id="formL">
         <input type="email" id="lEmail" placeholder="البريد الإلكتروني / Email">
         <input type="password" id="lPass" placeholder="كلمة المرور / Password">
         <button id="btnLogin" data-ar="دخول" data-en="Login">دخول</button>
     </div>
+
     <div id="formR" class="hidden">
         <input type="text" id="rName" placeholder="الاسم بالكامل / Full Name">
         <input type="email" id="rEmail" placeholder="البريد الإلكتروني / Email">
@@ -43,11 +49,12 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyALgV2v3lmxvEoP0HosqGSqm727vZrYUq4",
       authDomain: "orenapp-f2f1e.firebaseapp.com",
+      databaseURL: "https://orenapp-f2f1e-default-rtdb.firebaseio.com",
       projectId: "orenapp-f2f1e",
       storageBucket: "orenapp-f2f1e.firebasestorage.app",
       messagingSenderId: "973368909449",
@@ -55,37 +62,65 @@
     };
 
     const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    const db = getDatabase(app);
 
-    // تبديل اللغات والواجهات
-    let lang = 'ar';
-    document.getElementById('btnLang').onclick = () => {
-        lang = lang === 'ar' ? 'en' : 'ar';
-        document.body.dir = lang === 'ar' ? 'rtl' : 'ltr';
-        document.getElementById('btnLang').innerText = lang === 'ar' ? 'English' : 'عربي';
-        document.querySelectorAll('[data-ar]').forEach(el => el.innerText = el.getAttribute('data-' + lang));
-    };
-    document.getElementById('tabL').onclick = () => { 
-        document.getElementById('formL').classList.remove('hidden'); document.getElementById('formR').classList.add('hidden');
-        document.getElementById('tabL').classList.add('active'); document.getElementById('tabR').classList.remove('active');
-    };
-    document.getElementById('tabR').onclick = () => { 
-        document.getElementById('formR').classList.remove('hidden'); document.getElementById('formL').classList.add('hidden');
-        document.getElementById('tabR').classList.add('active'); document.getElementById('tabL').classList.remove('active');
+    // --- نظام اللغات ---
+    let currentLang = 'ar';
+    const btnLang = document.getElementById('btnLang');
+    btnLang.onclick = () => {
+        currentLang = currentLang === 'ar' ? 'en' : 'ar';
+        document.body.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+        btnLang.innerText = currentLang === 'ar' ? 'English' : 'عربي';
+        document.querySelectorAll('[data-ar]').forEach(el => {
+            el.innerText = el.getAttribute('data-' + currentLang);
+        });
     };
 
-    // التسجيل في Firebase
+    // --- التبديل بين الدخول والتسجيل ---
+    const tL = document.getElementById('tabL'), tR = document.getElementById('tabR');
+    const fL = document.getElementById('formL'), fR = document.getElementById('formR');
+
+    tL.onclick = () => {
+        fL.classList.remove('hidden'); fR.classList.add('hidden');
+        tL.classList.add('active'); tR.classList.remove('active');
+    };
+    tR.onclick = () => {
+        fR.classList.remove('hidden'); fL.classList.add('hidden');
+        tR.classList.add('active'); tL.classList.remove('active');
+    };
+
+    // --- التسجيل الفعلي في Realtime Database ---
     document.getElementById('btnReg').onclick = async () => {
         const name = document.getElementById('rName').value;
         const email = document.getElementById('rEmail').value;
         const phone = document.getElementById('rPhone').value;
-        if(!name || !email) return alert("اكمل البيانات!");
-        
+
+        if(!name || !email || !phone) {
+            alert(currentLang === 'ar' ? "برجاء إكمال البيانات!" : "Please fill all fields!");
+            return;
+        }
+
+        const btn = document.getElementById('btnReg');
+        btn.disabled = true;
+        btn.innerText = currentLang === 'ar' ? "جاري الحفظ..." : "Saving...";
+
         try {
-            await addDoc(collection(db, "users"), { name, email, phone, date: new Date().toLocaleString() });
-            alert("تم التسجيل بنجاح في أورين! 🎉");
-        } catch (e) { alert("خطأ: " + e.message); }
+            const usersRef = ref(db, 'users');
+            const newUserRef = push(usersRef);
+            await set(newUserRef, {
+                name, email, phone, timestamp: new Date().toLocaleString()
+            });
+            alert(currentLang === 'ar' ? "تم التسجيل في أورين بنجاح! 🎉" : "Registered successfully in Oren! 🎉");
+            location.reload();
+        } catch (e) {
+            alert("Error: " + e.message);
+            btn.disabled = false;
+            btn.innerText = currentLang === 'ar' ? "إنشاء حساب" : "Create Account";
+        }
     };
+
+    document.getElementById('btnLogin').onclick = () => alert("Login feature coming soon! / ميزة الدخول قريباً");
 </script>
+
 </body>
 </html>
