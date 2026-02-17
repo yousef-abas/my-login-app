@@ -5,49 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oren - أورين</title>
     <style>
-        :root { --main-color: #00d2ff; --secondary-color: #9d50bb; }
-        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: 0.4s; }
-        body { margin: 0; background: #0f0c29; background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); height: 100vh; display: flex; justify-content: center; align-items: center; color: white; overflow: hidden; }
-        .container { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); padding: 30px; border-radius: 20px; width: 90%; max-width: 450px; text-align: center; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-        .logo { font-size: 50px; font-weight: 900; background: linear-gradient(to right, var(--main-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
-        .tabs { display: flex; justify-content: space-around; margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.2); }
-        .tab { padding: 10px; cursor: pointer; opacity: 0.6; font-weight: bold; }
-        .tab.active { opacity: 1; border-bottom: 3px solid var(--main-color); color: var(--main-color); }
-        input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.2); color: white; font-size: 14px; }
-        button { width: 100%; padding: 15px; border-radius: 10px; border: none; background: linear-gradient(to right, var(--main-color), var(--secondary-color)); color: white; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; }
-        .lang-switch { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.1); padding: 5px 15px; border-radius: 20px; cursor: pointer; font-size: 12px; }
+        :root { --main: #00d2ff; --sec: #9d50bb; }
+        * { box-sizing: border-box; transition: 0.3s; font-family: 'Segoe UI', sans-serif; }
+        body { margin: 0; background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); height: 100vh; display: flex; justify-content: center; align-items: center; color: white; }
+        .container { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; border: 1px solid rgba(255,255,255,0.1); position: relative; }
+        .logo { font-size: 45px; font-weight: 900; background: linear-gradient(to right, var(--main), var(--sec)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px; }
+        .lang-toggle { position: absolute; top: 15px; left: 15px; background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 10px; cursor: pointer; font-size: 12px; }
+        .tabs { display: flex; justify-content: space-around; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .tab { padding: 10px; cursor: pointer; opacity: 0.5; font-weight: bold; }
+        .tab.active { opacity: 1; border-bottom: 3px solid var(--main); color: var(--main); }
+        input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.2); color: white; outline: none; }
+        button { width: 100%; padding: 15px; border-radius: 10px; border: none; background: linear-gradient(to right, var(--main), var(--sec)); color: white; font-weight: bold; cursor: pointer; margin-top: 15px; font-size: 16px; }
         .hidden { display: none; }
     </style>
 </head>
 <body>
 
-<div class="lang-switch" id="langBtn">English</div>
-
 <div class="container">
+    <div class="lang-toggle" id="btnLang">English</div>
     <div class="logo">OREN</div>
-    
     <div class="tabs">
-        <div class="tab active" id="tabLogin" data-ar="تسجيل الدخول" data-en="Login">تسجيل الدخول</div>
-        <div class="tab" id="tabRegister" data-ar="حساب جديد" data-en="Sign Up">حساب جديد</div>
+        <div class="tab active" id="tabL" data-ar="دخول" data-en="Login">دخول</div>
+        <div class="tab" id="tabR" data-ar="تسجيل" data-en="Sign Up">تسجيل</div>
     </div>
-
-    <div id="loginForm">
-        <input type="email" id="loginEmail" placeholder="البريد الإلكتروني / Email">
-        <input type="password" id="loginPass" placeholder="كلمة المرور / Password">
-        <button id="btnLoginAction">GO / دخول</button>
+    <div id="formL">
+        <input type="email" id="lEmail" placeholder="البريد الإلكتروني / Email">
+        <input type="password" id="lPass" placeholder="كلمة المرور / Password">
+        <button id="btnLogin" data-ar="دخول" data-en="Login">دخول</button>
     </div>
-
-    <div id="registerForm" class="hidden">
-        <input type="text" id="regName" placeholder="الاسم بالكامل / Full Name">
-        <input type="email" id="regEmail" placeholder="البريد الإلكتروني / Email">
-        <input type="tel" id="regPhone" placeholder="رقم الهاتف / Phone">
-        <input type="password" id="regPass" placeholder="كلمة المرور / Password">
-        <button id="btnRegAction">CREATE / إنشاء</button>
+    <div id="formR" class="hidden">
+        <input type="text" id="rName" placeholder="الاسم بالكامل / Full Name">
+        <input type="email" id="rEmail" placeholder="البريد الإلكتروني / Email">
+        <input type="tel" id="rPhone" placeholder="رقم الهاتف / Phone">
+        <button id="btnReg" data-ar="إنشاء حساب" data-en="Create Account">إنشاء حساب</button>
     </div>
 </div>
 
 <script type="module">
-    // ربط Firebase بتاعك
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
@@ -63,49 +57,35 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // --- نظام التبديل بين الدخول والتسجيل ---
-    const tabLogin = document.getElementById('tabLogin');
-    const tabRegister = document.getElementById('tabRegister');
-    const loginForm = document.getElementById('loginForm');
-    const registerForm = document.getElementById('registerForm');
-
-    tabLogin.onclick = () => {
-        tabLogin.classList.add('active'); tabRegister.classList.remove('active');
-        loginForm.classList.remove('hidden'); registerForm.classList.add('hidden');
+    // تبديل اللغات والواجهات
+    let lang = 'ar';
+    document.getElementById('btnLang').onclick = () => {
+        lang = lang === 'ar' ? 'en' : 'ar';
+        document.body.dir = lang === 'ar' ? 'rtl' : 'ltr';
+        document.getElementById('btnLang').innerText = lang === 'ar' ? 'English' : 'عربي';
+        document.querySelectorAll('[data-ar]').forEach(el => el.innerText = el.getAttribute('data-' + lang));
+    };
+    document.getElementById('tabL').onclick = () => { 
+        document.getElementById('formL').classList.remove('hidden'); document.getElementById('formR').classList.add('hidden');
+        document.getElementById('tabL').classList.add('active'); document.getElementById('tabR').classList.remove('active');
+    };
+    document.getElementById('tabR').onclick = () => { 
+        document.getElementById('formR').classList.remove('hidden'); document.getElementById('formL').classList.add('hidden');
+        document.getElementById('tabR').classList.add('active'); document.getElementById('tabL').classList.remove('active');
     };
 
-    tabRegister.onclick = () => {
-        tabRegister.classList.add('active'); tabLogin.classList.remove('active');
-        registerForm.classList.remove('hidden'); loginForm.classList.add('hidden');
-    };
-
-    // --- نظام اللغات ---
-    let currentLang = 'ar';
-    document.getElementById('langBtn').onclick = function() {
-        currentLang = currentLang === 'ar' ? 'en' : 'ar';
-        this.innerText = currentLang === 'ar' ? 'English' : 'عربي';
-        document.body.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
-        // تحديث النصوص (ممكن تزيدهم لكل العناصر)
-        tabLogin.innerText = tabLogin.getAttribute('data-' + currentLang);
-        tabRegister.innerText = tabRegister.getAttribute('data-' + currentLang);
-    };
-
-    // --- إرسال البيانات لـ Firebase عند التسجيل ---
-    document.getElementById('btnRegAction').onclick = async () => {
-        const name = document.getElementById('regName').value;
-        const email = document.getElementById('regEmail').value;
-        const phone = document.getElementById('regPhone').value;
-
-        if(!name || !email) return alert("Please fill all fields / كمل البيانات");
-
+    // التسجيل في Firebase
+    document.getElementById('btnReg').onclick = async () => {
+        const name = document.getElementById('rName').value;
+        const email = document.getElementById('rEmail').value;
+        const phone = document.getElementById('rPhone').value;
+        if(!name || !email) return alert("اكمل البيانات!");
+        
         try {
-            await addDoc(collection(db, "users"), {
-                name, email, phone, date: new Date().toLocaleString()
-            });
-            alert("Success! / تم بنجاح");
-        } catch (e) { alert("Error: " + e.message); }
+            await addDoc(collection(db, "users"), { name, email, phone, date: new Date().toLocaleString() });
+            alert("تم التسجيل بنجاح في أورين! 🎉");
+        } catch (e) { alert("خطأ: " + e.message); }
     };
 </script>
-
 </body>
 </html>
