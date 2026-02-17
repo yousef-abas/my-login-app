@@ -3,285 +3,214 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تطبيقنا الاحترافي</title>
+    <title>Oren - أورين</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root {
-            --primary-color: #1a73e8;
-            --bg-color: #f0f2f5;
-            --card-bg: #ffffff;
-            --text-color: #333;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
 
+        * { box-sizing: border-box; transition: all 0.3s ease; font-family: 'Poppins', sans-serif; }
+        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
             margin: 0;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%); /* خلفية ليلية فخمة */
+            height: 100vh;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            overflow: hidden;
         }
 
-        /* شريط اللغة العلوي */
-        .top-bar {
-            width: 100%;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: flex-end;
-            box-sizing: border-box;
+        /* تصميم اللوجو النصي Oren */
+        .logo-text {
+            font-size: 45px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            background: linear-gradient(to right, #00d2ff, #928dab);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            padding: 40px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 420px;
+            text-align: center;
+            color: white;
+        }
+
+        .lang-switch {
+            position: absolute;
+            top: 25px;
+            left: 25px;
         }
 
         .lang-btn {
-            background: var(--primary-color);
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
             color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 20px;
+            padding: 6px 18px;
+            border-radius: 12px;
             cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
+            font-size: 13px;
         }
 
-        /* حاوية النموذج */
-        .container {
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            width: 90%;
-            max-width: 450px;
-            margin-bottom: 50px;
+        h2 { font-weight: 300; margin-bottom: 30px; opacity: 0.9; font-size: 18px; }
+
+        .input-group {
+            margin-bottom: 18px;
+            text-align: right;
         }
 
-        h2 { text-align: center; color: var(--primary-color); margin-bottom: 25px; }
+        html[dir="ltr"] .input-group { text-align: left; }
 
-        .input-group { margin-bottom: 15px; position: relative; }
-
-        .input-group i {
-            position: absolute;
-            top: 38px;
-            right: 15px;
-            color: #999;
-        }
-
-        /* تعديل مكان الأيقونة عند قلب اللغة */
-        html[dir="ltr"] .input-group i { right: auto; left: 15px; }
-
-        label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 14px; }
-
-        input, select {
+        input {
             width: 100%;
-            padding: 12px 40px 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-sizing: border-box;
+            padding: 14px 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 15px;
+            font-size: 15px;
+            background: rgba(255,255,255,0.05);
+            color: white;
             outline: none;
-            transition: 0.3s;
         }
 
-        html[dir="ltr"] input { padding: 12px 15px 12px 40px; }
-
-        input:focus { border-color: var(--primary-color); box-shadow: 0 0 5px rgba(26,115,232,0.2); }
+        input:focus {
+            background: rgba(255,255,255,0.1);
+            border-color: #00d2ff;
+        }
 
         .main-btn {
             width: 100%;
-            padding: 12px;
-            background: var(--primary-color);
-            color: white;
+            padding: 16px;
+            background: linear-gradient(to right, #00d2ff, #3a7bd5);
             border: none;
-            border-radius: 8px;
+            border-radius: 15px;
+            color: white;
             font-size: 16px;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
             margin-top: 10px;
+            box-shadow: 0 10px 20px rgba(0, 210, 255, 0.2);
         }
 
-        .divider {
-            text-align: center;
-            margin: 20px 0;
-            position: relative;
-        }
-        .divider::before {
-            content: "";
-            position: absolute;
-            width: 100%;
-            height: 1px;
-            background: #ddd;
-            top: 50%;
-            left: 0;
-            z-index: 1;
-        }
-        .divider span {
-            background: var(--card-bg);
-            padding: 0 10px;
-            position: relative;
-            z-index: 2;
-            color: #777;
-            font-size: 14px;
-        }
+        .main-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(0, 210, 255, 0.3); }
 
         .google-btn {
             width: 100%;
             padding: 12px;
-            background: white;
-            color: #555;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 15px;
             display: flex;
-            justify-content: center;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
+            gap: 12px;
             cursor: pointer;
-            font-weight: 600;
-        }
-
-        .google-btn img { width: 20px; }
-
-        .toggle-form {
-            text-align: center;
             margin-top: 20px;
-            font-size: 14px;
+            color: white;
         }
 
-        .toggle-form a { color: var(--primary-color); text-decoration: none; font-weight: bold; }
+        .google-btn img { width: 18px; }
+
+        .toggle-link { margin-top: 25px; font-size: 13px; color: #aaa; }
+        .toggle-link a { color: #00d2ff; text-decoration: none; font-weight: bold; }
 
         .hidden { display: none; }
+        .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+        ::placeholder { color: rgba(255,255,255,0.3); }
     </style>
 </head>
 <body>
 
-    <div class="top-bar">
+    <div class="lang-switch">
         <button class="lang-btn" onclick="toggleLanguage()" id="langToggle">English</button>
     </div>
 
     <div class="container" id="loginForm">
-        <h2 id="loginTitle">تسجيل الدخول</h2>
+        <div class="logo-text">OREN</div>
+        <h2 id="loginTitle">مرحباً بك مجدداً</h2>
+        
         <div class="input-group">
-            <label id="lblUser">اسم المستخدم</label>
-            <i class="fas fa-user"></i>
-            <input type="text" placeholder="User123">
+            <input type="text" placeholder="اسم المستخدم" id="userInput">
         </div>
         <div class="input-group">
-            <label id="lblPass">كلمة المرور</label>
-            <i class="fas fa-lock"></i>
-            <input type="password" placeholder="••••••••">
+            <input type="password" placeholder="كلمة المرور" id="passInput">
         </div>
-        <button class="main-btn" id="btnLogin">دخول</button>
-
-        <div class="divider"><span id="txtOr">أو من خلال</span></div>
-
+        
+        <button class="main-btn" id="btnLogin">تسجيل الدخول</button>
+        
         <button class="google-btn">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google">
-            <span id="txtGoogle">التسجيل بواسطة جوجل</span>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg">
+            <span id="txtGoogle">متابعة بواسطة جوجل</span>
         </button>
 
-        <div class="toggle-form">
+        <div class="toggle-link">
             <span id="txtNoAccount">ليس لديك حساب؟</span>
-            <a href="#" onclick="switchForm('signup')" id="linkRegister">إنشاء حساب جديد</a>
+            <a href="#" onclick="switchForm('signup')" id="linkRegister">اشترك الآن</a>
         </div>
     </div>
 
-    <div class="container hidden" id="signupForm">
-        <h2 id="signupTitle">إنشاء حساب جديد</h2>
-        <div style="display: flex; gap: 10px;">
-            <div class="input-group" style="flex:1">
-                <label id="lblFirst">الاسم الأول</label>
-                <input type="text">
-            </div>
-            <div class="input-group" style="flex:1">
-                <label id="lblLast">الاسم الثاني</label>
-                <input type="text">
-            </div>
+    <div class="container hidden" id="signupForm" style="max-width: 480px;">
+        <div class="logo-text">OREN</div>
+        <h2 id="signupTitle">انضم إلى أورين</h2>
+        
+        <div class="grid-inputs">
+            <div class="input-group"><input type="text" placeholder="الاسم الأول"></div>
+            <div class="input-group"><input type="text" placeholder="اللقب"></div>
         </div>
-        <div class="input-group">
-            <label id="lblEmail">البريد الإلكتروني</label>
-            <input type="email" placeholder="example@gmail.com">
+        <div class="input-group"><input type="email" placeholder="البريد الإلكتروني"></div>
+        <div class="input-group"><input type="tel" placeholder="رقم الهاتف"></div>
+        <div class="grid-inputs">
+            <div class="input-group"><input type="text" placeholder="البلد"></div>
+            <div class="input-group"><input type="text" placeholder="المحافظة"></div>
         </div>
-        <div class="input-group">
-            <label id="lblPhone">رقم الهاتف</label>
-            <input type="tel" placeholder="+20 123...">
-        </div>
-        <div class="input-group">
-            <label id="lblBirth">تاريخ الميلاد</label>
-            <input type="date">
-        </div>
-        <div style="display: flex; gap: 10px;">
-            <div class="input-group" style="flex:1">
-                <label id="lblCountry">البلد</label>
-                <input type="text">
-            </div>
-            <div class="input-group" style="flex:1">
-                <label id="lblCity">المحافظة</label>
-                <input type="text">
-            </div>
-        </div>
-        <button class="main-btn" id="btnRegisterNow">تسجيل الآن</button>
-
-        <div class="toggle-form">
-            <span id="txtHasAccount">لديك حساب بالفعل؟</span>
-            <a href="#" onclick="switchForm('login')" id="linkLogin">تسجيل الدخول</a>
+        
+        <button class="main-btn" id="btnRegisterNow">تأكيد التسجيل</button>
+        
+        <div class="toggle-link">
+            <span id="txtHasAccount">تمتلك حساباً بالفعل؟</span>
+            <a href="#" onclick="switchForm('login')" id="linkLogin">دخول</a>
         </div>
     </div>
 
     <script>
-        // دالة التنقل بين الفورمات
         function switchForm(form) {
-            if (form === 'signup') {
-                document.getElementById('loginForm').classList.add('hidden');
-                document.getElementById('signupForm').classList.remove('hidden');
-            } else {
-                document.getElementById('signupForm').classList.add('hidden');
-                document.getElementById('loginForm').classList.remove('hidden');
-            }
+            document.getElementById('loginForm').classList.toggle('hidden', form === 'signup');
+            document.getElementById('signupForm').classList.toggle('hidden', form === 'login');
         }
 
-        // نظام تغيير اللغة
         let currentLang = 'ar';
         function toggleLanguage() {
             const html = document.getElementById('mainHtml');
             const btn = document.getElementById('langToggle');
-            
-            if (currentLang === 'ar') {
-                html.dir = 'ltr';
-                html.lang = 'en';
-                currentLang = 'en';
-                btn.innerText = 'العربية';
-                updateText('en');
-            } else {
-                html.dir = 'rtl';
-                html.lang = 'ar';
-                currentLang = 'ar';
-                btn.innerText = 'English';
-                updateText('ar');
-            }
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            html.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+            btn.innerText = currentLang === 'ar' ? 'English' : 'العربية';
+            updateText(currentLang);
         }
 
         function updateText(lang) {
-            const translations = {
-                ar: {
-                    loginTitle: "تسجيل الدخول", lblUser: "اسم المستخدم", lblPass: "كلمة المرور",
-                    btnLogin: "دخول", txtOr: "أو من خلال", txtGoogle: "التسجيل بواسطة جوجل",
-                    txtNoAccount: "ليس لديك حساب؟", linkRegister: "إنشاء حساب جديد",
-                    signupTitle: "إنشاء حساب جديد", lblFirst: "الاسم الأول", lblLast: "الاسم الثاني",
-                    lblEmail: "البريد الإلكتروني", lblPhone: "رقم الهاتف", lblBirth: "تاريخ الميلاد",
-                    lblCountry: "البلد", lblCity: "المحافظة", btnRegisterNow: "تسجيل الآن",
-                    txtHasAccount: "لديك حساب بالفعل؟", linkLogin: "تسجيل الدخول"
-                },
-                en: {
-                    loginTitle: "Login", lblUser: "Username", lblPass: "Password",
-                    btnLogin: "Login", txtOr: "Or via", txtGoogle: "Sign in with Google",
-                    txtNoAccount: "Don't have an account?", linkRegister: "Register now",
-                    signupTitle: "Create New Account", lblFirst: "First Name", lblLast: "Last Name",
-                    lblEmail: "Email", lblPhone: "Phone Number", lblBirth: "Birth Date",
-                    lblCountry: "Country", lblCity: "City/State", btnRegisterNow: "Register Now",
-                    txtHasAccount: "Already have an account?", linkLogin: "Login"
-                }
+            const trans = {
+                ar: { loginTitle: "مرحباً بك مجدداً", btnLogin: "تسجيل الدخول", txtGoogle: "متابعة بواسطة جوجل", txtNoAccount: "ليس لديك حساب؟", linkRegister: "اشترك الآن", signupTitle: "انضم إلى أورين", btnRegisterNow: "تأكيد التسجيل", txtHasAccount: "تمتلك حساباً بالفعل؟", linkLogin: "دخول" },
+                en: { loginTitle: "Welcome Back", btnLogin: "Login", txtGoogle: "Continue with Google", txtNoAccount: "Don't have an account?", linkRegister: "Join Now", signupTitle: "Join Oren", btnRegisterNow: "Register Now", txtHasAccount: "Already have an account?", linkLogin: "Login" }
             };
-
-            for (let id in translations[lang]) {
-                const el = document.getElementById(id);
-                if (el) el.innerText = translations[lang][id];
+            for (let id in trans[lang]) { document.getElementById(id).innerText = trans[lang][id]; }
+            
+            // تحديث الـ Placeholders
+            if(lang === 'en') {
+                document.getElementById('userInput').placeholder = "Username";
+                document.getElementById('passInput').placeholder = "Password";
+            } else {
+                document.getElementById('userInput').placeholder = "اسم المستخدم";
+                document.getElementById('passInput').placeholder = "كلمة المرور";
             }
         }
     </script>
