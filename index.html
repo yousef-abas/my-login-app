@@ -3,22 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OREN - Youssef Abas v4.0</title>
+    <title>OREN - Youssef Abas v5.0</title>
     <style>
         :root { --p: #9d50bb; --s: #6e48aa; --a: #00d2ff; --bg: #050510; --shadow: rgba(0, 210, 255, 0.4); }
         * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         body, html { margin: 0; padding: 0; background: var(--bg); color: white; height: 100vh; overflow: hidden; }
 
-        /* --- مبدل اللغة (Language Toggle) --- */
-        .lang-btn {
-            position: fixed; top: 20px; right: 20px; z-index: 10000;
-            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
-            color: white; padding: 10px 18px; border-radius: 12px; cursor: pointer;
-            font-weight: bold; backdrop-filter: blur(10px); display: none;
-        }
-        .lang-btn:hover { background: var(--a); border-color: var(--a); transform: scale(1.1); }
+        /* مبدل اللغة */
+        .lang-btn { position: fixed; top: 20px; right: 20px; z-index: 10000; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 10px 18px; border-radius: 12px; cursor: pointer; font-weight: bold; backdrop-filter: blur(10px); display: none; }
+        .lang-btn:hover { background: var(--a); transform: scale(1.1); box-shadow: 0 0 20px var(--a); }
 
-        /* --- الشاشة الافتتاحية --- */
+        /* Splash Screen */
         #splash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); display: flex; justify-content: center; align-items: center; z-index: 9999; }
         .energy-ball { width: 15px; height: 15px; background: #fff; border-radius: 50%; box-shadow: 0 0 20px var(--a); animation: dropAndShock 1.5s forwards; position: absolute; }
         .oren-reveal { font-size: 80px; font-weight: 900; opacity: 0; animation: textReveal 1.2s 1.4s forwards; letter-spacing: 10px; background: linear-gradient(to right, #fff, var(--a)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -26,42 +21,38 @@
         @keyframes dropAndShock { 0% { transform: translateY(-800px); } 65% { transform: translateY(0); box-shadow: 0 0 150px 70px rgba(0, 210, 255, 0.6); } 100% { transform: scale(60); opacity: 0; } }
         @keyframes textReveal { 0% { opacity: 0; filter: blur(20px); transform: scale(0.8); } 100% { opacity: 1; filter: blur(0); transform: scale(1); } }
 
-        /* --- واجهة الدخول --- */
+        /* واجهة الدخول والكارت البارز */
         #authPage { display: none; height: 100vh; justify-content: center; align-items: center; padding: 20px; background: radial-gradient(circle at center, #1a1a3a 0%, #050510 100%); overflow-y: auto; }
         
         .card { 
             background: rgba(255,255,255,0.03); backdrop-filter: blur(25px); 
             padding: 45px 35px; border-radius: 45px; width: 100%; max-width: 480px; 
             text-align: center; border: 1px solid rgba(255,255,255,0.1); 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4); animation: fadeInUp 0.8s ease; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4); 
+            cursor: default;
         }
-        .card:hover { transform: translateY(-10px); box-shadow: 0 30px 60px rgba(0, 210, 255, 0.2); }
+        /* بروز الكارت */
+        .card:hover { transform: translateY(-10px) scale(1.01); box-shadow: 0 30px 60px rgba(0, 210, 255, 0.2); border-color: rgba(0, 210, 255, 0.4); }
 
-        /* الاسم المكبر */
-        .big-logo { 
-            font-size: 55px; font-weight: 950; color: var(--a); margin-bottom: 30px; 
-            letter-spacing: 6px; text-shadow: 0 0 25px var(--shadow); 
-            display: inline-block; width: 100%;
-        }
+        .big-logo { font-size: 60px; font-weight: 950; color: var(--a); margin-bottom: 30px; letter-spacing: 6px; text-shadow: 0 0 25px var(--shadow); }
 
         .tabs { display: flex; background: rgba(0,0,0,0.4); padding: 7px; border-radius: 20px; margin-bottom: 30px; }
         .tab { flex: 1; padding: 12px; cursor: pointer; border-radius: 15px; font-weight: bold; opacity: 0.5; font-size: 15px; }
         .tab.active { background: linear-gradient(45deg, var(--p), var(--s)); opacity: 1; box-shadow: 0 5px 15px var(--p); }
 
-        .input-box { width: 100%; padding: 16px; margin-bottom: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.4); color: white; text-align: center; font-size: 14px; outline: none; }
+        .input-box { width: 100%; padding: 15px; margin-bottom: 12px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.4); color: white; text-align: center; font-size: 14px; outline: none; }
         .input-box:focus, .input-box:hover { border-color: var(--a); box-shadow: 0 0 15px var(--shadow); transform: scale(1.02); }
         
         .btn { width: 100%; padding: 18px; border-radius: 15px; border: none; background: linear-gradient(45deg, var(--s), var(--p)); color: white; font-weight: bold; cursor: pointer; font-size: 17px; margin-top: 10px; }
-        .btn:hover { transform: scale(1.03); box-shadow: 0 10px 25px var(--p); filter: brightness(1.2); }
+        .btn:hover { transform: scale(1.03); box-shadow: 0 10px 25px var(--p); filter: brightness(1.1); }
 
         .google-btn { width: 100%; padding: 14px; border-radius: 15px; border: none; background: white; color: #333; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 15px; }
-        .google-btn:hover { transform: scale(1.03); box-shadow: 0 10px 25px rgba(255,255,255,0.2); }
+        .google-btn:hover { transform: scale(1.03); box-shadow: 0 10px 25px rgba(255,255,255,0.3); }
 
-        .footer-text { margin-top: 30px; font-size: 12px; color: rgba(255,255,255,0.4); letter-spacing: 1px; line-height: 1.6; }
-        .footer-text b { color: var(--a); }
+        .footer-text { margin-top: 30px; font-size: 12px; color: rgba(255,255,255,0.4); letter-spacing: 1px; }
+        .footer-text b { color: var(--a); text-shadow: 0 0 10px var(--shadow); }
 
         .hidden { display: none; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         #authPage::-webkit-scrollbar { width: 0px; }
     </style>
 </head>
@@ -84,90 +75,130 @@
             </div>
 
             <div id="fL">
-                <input type="text" id="lUser" class="input-box" data-ar="الإيميل أو رقم الهاتف" data-en="Email or Phone Number" placeholder="الإيميل أو رقم الهاتف">
-                <input type="password" id="lPass" class="input-box" data-ar="كلمة المرور" data-en="Password" placeholder="كلمة المرور">
-                <button class="btn" id="btnLogin" data-ar="دخول" data-en="LOGIN">دخول</button>
-                <button class="google-btn">
+                <input type="email" id="loginEmail" class="input-box" data-ar="البريد الإلكتروني" data-en="Email" placeholder="البريد الإلكتروني">
+                <input type="password" id="loginPass" class="input-box" data-ar="كلمة المرور" data-en="Password" placeholder="كلمة المرور">
+                <button class="btn" id="mainLoginBtn" data-ar="دخول | LOGIN" data-en="LOGIN">دخول | LOGIN</button>
+                <button class="google-btn" id="googleBtn">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" width="18">
                     <span data-ar="متابعة باستخدام Google" data-en="Continue with Google">متابعة باستخدام Google</span>
                 </button>
             </div>
 
             <div id="fR" class="hidden">
-                <input type="text" class="input-box" data-ar="الاسم بالكامل" data-en="Full Name" placeholder="الاسم بالكامل">
-                <input type="email" class="input-box" data-ar="البريد الإلكتروني" data-en="Email Address" placeholder="البريد الإلكتروني">
-                <input type="tel" class="input-box" data-ar="رقم الهاتف" data-en="Phone Number" placeholder="رقم الهاتف">
-                <select class="input-box" style="appearance: none;">
+                <input type="text" id="regName" class="input-box" data-ar="الاسم بالكامل" data-en="Full Name" placeholder="الاسم بالكامل">
+                <input type="email" id="regEmail" class="input-box" data-ar="البريد الإلكتروني" data-en="Email Address" placeholder="البريد الإلكتروني">
+                <input type="tel" id="regPhone" class="input-box" data-ar="رقم الهاتف" data-en="Phone Number" placeholder="رقم الهاتف">
+                
+                <select id="regGov" class="input-box" style="appearance: none;">
                     <option value="" disabled selected data-ar="اختر المحافظة" data-en="Select City">اختر المحافظة</option>
-                    <option data-ar="القاهرة" data-en="Cairo">القاهرة</option>
-                    <option data-ar="الجيزة" data-en="Giza">الجيزة</option>
+                    <option>القاهرة</option><option>الجيزة</option><option>الإسكندرية</option><option>الدقهلية</option>
                 </select>
-                <input type="text" class="input-box" data-ar="المنطقة / العنوان" data-en="Area / Address" placeholder="المنطقة / العنوان">
-                <input type="password" class="input-box" data-ar="كلمة المرور" data-en="Password" placeholder="كلمة المرور">
-                <button class="btn" data-ar="إنشاء حساب" data-en="CREATE ACCOUNT">إنشاء حساب</button>
+
+                <input type="text" id="regArea" class="input-box" data-ar="المنطقة / العنوان" data-en="Area / Address" placeholder="المنطقة / العنوان">
+                <input type="date" id="regDob" class="input-box">
+                <input type="password" id="regPass" class="input-box" data-ar="كلمة المرور" data-en="Password" placeholder="كلمة المرور">
+                
+                <button class="btn" id="mainRegBtn" data-ar="إنشاء حساب | SIGN UP" data-en="CREATE ACCOUNT">إنشاء حساب | SIGN UP</button>
             </div>
 
             <div class="footer-text">
                 OREN SYSTEM DEVELOPED BY <b>YOUSEF ABAS</b><br>
-                <span style="opacity:0.6">V 4.0.0 - 2026</span>
+                <span style="opacity:0.6">V 5.0.0 - 2026</span>
             </div>
         </div>
     </div>
 
-    <script>
-        let currentLang = 'ar';
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        // أنيميشن الافتتاحية
+        const firebaseConfig = {
+            apiKey: "AIzaSyALgV2v3lmxvEoP0HosqGSqm727vZrYUq4",
+            authDomain: "orenapp-f2f1e.firebaseapp.com",
+            databaseURL: "https://orenapp-f2f1e-default-rtdb.firebaseio.com",
+            projectId: "orenapp-f2f1e",
+            storageBucket: "orenapp-f2f1e.firebasestorage.app",
+            messagingSenderId: "973368909449",
+            appId: "1:973368909449:web:ce364a309f622f575c3058"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+        const provider = new GoogleAuthProvider();
+
+        // وظيفية التسجيل الحقيقية
+        document.getElementById('mainRegBtn').onclick = async () => {
+            const userData = {
+                name: document.getElementById('regName').value,
+                email: document.getElementById('regEmail').value,
+                phone: document.getElementById('regPhone').value,
+                gov: document.getElementById('regGov').value,
+                area: document.getElementById('regArea').value,
+                dob: document.getElementById('regDob').value,
+                pass: document.getElementById('regPass').value
+            };
+
+            if(!userData.email || !userData.pass) return alert("البريد وكلمة المرور مطلوبين!");
+
+            try {
+                const res = await createUserWithEmailAndPassword(auth, userData.email, userData.pass);
+                await set(ref(db, 'users/' + res.user.uid), userData);
+                alert("تم تسجيلك بنجاح في نظام OREN! 🎉");
+                location.reload();
+            } catch (e) { alert("خطأ: " + e.message); }
+        };
+
+        // وظيفية الدخول الحقيقية
+        document.getElementById('mainLoginBtn').onclick = async () => {
+            const email = document.getElementById('loginEmail').value;
+            const pass = document.getElementById('loginPass').value;
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+                alert("أهلاً بك مجدداً في OREN! ✅");
+            } catch (e) { alert("بيانات الدخول غير صحيحة"); }
+        };
+
+        // جوجل
+        document.getElementById('googleBtn').onclick = async () => {
+            try { await signInWithPopup(auth, provider); alert("تم الدخول بجوجل!"); } 
+            catch (e) { alert("فشل الاتصال بجوجل"); }
+        };
+    </script>
+
+    <script>
+        // أنيميشن الافتتاحية والتبديل
+        let currentLang = 'ar';
         setTimeout(() => {
-            const splash = document.getElementById('splash');
-            splash.style.opacity = '0';
+            document.getElementById('splash').style.opacity = '0';
             setTimeout(() => {
-                splash.style.display = 'none';
+                document.getElementById('splash').style.display = 'none';
                 document.getElementById('authPage').style.display = 'flex';
                 document.getElementById('langToggle').style.display = 'block';
             }, 500);
         }, 3800);
 
-        // تبديل اللغة
-        function toggleLang() {
+        window.toggleLang = () => {
             const html = document.getElementById('htmlTag');
             const btn = document.getElementById('langToggle');
-            const elements = document.querySelectorAll('[data-ar]');
-
-            if (currentLang === 'ar') {
-                currentLang = 'en';
-                html.dir = 'ltr';
-                html.lang = 'en';
-                btn.innerText = 'العربية';
-            } else {
-                currentLang = 'ar';
-                html.dir = 'rtl';
-                html.lang = 'ar';
-                btn.innerText = 'English';
-            }
-
-            elements.forEach(el => {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            html.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+            btn.innerText = currentLang === 'ar' ? 'English' : 'العربية';
+            document.querySelectorAll('[data-ar]').forEach(el => {
                 const text = el.getAttribute(`data-${currentLang}`);
-                if (el.tagName === 'INPUT' || el.tagName === 'SELECT') {
-                    if (el.placeholder !== undefined) el.placeholder = text;
-                    if (el.options && el.options[0]) el.options[0].text = text;
-                } else {
-                    el.innerText = text;
-                }
+                if (el.placeholder !== undefined) el.placeholder = text;
+                else el.innerText = text;
             });
-        }
-
-        // التبديل بين التابس
-        const tL = document.getElementById('tL'), tR = document.getElementById('tR');
-        const fL = document.getElementById('fL'), fR = document.getElementById('fR');
-
-        tL.onclick = () => {
-            tL.classList.add('active'); tR.classList.remove('active');
-            fL.classList.remove('hidden'); fR.classList.add('hidden');
         };
-        tR.onclick = () => {
-            tR.classList.add('active'); tL.classList.remove('active');
-            fR.classList.remove('hidden'); fL.classList.add('hidden');
+
+        document.getElementById('tL').onclick = function() {
+            this.classList.add('active'); document.getElementById('tR').classList.remove('active');
+            document.getElementById('fL').classList.remove('hidden'); document.getElementById('fR').classList.add('hidden');
+        };
+        document.getElementById('tR').onclick = function() {
+            this.classList.add('active'); document.getElementById('tL').classList.remove('active');
+            document.getElementById('fR').classList.remove('hidden'); document.getElementById('fL').classList.add('hidden');
         };
     </script>
 </body>
