@@ -16,27 +16,31 @@
         @keyframes dropAndShock { 0% { transform: translateY(-700px); } 65% { transform: translateY(0); box-shadow: 0 0 150px 70px rgba(0, 210, 255, 0.5); } 100% { transform: scale(50); opacity: 0; } }
         @keyframes textReveal { 0% { opacity: 0; filter: blur(15px); } 100% { opacity: 1; filter: blur(0); } }
 
-        /* --- Auth Section --- */
+        /* --- Auth Section (كل البيانات اللي طلبتها) --- */
         #authPage { display: none; min-height: 100vh; justify-content: center; align-items: center; padding: 20px; background: radial-gradient(circle, #1a1a3a 0%, #050510 100%); }
         .card { background: rgba(255,255,255,0.02); backdrop-filter: blur(25px); padding: 30px; border-radius: 35px; width: 100%; max-width: 450px; text-align: center; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
         .tabs { display: flex; background: rgba(0,0,0,0.3); padding: 5px; border-radius: 15px; margin-bottom: 20px; }
         .tab { flex: 1; padding: 12px; cursor: pointer; border-radius: 12px; font-weight: bold; opacity: 0.5; }
         .tab.active { background: linear-gradient(45deg, var(--p), var(--s)); opacity: 1; }
-        .input-box { width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: white; text-align: center; font-size: 14px; }
+        .input-box { width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: white; text-align: center; font-size: 14px; outline: none; }
+        .input-box:focus { border-color: var(--a); }
         .btn { width: 100%; padding: 16px; border-radius: 12px; border: none; background: linear-gradient(45deg, var(--s), var(--p)); color: white; font-weight: bold; cursor: pointer; font-size: 16px; }
 
-        /* --- Store Page --- */
-        #storePage { display: none; padding-bottom: 80px; }
+        /* --- Store Page (Dynamic) --- */
+        #storePage { display: none; padding-bottom: 100px; }
         header { padding: 20px; display: flex; justify-content: space-between; align-items: center; background: rgba(5,5,16,0.9); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px); }
-        .search-bar { background: var(--card); padding: 12px; border-radius: 15px; margin: 0 20px 20px; display: flex; align-items: center; color: #888; border: 1px solid #222; font-size: 14px; }
-        .cat-row { display: flex; overflow-x: auto; padding: 0 20px 15px; gap: 15px; scrollbar-width: none; }
-        .cat-item { min-width: 75px; text-align: center; }
-        .cat-circle { width: 65px; height: 65px; background: var(--card); border-radius: 50%; border: 2px solid var(--p); display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 5px; }
-        .banner { margin: 10px 20px; height: 160px; background: linear-gradient(135deg, var(--s), #24243e); border-radius: 25px; padding: 20px; display: flex; align-items: center; position: relative; overflow: hidden; }
         .products-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; }
-        .p-card { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid #222; }
-        .p-img { width: 100%; height: 140px; object-fit: cover; background: #222; }
+        .p-card { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid #222; position: relative; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .p-img { width: 100%; height: 150px; object-fit: cover; }
         .p-info { padding: 12px; }
+        .sale-tag { position: absolute; top: 10px; left: 10px; background: #ff4757; color: white; padding: 4px 8px; border-radius: 8px; font-size: 10px; font-weight: bold; }
+        .add-btn { background: var(--p); border: none; color: white; width: 100%; padding: 10px; border-radius: 12px; cursor: pointer; margin-top: 10px; font-size: 13px; }
+
+        /* --- Admin UI --- */
+        #adminBtn { position: fixed; bottom: 85px; left: 20px; background: var(--a); width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; z-index: 1000; box-shadow: 0 0 15px var(--a); }
+        #adminModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; }
+
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #0a0a1a; display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid #222; }
         .hidden { display: none; }
     </style>
@@ -64,11 +68,10 @@
             <select id="rGov" class="input-box">
                 <option value="" disabled selected>اختر المحافظة</option>
                 <option>القاهرة</option><option>الجيزة</option><option>الإسكندرية</option><option>الدقهلية</option><option>الشرقية</option>
-                <option>الغربية</option><option>القليوبية</option><option>البحيرة</option><option>المنوفية</option><option>قنا</option>
+                <option>المنوفية</option><option>القليوبية</option><option>البحيرة</option><option>الغربية</option><option>بور سعيد</option>
             </select>
             <input type="text" id="rArea" class="input-box" placeholder="المنطقة / المدينة">
-            <label style="font-size: 11px; display: block; text-align: right; margin-bottom: 5px; color: #aaa;">تاريخ الميلاد</label>
-            <input type="date" id="rDob" class="input-box">
+            <input type="date" id="rDob" class="input-box" title="تاريخ الميلاد">
             <input type="password" id="rPass" class="input-box" placeholder="كلمة المرور">
             <button class="btn" id="btnReg">إنشاء الحساب</button>
         </div>
@@ -78,40 +81,35 @@
 <div id="storePage">
     <header>
         <div style="font-weight: 900; font-size: 24px; color: var(--a);">OREN</div>
-        <div id="uName" style="font-size: 13px; color: #888;">مرحباً بك</div>
+        <div style="font-size: 14px; color: #888;" id="welcomeUser">مرحباً</div>
     </header>
-    <div class="search-bar">🔍 ابحث عما تريد في أورين...</div>
-    <div class="cat-row">
-        <div class="cat-item"><div class="cat-circle">👕</div><span>ملابس</span></div>
-        <div class="cat-item"><div class="cat-circle">👟</div><span>أحذية</span></div>
-        <div class="cat-item"><div class="cat-circle">⌚</div><span>ساعات</span></div>
-        <div class="cat-item"><div class="cat-circle">🎧</div><span>إلكترونيات</span></div>
-    </div>
-    <div class="banner">
-        <div>
-            <h2 style="margin:0">أقوى العروض 🔥</h2>
-            <p style="margin:5px 0; font-size: 14px;">خصم يصل لـ 50% على الإكسسوارات</p>
+    
+    <div style="padding: 20px; font-weight: bold; font-size: 18px;">المعروض الآن ✨</div>
+    <div class="products-grid" id="pGrid">
         </div>
-    </div>
-    <div style="padding: 20px; font-weight: bold;">اكتشف مجموعتنا ✨</div>
-    <div class="products-grid">
-        <div class="p-card">
-            <img class="p-img" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400" alt="">
-            <div class="p-info"><h4>حذاء رياضي نيون</h4><div style="color:var(--a); font-weight:bold;">1,200 EGP</div></div>
-        </div>
-        <div class="p-card">
-            <img class="p-img" src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400" alt="">
-            <div class="p-info"><h4>ساعة كلاسيك</h4><div style="color:var(--a); font-weight:bold;">950 EGP</div></div>
-        </div>
-    </div>
+
+    <div id="adminBtn" onclick="openAdmin()">⚙️</div>
+
     <div class="bottom-nav">
         <div style="color: var(--a)">🏠</div><div>🛍️</div><div>❤️</div><div>👤</div>
     </div>
 </div>
 
+<div id="adminModal">
+    <div class="card" style="max-width: 90%">
+        <h3>إضافة منتج جديد 🛒</h3>
+        <input type="text" id="pTitle" class="input-box" placeholder="اسم المنتج">
+        <input type="number" id="pPrice" class="input-box" placeholder="السعر">
+        <input type="text" id="pLink" class="input-box" placeholder="رابط الصورة">
+        <input type="text" id="pSale" class="input-box" placeholder="الخصم (اختياري)">
+        <button class="btn" onclick="addNewProduct()">إضافة للمتجر</button>
+        <button onclick="document.getElementById('adminModal').style.display='none'" style="margin-top:10px; background:none; border:none; color:gray">إلغاء</button>
+    </div>
+</div>
+
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, push, set, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getDatabase, ref, push, set, get, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyALgV2v3lmxvEoP0HosqGSqm727vZrYUq4",
@@ -137,24 +135,25 @@
     tL.onclick = () => { tL.classList.add('active'); tR.classList.remove('active'); fL.classList.remove('hidden'); fR.classList.add('hidden'); };
     tR.onclick = () => { tR.classList.add('active'); tL.classList.remove('active'); fR.classList.remove('hidden'); fL.classList.add('hidden'); };
 
-    // Login logic
+    // Login (مع فحص حقيقي من الداتا)
     document.getElementById('btnLogin').onclick = async () => {
         const userInp = document.getElementById('lUser').value.trim();
         const passInp = document.getElementById('lPass').value;
         const snapshot = await get(ref(db, 'users'));
-        let foundUser = null;
+        let found = null;
         snapshot.forEach(c => {
             const u = c.val();
-            if((u.email === userInp || u.phone === userInp) && u.pass === passInp) foundUser = u;
+            if((u.email === userInp || u.phone === userInp) && u.pass === passInp) found = u;
         });
-        if(foundUser) {
+        if(found) {
             document.getElementById('authPage').style.display = 'none';
             document.getElementById('storePage').style.display = 'block';
-            document.getElementById('uName').innerText = "أهلاً، " + foundUser.name;
-        } else alert("بياناتك غلط يا بطل!");
+            document.getElementById('welcomeUser').innerText = "أهلاً، " + found.name;
+            loadProducts();
+        } else alert("البيانات غير صحيحة أو غير مسجلة!");
     };
 
-    // Register logic
+    // Register
     document.getElementById('btnReg').onclick = async () => {
         const data = {
             name: document.getElementById('rName').value,
@@ -165,10 +164,46 @@
             dob: document.getElementById('rDob').value,
             pass: document.getElementById('rPass').value
         };
-        if(!data.name || !data.phone || !data.pass) return alert("اكمل بياناتك الأساسية!");
+        if(!data.name || !data.phone || !data.pass) return alert("اكمل البيانات الأساسية!");
         await set(push(ref(db, 'users')), data);
-        alert("مبروك! سجل دخول دلوقتي."); location.reload();
+        alert("تم التسجيل! سجل دخول الآن."); location.reload();
     };
+
+    // Admin & Products
+    window.openAdmin = () => {
+        if(prompt("كلمة السر:") === "123") document.getElementById('adminModal').style.display = 'flex';
+    };
+
+    window.addNewProduct = async () => {
+        const title = document.getElementById('pTitle').value;
+        const price = document.getElementById('pPrice').value;
+        const link = document.getElementById('pLink').value;
+        const sale = document.getElementById('pSale').value;
+        if(title && price && link) {
+            await push(ref(db, 'products'), { title, price, link, sale });
+            alert("تم الرفع!"); document.getElementById('adminModal').style.display = 'none';
+        }
+    };
+
+    function loadProducts() {
+        onValue(ref(db, 'products'), (snap) => {
+            const grid = document.getElementById('pGrid');
+            grid.innerHTML = "";
+            snap.forEach(c => {
+                const p = c.val();
+                grid.innerHTML += `
+                    <div class="p-card">
+                        ${p.sale ? `<div class="sale-tag">${p.sale}</div>` : ''}
+                        <img class="p-img" src="${p.link}">
+                        <div class="p-info">
+                            <h4>${p.title}</h4>
+                            <div style="color:var(--a); font-weight:bold;">${p.price} EGP</div>
+                            <button class="add-btn">إضافة للسلة</button>
+                        </div>
+                    </div>`;
+            });
+        });
+    }
 </script>
 </body>
 </html>
