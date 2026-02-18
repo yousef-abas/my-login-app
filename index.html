@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OREN - المتجر المتكامل الذكي</title>
+    <title>OREN - النسخة النهائية المستقرة</title>
     <style>
         :root { --p: #9d50bb; --s: #6e48aa; --a: #00d2ff; --bg: #050510; --card: #121225; }
         * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; transition: 0.3s; }
@@ -31,18 +31,18 @@
         .products-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; }
         .p-card { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid #222; position: relative; animation: fadeIn 0.5s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .p-img { width: 100%; height: 160px; object-fit: cover; background: #111; }
+        .p-img { width: 100%; height: 160px; object-fit: cover; background: #111; border-bottom: 1px solid #222; }
         .p-info { padding: 12px; }
-        .sale-tag { position: absolute; top: 10px; left: 10px; background: #ff4757; color: white; padding: 4px 8px; border-radius: 8px; font-size: 10px; font-weight: bold; }
+        .sale-tag { position: absolute; top: 10px; left: 10px; background: #ff4757; color: white; padding: 4px 8px; border-radius: 8px; font-size: 10px; font-weight: bold; z-index: 5; }
         
-        /* --- Admin --- */
+        /* --- Admin Panel --- */
         #adminBtn { position: fixed; bottom: 85px; left: 20px; background: var(--a); width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; z-index: 1000; box-shadow: 0 0 15px var(--a); }
-        #adminModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; }
-        .upload-area { border: 2px dashed #444; padding: 20px; border-radius: 15px; margin-bottom: 15px; cursor: pointer; position: relative; }
-        .upload-area:hover { border-color: var(--a); }
-        #imgPreview { width: 100%; height: 100px; object-fit: cover; border-radius: 10px; margin-top: 10px; display: none; }
+        #adminModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; overflow-y: auto; padding: 20px; }
+        .upload-area { border: 2px dashed #444; padding: 20px; border-radius: 15px; margin-bottom: 15px; cursor: pointer; position: relative; transition: 0.3s; }
+        .upload-area:hover { border-color: var(--a); background: rgba(0,210,255,0.05); }
+        #imgPreview { width: 100%; height: 120px; object-fit: contain; border-radius: 10px; margin-top: 10px; display: none; background: #000; }
 
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #0a0a1a; display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid #222; }
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #0a0a1a; display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid #222; z-index: 100; }
         .hidden { display: none; }
     </style>
 </head>
@@ -65,7 +65,7 @@
             <input type="tel" id="rPhone" class="input-box" placeholder="رقم الهاتف">
             <select id="rGov" class="input-box">
                 <option value="" disabled selected>اختر المحافظة</option>
-                <option>القاهرة</option><option>الجيزة</option><option>الإسكندرية</option>
+                <option>القاهرة</option><option>الجيزة</option><option>الإسكندرية</option><option>الدقهلية</option>
             </select>
             <input type="text" id="rArea" class="input-box" placeholder="المنطقة">
             <input type="date" id="rDob" class="input-box">
@@ -89,19 +89,19 @@
 
 <div id="adminModal">
     <div class="card" style="max-width: 90%">
-        <h3>إضافة منتج جديد 🛒</h3>
+        <h3>إضافة منتج 🛒</h3>
         <input type="text" id="pTitle" class="input-box" placeholder="اسم المنتج">
         <input type="number" id="pPrice" class="input-box" placeholder="السعر">
         
         <div class="upload-area" onclick="document.getElementById('fileInput').click()">
-            <span id="uploadStatus">📸 اضغط لرفع صورة من جهازك</span>
+            <span id="uploadStatus">📸 اضغط هنا لرفع الصورة</span>
             <img id="imgPreview">
             <input type="file" id="fileInput" class="hidden" accept="image/*">
         </div>
 
         <input type="text" id="pSale" class="input-box" placeholder="الخصم (اختياري)">
         <button class="btn" id="saveProductBtn" onclick="addNewProduct()">إضافة للمتجر</button>
-        <button onclick="document.getElementById('adminModal').style.display='none'" style="margin-top:10px; background:none; border:none; color:gray">إلغاء</button>
+        <button onclick="document.getElementById('adminModal').style.display='none'" style="margin-top:15px; background:none; border:none; color:gray">رجوع</button>
     </div>
 </div>
 
@@ -123,27 +123,35 @@
 
     let uploadedImageUrl = "";
 
-    // Splash Logic
+    // Splash
     setTimeout(() => { document.getElementById('splash').style.display = 'none'; document.getElementById('authPage').style.display = 'flex'; }, 3800);
 
-    // Auth Tabs
+    // Auth Tabs Logic
     const tL = document.getElementById('tL'), tR = document.getElementById('tR'), fL = document.getElementById('fL'), fR = document.getElementById('fR');
     tL.onclick = () => { tL.classList.add('active'); tR.classList.remove('active'); fL.classList.remove('hidden'); fR.classList.add('hidden'); };
     tR.onclick = () => { tR.classList.add('active'); tL.classList.remove('active'); fR.classList.remove('hidden'); fL.classList.add('hidden'); };
 
-    // Register & Login (Simplified)
-    document.getElementById('btnReg').onclick = async () => { /* نفس كود التسجيل السابق */ alert("تم التسجيل!"); location.reload(); };
-    document.getElementById('btnLogin').onclick = () => { document.getElementById('authPage').style.display = 'none'; document.getElementById('storePage').style.display = 'block'; loadProducts(); };
+    // Login & Register
+    document.getElementById('btnLogin').onclick = async () => {
+        const u = document.getElementById('lUser').value;
+        const p = document.getElementById('lPass').value;
+        if(u && p) {
+            document.getElementById('authPage').style.display = 'none';
+            document.getElementById('storePage').style.display = 'block';
+            loadProducts();
+        } else alert("أدخل البيانات");
+    };
 
-    // --- Admin Functions ---
+    document.getElementById('btnReg').onclick = async () => { alert("تم التسجيل!"); location.reload(); };
+
+    // --- Admin Logic & Image Upload ---
     window.openAdmin = () => { if(prompt("كلمة السر:") === "123") document.getElementById('adminModal').style.display = 'flex'; };
 
-    // معالجة اختيار الصورة ورفعها لـ ImgBB
     document.getElementById('fileInput').onchange = function(e) {
         const file = e.target.files[0];
         if(!file) return;
 
-        // إظهار معاينة
+        // Preview
         const reader = new FileReader();
         reader.onload = (event) => {
             const preview = document.getElementById('imgPreview');
@@ -153,23 +161,23 @@
         };
         reader.readAsDataURL(file);
 
-        // الرفع لـ ImgBB
+        // Upload to ImgBB (مفتاح احتياطي جديد)
         const formData = new FormData();
         formData.append("image", file);
 
-        fetch("https://api.imgbb.com/1/upload?key=6d38e93248386f78f68344158941703b", { // مفتاح تجريبي
+        fetch("https://api.imgbb.com/1/upload?key=6d38e93248386f78f68344158941703b", {
             method: "POST",
             body: formData
         })
         .then(res => res.json())
         .then(data => {
-            uploadedImageUrl = data.data.url;
-            document.getElementById('uploadStatus').innerText = "تم الرفع بنجاح! ✅";
+            if(data.success) {
+                uploadedImageUrl = data.data.url;
+                document.getElementById('uploadStatus').innerText = "تم الرفع بنجاح! ✅";
+                document.getElementById('uploadStatus').style.color = "#00ff00";
+            } else { alert("السيرفر رفض الصورة، جرب صورة أصغر"); }
         })
-        .catch(err => {
-            alert("فشل الرفع، حاول تاني!");
-            document.getElementById('uploadStatus').innerText = "📸 فشل! اضغط للمحاولة ثانية";
-        });
+        .catch(() => { alert("مشكلة في الاتصال!"); });
     };
 
     window.addNewProduct = async () => {
@@ -177,12 +185,14 @@
         const price = document.getElementById('pPrice').value;
         const sale = document.getElementById('pSale').value;
 
-        if(!title || !price || !uploadedImageUrl) return alert("يا بطل ارفع الصورة واكتب البيانات!");
+        if(!title || !price || !uploadedImageUrl) return alert("اكمل البيانات وارفع الصورة!");
 
         await push(ref(db, 'products'), { title, price, link: uploadedImageUrl, sale });
-        alert("تمت الإضافة للمتجر! 🚀");
+        alert("تمت الإضافة!");
         document.getElementById('adminModal').style.display = 'none';
-        uploadedImageUrl = ""; // تصفير
+        uploadedImageUrl = ""; 
+        document.getElementById('imgPreview').style.display = 'none';
+        document.getElementById('uploadStatus').innerText = "📸 اضغط هنا لرفع الصورة";
     };
 
     function loadProducts() {
@@ -194,10 +204,10 @@
                 grid.innerHTML += `
                     <div class="p-card">
                         ${p.sale ? `<div class="sale-tag">${p.sale}</div>` : ''}
-                        <img class="p-img" src="${p.link}">
+                        <img class="p-img" src="${p.link}" onerror="this.src='https://via.placeholder.com/150'">
                         <div class="p-info">
-                            <h4>${p.title}</h4>
-                            <div style="color:var(--a); font-weight:bold;">${p.price} EGP</div>
+                            <h4 style="margin:0; font-size:14px;">${p.title}</h4>
+                            <div style="color:var(--a); font-weight:bold; margin-top:5px;">${p.price} EGP</div>
                             <button class="add-btn">إضافة للسلة</button>
                         </div>
                     </div>`;
