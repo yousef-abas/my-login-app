@@ -3,132 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OREN - التجربة الفخمة</title>
+    <title>OREN - المتجر المتكامل</title>
     <style>
-        :root { --p: #9d50bb; --s: #6e48aa; --a: #00d2ff; --bg: #050510; --card: #151525; }
+        :root { --p: #9d50bb; --s: #6e48aa; --a: #00d2ff; --bg: #050510; --card: #121225; }
         * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; transition: 0.3s; }
         body, html { margin: 0; padding: 0; background: var(--bg); color: white; min-height: 100vh; overflow-x: hidden; }
 
         /* --- Splash Screen --- */
         #splash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); display: flex; justify-content: center; align-items: center; z-index: 9999; }
         .energy-ball { width: 15px; height: 15px; background: #fff; border-radius: 50%; box-shadow: 0 0 20px var(--a); animation: dropAndShock 1.5s forwards; position: absolute; }
-        .oren-reveal { font-size: 60px; font-weight: 900; opacity: 0; animation: textReveal 1.2s 1.4s forwards; }
+        .oren-reveal { font-size: 60px; font-weight: 900; opacity: 0; animation: textReveal 1.2s 1.4s forwards; letter-spacing: 5px; }
         @keyframes dropAndShock { 0% { transform: translateY(-700px); } 65% { transform: translateY(0); box-shadow: 0 0 150px 70px rgba(0, 210, 255, 0.5); } 100% { transform: scale(50); opacity: 0; } }
         @keyframes textReveal { 0% { opacity: 0; filter: blur(15px); } 100% { opacity: 1; filter: blur(0); } }
 
         /* --- Auth Section --- */
-        #authPage { display: none; height: 100vh; justify-content: center; align-items: center; padding: 20px; }
-        .card { background: rgba(255,255,255,0.02); backdrop-filter: blur(25px); padding: 30px; border-radius: 35px; width: 100%; max-width: 450px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
-        .input-box { width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: white; text-align: center; }
-        .btn { width: 100%; padding: 16px; border-radius: 12px; border: none; background: linear-gradient(45deg, var(--s), var(--p)); color: white; font-weight: bold; cursor: pointer; }
+        #authPage { display: none; min-height: 100vh; justify-content: center; align-items: center; padding: 20px; background: radial-gradient(circle, #1a1a3a 0%, #050510 100%); }
+        .card { background: rgba(255,255,255,0.02); backdrop-filter: blur(25px); padding: 30px; border-radius: 35px; width: 100%; max-width: 450px; text-align: center; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .tabs { display: flex; background: rgba(0,0,0,0.3); padding: 5px; border-radius: 15px; margin-bottom: 20px; }
+        .tab { flex: 1; padding: 12px; cursor: pointer; border-radius: 12px; font-weight: bold; opacity: 0.5; }
+        .tab.active { background: linear-gradient(45deg, var(--p), var(--s)); opacity: 1; }
+        .input-box { width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: white; text-align: center; font-size: 14px; }
+        .btn { width: 100%; padding: 16px; border-radius: 12px; border: none; background: linear-gradient(45deg, var(--s), var(--p)); color: white; font-weight: bold; cursor: pointer; font-size: 16px; }
 
-        /* --- Store Home (Noon Style) --- */
+        /* --- Store Page --- */
         #storePage { display: none; padding-bottom: 80px; }
-        
-        header { padding: 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: var(--bg); z-index: 100; }
-        .search-bar { background: var(--card); padding: 12px; border-radius: 15px; margin: 0 20px; display: flex; align-items: center; color: #888; border: 1px solid #333; }
-        
-        /* Categories Slider */
-        .cat-row { display: flex; overflow-x: auto; padding: 15px 20px; gap: 15px; scrollbar-width: none; }
-        .cat-item { min-width: 80px; text-align: center; }
-        .cat-circle { width: 70px; height: 70px; background: linear-gradient(45deg, #222, #333); border-radius: 50%; margin-bottom: 8px; border: 2px solid var(--p); display: flex; align-items: center; justify-content: center; font-size: 24px; }
-        .cat-item span { font-size: 12px; color: #ccc; }
-
-        /* Banner Slider */
-        .banner { margin: 10px 20px; height: 180px; background: linear-gradient(to right, #6e48aa, #9d50bb); border-radius: 20px; display: flex; align-items: center; padding: 25px; position: relative; overflow: hidden; }
-        .banner h2 { font-size: 22px; z-index: 2; }
-        .banner::after { content: ''; position: absolute; right: -20px; width: 150px; height: 150px; background: rgba(255,255,255,0.1); border-radius: 50%; }
-
-        /* Products Grid */
-        .section-title { padding: 20px; font-weight: bold; font-size: 18px; }
-        .products-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px; }
+        header { padding: 20px; display: flex; justify-content: space-between; align-items: center; background: rgba(5,5,16,0.9); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px); }
+        .search-bar { background: var(--card); padding: 12px; border-radius: 15px; margin: 0 20px 20px; display: flex; align-items: center; color: #888; border: 1px solid #222; font-size: 14px; }
+        .cat-row { display: flex; overflow-x: auto; padding: 0 20px 15px; gap: 15px; scrollbar-width: none; }
+        .cat-item { min-width: 75px; text-align: center; }
+        .cat-circle { width: 65px; height: 65px; background: var(--card); border-radius: 50%; border: 2px solid var(--p); display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 5px; }
+        .banner { margin: 10px 20px; height: 160px; background: linear-gradient(135deg, var(--s), #24243e); border-radius: 25px; padding: 20px; display: flex; align-items: center; position: relative; overflow: hidden; }
+        .products-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; }
         .p-card { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid #222; }
-        .p-img { width: 100%; height: 150px; background: #222; object-fit: cover; }
+        .p-img { width: 100%; height: 140px; object-fit: cover; background: #222; }
         .p-info { padding: 12px; }
-        .p-info h4 { margin: 0; font-size: 14px; color: #fff; }
-        .p-price { color: var(--a); font-weight: bold; margin-top: 8px; font-size: 16px; }
-
-        /* Bottom Nav Bar */
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #0a0a1a; display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid #222; }
-        .nav-item { text-align: center; font-size: 20px; color: #555; cursor: pointer; }
-        .nav-item.active { color: var(--a); }
-
         .hidden { display: none; }
     </style>
 </head>
 <body>
 
-<div id="splash">
-    <div class="energy-ball"></div>
-    <div class="oren-reveal">OREN</div>
-</div>
+<div id="splash"><div class="energy-ball"></div><div class="oren-reveal">OREN</div></div>
 
 <div id="authPage">
     <div class="card">
-        <div style="font-size: 30px; font-weight: 900; color: var(--a); margin-bottom: 20px;">OREN</div>
+        <div style="font-size: 35px; font-weight: 900; background: linear-gradient(to right, var(--a), var(--p)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px;">OREN</div>
+        <div class="tabs">
+            <div class="tab active" id="tL">دخول</div>
+            <div class="tab" id="tR">جديد</div>
+        </div>
         <div id="fL">
-            <input type="text" id="lUser" class="input-box" placeholder="الإيميل أو الهاتف">
+            <input type="text" id="lUser" class="input-box" placeholder="الإيميل أو رقم الهاتف">
             <input type="password" id="lPass" class="input-box" placeholder="كلمة المرور">
             <button class="btn" id="btnLogin">دخول</button>
-            <p onclick="toggleAuth()" style="font-size: 12px; margin-top: 15px; cursor: pointer;">ليس لديك حساب؟ سجل الآن</p>
         </div>
         <div id="fR" class="hidden">
-            <input type="text" id="rName" class="input-box" placeholder="الاسم الكامل">
+            <input type="text" id="rName" class="input-box" placeholder="الاسم بالكامل">
+            <input type="email" id="rEmail" class="input-box" placeholder="البريد الإلكتروني">
             <input type="tel" id="rPhone" class="input-box" placeholder="رقم الهاتف">
+            <select id="rGov" class="input-box">
+                <option value="" disabled selected>اختر المحافظة</option>
+                <option>القاهرة</option><option>الجيزة</option><option>الإسكندرية</option><option>الدقهلية</option><option>الشرقية</option>
+                <option>الغربية</option><option>القليوبية</option><option>البحيرة</option><option>المنوفية</option><option>قنا</option>
+            </select>
+            <input type="text" id="rArea" class="input-box" placeholder="المنطقة / المدينة">
+            <label style="font-size: 11px; display: block; text-align: right; margin-bottom: 5px; color: #aaa;">تاريخ الميلاد</label>
+            <input type="date" id="rDob" class="input-box">
             <input type="password" id="rPass" class="input-box" placeholder="كلمة المرور">
             <button class="btn" id="btnReg">إنشاء الحساب</button>
-            <p onclick="toggleAuth()" style="font-size: 12px; margin-top: 15px; cursor: pointer;">لديك حساب؟ سجل دخول</p>
         </div>
     </div>
 </div>
 
 <div id="storePage">
     <header>
-        <div style="font-weight: 900; font-size: 20px; color: var(--a);">OREN</div>
-        <div id="userName" style="font-size: 14px; color: #888;">أهلاً بك</div>
+        <div style="font-weight: 900; font-size: 24px; color: var(--a);">OREN</div>
+        <div id="uName" style="font-size: 13px; color: #888;">مرحباً بك</div>
     </header>
-
-    <div class="search-bar">🔍 ابحث عن ملابس، إكسسوارات...</div>
-
+    <div class="search-bar">🔍 ابحث عما تريد في أورين...</div>
     <div class="cat-row">
         <div class="cat-item"><div class="cat-circle">👕</div><span>ملابس</span></div>
+        <div class="cat-item"><div class="cat-circle">👟</div><span>أحذية</span></div>
         <div class="cat-item"><div class="cat-circle">⌚</div><span>ساعات</span></div>
         <div class="cat-item"><div class="cat-circle">🎧</div><span>إلكترونيات</span></div>
-        <div class="cat-item"><div class="cat-circle">👟</div><span>أحذية</span></div>
-        <div class="cat-item"><div class="cat-circle">🕶️</div><span>نظارات</span></div>
     </div>
-
     <div class="banner">
         <div>
-            <h2>خصومات الشتاء!<br><span style="color: var(--a);">تصل إلى 50%</span></h2>
-            <button style="background: white; border: none; padding: 8px 15px; border-radius: 10px; font-weight: bold; margin-top: 10px;">تسوق الآن</button>
+            <h2 style="margin:0">أقوى العروض 🔥</h2>
+            <p style="margin:5px 0; font-size: 14px;">خصم يصل لـ 50% على الإكسسوارات</p>
         </div>
     </div>
-
-    <div class="section-title">وصل حديثاً ✨</div>
-
+    <div style="padding: 20px; font-weight: bold;">اكتشف مجموعتنا ✨</div>
     <div class="products-grid">
         <div class="p-card">
-            <img class="p-img" src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500" alt="">
-            <div class="p-info">
-                <h4>ساعة أورين الذكية</h4>
-                <div class="p-price">850 EGP</div>
-            </div>
+            <img class="p-img" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400" alt="">
+            <div class="p-info"><h4>حذاء رياضي نيون</h4><div style="color:var(--a); font-weight:bold;">1,200 EGP</div></div>
         </div>
         <div class="p-card">
-            <img class="p-img" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500" alt="">
-            <div class="p-info">
-                <h4>حذاء رياضي نيون</h4>
-                <div class="p-price">1,200 EGP</div>
-            </div>
+            <img class="p-img" src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400" alt="">
+            <div class="p-info"><h4>ساعة كلاسيك</h4><div style="color:var(--a); font-weight:bold;">950 EGP</div></div>
         </div>
     </div>
-
     <div class="bottom-nav">
-        <div class="nav-item active">🏠</div>
-        <div class="nav-item">🛍️</div>
-        <div class="nav-item">❤️</div>
-        <div class="nav-item">👤</div>
+        <div style="color: var(--a)">🏠</div><div>🛍️</div><div>❤️</div><div>👤</div>
     </div>
 </div>
 
@@ -145,7 +122,6 @@
       messagingSenderId: "973368909449",
       appId: "1:973368909449:web:ce364a309f622f575c3058"
     };
-
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
@@ -155,41 +131,44 @@
         document.getElementById('authPage').style.display = 'flex';
     }, 3800);
 
-    window.toggleAuth = () => {
-        document.getElementById('fL').classList.toggle('hidden');
-        document.getElementById('fR').classList.toggle('hidden');
-    };
+    // Tabs
+    const tL = document.getElementById('tL'), tR = document.getElementById('tR');
+    const fL = document.getElementById('fL'), fR = document.getElementById('fR');
+    tL.onclick = () => { tL.classList.add('active'); tR.classList.remove('active'); fL.classList.remove('hidden'); fR.classList.add('hidden'); };
+    tR.onclick = () => { tR.classList.add('active'); tL.classList.remove('active'); fR.classList.remove('hidden'); fL.classList.add('hidden'); };
 
     // Login logic
     document.getElementById('btnLogin').onclick = async () => {
-        const userInp = document.getElementById('lUser').value;
+        const userInp = document.getElementById('lUser').value.trim();
         const passInp = document.getElementById('lPass').value;
-        
         const snapshot = await get(ref(db, 'users'));
-        let user = null;
+        let foundUser = null;
         snapshot.forEach(c => {
-            if((c.val().email === userInp || c.val().phone === userInp) && c.val().pass === passInp) user = c.val();
+            const u = c.val();
+            if((u.email === userInp || u.phone === userInp) && u.pass === passInp) foundUser = u;
         });
-
-        if(user) {
+        if(foundUser) {
             document.getElementById('authPage').style.display = 'none';
             document.getElementById('storePage').style.display = 'block';
-            document.getElementById('userName').innerText = "أهلاً، " + user.name;
-        } else {
-            alert("خطأ في البيانات!");
-        }
+            document.getElementById('uName').innerText = "أهلاً، " + foundUser.name;
+        } else alert("بياناتك غلط يا بطل!");
     };
 
     // Register logic
     document.getElementById('btnReg').onclick = async () => {
-        const name = document.getElementById('rName').value;
-        const phone = document.getElementById('rPhone').value;
-        const pass = document.getElementById('rPass').value;
-        if(!name || !phone || !pass) return alert("اكمل البيانات");
-        await set(push(ref(db, 'users')), { name, phone, pass });
-        alert("تم التسجيل!"); location.reload();
+        const data = {
+            name: document.getElementById('rName').value,
+            email: document.getElementById('rEmail').value,
+            phone: document.getElementById('rPhone').value,
+            gov: document.getElementById('rGov').value,
+            area: document.getElementById('rArea').value,
+            dob: document.getElementById('rDob').value,
+            pass: document.getElementById('rPass').value
+        };
+        if(!data.name || !data.phone || !data.pass) return alert("اكمل بياناتك الأساسية!");
+        await set(push(ref(db, 'users')), data);
+        alert("مبروك! سجل دخول دلوقتي."); location.reload();
     };
 </script>
-
 </body>
 </html>
