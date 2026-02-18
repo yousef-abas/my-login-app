@@ -3,187 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OREN - المتجر المتكامل</title>
+    <title>OREN - بداية جديدة</title>
     <style>
-        :root { --p: #9d50bb; --s: #6e48aa; --a: #00d2ff; --bg: #050510; --card: #121225; }
-        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; transition: 0.3s; }
-        body, html { margin: 0; padding: 0; background: var(--bg); color: white; min-height: 100vh; overflow-x: hidden; }
+        :root { --p: #9d50bb; --s: #6e48aa; --a: #00d2ff; --bg: #050510; }
+        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; transition: 0.4s; }
+        body, html { margin: 0; padding: 0; background: var(--bg); color: white; height: 100vh; overflow: hidden; }
 
-        /* Splash & Animations */
-        #splash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); display: flex; justify-content: center; align-items: center; z-index: 9999; }
-        .energy-ball { width: 15px; height: 15px; background: #fff; border-radius: 50%; box-shadow: 0 0 20px var(--a); animation: dropAndShock 1.5s forwards; position: absolute; }
-        .oren-reveal { font-size: 60px; font-weight: 900; opacity: 0; animation: textReveal 1.2s 1.4s forwards; }
-        @keyframes dropAndShock { 0% { transform: translateY(-700px); } 65% { transform: translateY(0); box-shadow: 0 0 150px 70px rgba(0, 210, 255, 0.5); } 100% { transform: scale(50); opacity: 0; } }
-        @keyframes textReveal { 0% { opacity: 0; filter: blur(15px); } 100% { opacity: 1; filter: blur(0); } }
+        /* --- أنيميشن الكرة والاسم (الافتتاحية) --- */
+        #splash { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: var(--bg); display: flex; justify-content: center; 
+            align-items: center; z-index: 9999; 
+        }
+        .energy-ball { 
+            width: 15px; height: 15px; background: #fff; border-radius: 50%; 
+            box-shadow: 0 0 20px var(--a); animation: dropAndShock 1.5s forwards; 
+            position: absolute; 
+        }
+        .oren-reveal { 
+            font-size: 70px; font-weight: 900; opacity: 0; 
+            animation: textReveal 1.2s 1.4s forwards; letter-spacing: 8px; 
+            background: linear-gradient(to right, #fff, var(--a));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
 
-        /* Auth Card */
-        #authPage { display: none; min-height: 100vh; justify-content: center; align-items: center; padding: 20px; }
-        .card { background: rgba(255,255,255,0.02); backdrop-filter: blur(25px); padding: 30px; border-radius: 35px; width: 100%; max-width: 450px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
-        .input-box { width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: white; text-align: center; }
-        .btn { width: 100%; padding: 16px; border-radius: 12px; border: none; background: linear-gradient(45deg, var(--s), var(--p)); color: white; font-weight: bold; cursor: pointer; }
+        @keyframes dropAndShock {
+            0% { transform: translateY(-800px); }
+            65% { transform: translateY(0); box-shadow: 0 0 150px 70px rgba(0, 210, 255, 0.6); }
+            100% { transform: scale(60); opacity: 0; }
+        }
+        @keyframes textReveal {
+            0% { opacity: 0; filter: blur(20px); transform: scale(0.8); }
+            100% { opacity: 1; filter: blur(0); transform: scale(1); }
+        }
 
-        /* Store */
-        #storePage { display: none; padding-bottom: 100px; }
-        header { padding: 20px; display: flex; justify-content: space-between; align-items: center; background: rgba(5,5,16,0.9); position: sticky; top: 0; z-index: 100; }
-        .products-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; }
-        .p-card { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid #222; position: relative; }
-        .p-img { width: 100%; height: 160px; object-fit: cover; }
-        .p-info { padding: 12px; }
-        
-        /* Admin */
-        #adminBtn { position: fixed; bottom: 85px; left: 20px; background: var(--a); width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 1000; }
-        #adminModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; justify-content: center; align-items: center; overflow-y: auto; }
-        .upload-area { border: 2px dashed #444; padding: 15px; border-radius: 15px; margin-bottom: 10px; cursor: pointer; }
-        #imgPreview { width: 100%; max-height: 100px; object-fit: contain; display: none; margin: 10px 0; }
-        
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #0a0a1a; display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid #222; }
-        .hidden { display: none; }
+        /* --- واجهة الدخول --- */
+        #authPage { 
+            display: none; height: 100vh; justify-content: center; 
+            align-items: center; padding: 20px; 
+            background: radial-gradient(circle at center, #1a1a3a 0%, #050510 100%);
+        }
+        .card { 
+            background: rgba(255,255,255,0.03); backdrop-filter: blur(20px); 
+            padding: 40px; border-radius: 40px; width: 100%; max-width: 400px; 
+            text-align: center; border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+        .input-box { 
+            width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 15px; 
+            border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.4); 
+            color: white; text-align: center; font-size: 16px; outline: none;
+        }
+        .input-box:focus { border-color: var(--a); box-shadow: 0 0 10px rgba(0,210,255,0.2); }
+        .btn { 
+            width: 100%; padding: 16px; border-radius: 15px; border: none; 
+            background: linear-gradient(45deg, var(--s), var(--p)); 
+            color: white; font-weight: bold; cursor: pointer; font-size: 18px;
+            box-shadow: 0 10px 20px rgba(110, 72, 170, 0.3);
+        }
+        .btn:active { transform: scale(0.98); }
+
     </style>
 </head>
 <body>
 
-<div id="splash"><div class="energy-ball"></div><div class="oren-reveal">OREN</div></div>
+    <div id="splash">
+        <div class="energy-ball"></div>
+        <div class="oren-reveal">OREN</div>
+    </div>
 
-<div id="authPage">
-    <div class="card">
-        <h1 style="color:var(--a)">OREN</h1>
-        <div id="fL">
-            <input type="text" id="lUser" class="input-box" placeholder="الإيميل أو الهاتف">
-            <input type="password" id="lPass" class="input-box" placeholder="كلمة المرور">
-            <button class="btn" id="btnLogin">دخول</button>
+    <div id="authPage">
+        <div class="card">
+            <h2 style="margin-bottom: 30px; letter-spacing: 2px;">تسجيل الدخول</h2>
+            <input type="text" class="input-box" placeholder="اسم المستخدم">
+            <input type="password" class="input-box" placeholder="كلمة المرور">
+            <button class="btn" onclick="alert('جاهز للفكرة الجديدة!')">دخول</button>
+            <p style="margin-top: 20px; font-size: 13px; color: #888;">نظام OREN المطور v2.0</p>
         </div>
     </div>
-</div>
 
-<div id="storePage">
-    <header><div style="font-weight:900; font-size:24px; color:var(--a);">OREN</div></header>
-    <div class="products-grid" id="pGrid"></div>
-    <div id="adminBtn" onclick="openAdmin()">⚙️</div>
-    <div class="bottom-nav"><div>🏠</div><div>🛍️</div><div>❤️</div><div>👤</div></div>
-</div>
+    <script>
+        // إخفاء الـ Splash وإظهار صفحة الدخول بعد الأنيميشن
+        setTimeout(() => {
+            document.getElementById('splash').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('splash').style.display = 'none';
+                document.getElementById('authPage').style.display = 'flex';
+                // أنيميشن ظهور خفيف للكارت
+                document.querySelector('.card').style.animation = 'fadeInUp 0.8s ease';
+            }, 500);
+        }, 3800);
+    </script>
 
-<div id="adminModal">
-    <div class="card" style="max-width: 90%">
-        <h3>إضافة منتج 🛒</h3>
-        <input type="text" id="pTitle" class="input-box" placeholder="اسم المنتج">
-        <input type="number" id="pPrice" class="input-box" placeholder="السعر">
-        
-        <div class="upload-area" onclick="document.getElementById('fileInput').click()">
-            <span id="uploadStatus">📸 اضغط لرفع صورة من جهازك</span>
-            <img id="imgPreview">
-            <input type="file" id="fileInput" class="hidden" accept="image/*">
-        </div>
-        
-        <p style="font-size: 12px; color: #888;">أو حط رابط صورة جاهز:</p>
-        <input type="text" id="pLinkBackup" class="input-box" placeholder="رابط الصورة (اختياري)">
-
-        <input type="text" id="pSale" class="input-box" placeholder="الخصم (مثال: 20%)">
-        <button class="btn" onclick="addNewProduct()">إضافة للمتجر</button>
-        <button onclick="document.getElementById('adminModal').style.display='none'" style="margin-top:10px; background:none; border:none; color:gray">إلغاء</button>
-    </div>
-</div>
-
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyALgV2v3lmxvEoP0HosqGSqm727vZrYUq4",
-      authDomain: "orenapp-f2f1e.firebaseapp.com",
-      databaseURL: "https://orenapp-f2f1e-default-rtdb.firebaseio.com",
-      projectId: "orenapp-f2f1e",
-      storageBucket: "orenapp-f2f1e.firebasestorage.app",
-      messagingSenderId: "973368909449",
-      appId: "1:973368909449:web:ce364a309f622f575c3058"
-    };
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-
-    let finalImageUrl = "";
-
-    // Splash
-    setTimeout(() => { document.getElementById('splash').style.display='none'; document.getElementById('authPage').style.display='flex'; }, 3000);
-
-    // Login
-    document.getElementById('btnLogin').onclick = () => {
-        document.getElementById('authPage').style.display='none';
-        document.getElementById('storePage').style.display='block';
-        loadProducts();
-    };
-
-    // Admin
-    window.openAdmin = () => { if(prompt("الباسورد:") === "123") document.getElementById('adminModal').style.display='flex'; };
-
-    // Image Upload Logic (Updated Key)
-    document.getElementById('fileInput').onchange = function(e) {
-        const file = e.target.files[0];
-        if(!file) return;
-
-        // Preview
-        const reader = new FileReader();
-        reader.onload = (ev) => { 
-            const img = document.getElementById('imgPreview');
-            img.src = ev.target.result; img.style.display = 'block';
-            document.getElementById('uploadStatus').innerText = "جاري الرفع... ⏳";
-        };
-        reader.readAsDataURL(file);
-
-        // Upload to ImgBB (Try this NEW KEY)
-        const formData = new FormData();
-        formData.append("image", file);
-        
-        // استخدام مفتاح API مختلف ومستقر
-        fetch("https://api.imgbb.com/1/upload?key=03774619a9776f3f01f05739c943714b", {
-            method: "POST",
-            body: formData
-        })
-        .then(res => res.json())
-        .then(data => {
-            if(data.success) {
-                finalImageUrl = data.data.url;
-                document.getElementById('uploadStatus').innerText = "تم الرفع! ✅";
-            } else {
-                alert("السيرفر لسه رافض.. استخدم خانة الرابط الاحتياطي!");
-                document.getElementById('uploadStatus').innerText = "❌ فشل الرفع";
-            }
-        });
-    };
-
-    window.addNewProduct = async () => {
-        const title = document.getElementById('pTitle').value;
-        const price = document.getElementById('pPrice').value;
-        const backupLink = document.getElementById('pLinkBackup').value;
-        const sale = document.getElementById('pSale').value;
-
-        // الأولوية للصورة المرفوعة، لو مفيش ياخد الرابط اليدوي
-        const imgToSend = finalImageUrl || backupLink;
-
-        if(!title || !price || !imgToSend) return alert("البيانات ناقصة يا بطل!");
-
-        await push(ref(db, 'products'), { title, price, link: imgToSend, sale });
-        alert("تم الإضافة!");
-        document.getElementById('adminModal').style.display='none';
-        location.reload(); 
-    };
-
-    function loadProducts() {
-        onValue(ref(db, 'products'), (snap) => {
-            const grid = document.getElementById('pGrid');
-            grid.innerHTML = "";
-            snap.forEach(c => {
-                const p = c.val();
-                grid.innerHTML += `<div class="p-card">
-                    ${p.sale ? `<div class="sale-tag">${p.sale}</div>` : ''}
-                    <img class="p-img" src="${p.link}">
-                    <div class="p-info">
-                        <h4>${p.title}</h4>
-                        <b style="color:var(--a)">${p.price} EGP</b>
-                        <button class="btn" style="padding:8px; font-size:12px; margin-top:10px;">إضافة للسلة</button>
-                    </div>
-                </div>`;
-            });
-        });
-    }
-</script>
+    <style>
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </body>
 </html>
