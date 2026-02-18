@@ -3,103 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OREN - بداية جديدة</title>
+    <title>OREN - النظام المتكامل</title>
     <style>
         :root { --p: #9d50bb; --s: #6e48aa; --a: #00d2ff; --bg: #050510; }
-        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; transition: 0.4s; }
+        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; transition: 0.3s; }
         body, html { margin: 0; padding: 0; background: var(--bg); color: white; height: 100vh; overflow: hidden; }
 
-        /* --- أنيميشن الكرة والاسم (الافتتاحية) --- */
-        #splash { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: var(--bg); display: flex; justify-content: center; 
-            align-items: center; z-index: 9999; 
-        }
-        .energy-ball { 
-            width: 15px; height: 15px; background: #fff; border-radius: 50%; 
-            box-shadow: 0 0 20px var(--a); animation: dropAndShock 1.5s forwards; 
-            position: absolute; 
-        }
-        .oren-reveal { 
-            font-size: 70px; font-weight: 900; opacity: 0; 
-            animation: textReveal 1.2s 1.4s forwards; letter-spacing: 8px; 
-            background: linear-gradient(to right, #fff, var(--a));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        /* --- Splash Screen --- */
+        #splash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+        .energy-ball { width: 15px; height: 15px; background: #fff; border-radius: 50%; box-shadow: 0 0 20px var(--a); animation: dropAndShock 1.5s forwards; position: absolute; }
+        .oren-reveal { font-size: 60px; font-weight: 900; opacity: 0; animation: textReveal 1.2s 1.4s forwards; letter-spacing: 5px; }
+        @keyframes dropAndShock { 0% { transform: translateY(-700px); } 65% { transform: translateY(0); box-shadow: 0 0 150px 70px rgba(0, 210, 255, 0.5); } 100% { transform: scale(50); opacity: 0; } }
+        @keyframes textReveal { 0% { opacity: 0; filter: blur(15px); } 100% { opacity: 1; filter: blur(0); } }
+
+        /* --- Auth Section --- */
+        #authPage { display: none; height: 100vh; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; background: radial-gradient(circle, #1a1a3a 0%, #050510 100%); }
+        .card { background: rgba(255,255,255,0.02); backdrop-filter: blur(25px); padding: 30px; border-radius: 35px; width: 100%; max-width: 450px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
+        
+        .tabs { display: flex; background: rgba(0,0,0,0.3); padding: 5px; border-radius: 15px; margin-bottom: 20px; }
+        .tab { flex: 1; padding: 12px; cursor: pointer; border-radius: 12px; font-weight: bold; opacity: 0.5; }
+        .tab.active { background: linear-gradient(45deg, var(--p), var(--s)); opacity: 1; }
+
+        .input-box { width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: white; text-align: center; outline: none; }
+        .btn { width: 100%; padding: 16px; border-radius: 12px; border: none; background: linear-gradient(45deg, var(--s), var(--p)); color: white; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        
+        /* زر جوجل */
+        .google-btn { 
+            width: 100%; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); 
+            background: white; color: #444; font-weight: bold; cursor: pointer; 
+            margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px;
         }
 
-        @keyframes dropAndShock {
-            0% { transform: translateY(-800px); }
-            65% { transform: translateY(0); box-shadow: 0 0 150px 70px rgba(0, 210, 255, 0.6); }
-            100% { transform: scale(60); opacity: 0; }
-        }
-        @keyframes textReveal {
-            0% { opacity: 0; filter: blur(20px); transform: scale(0.8); }
-            100% { opacity: 1; filter: blur(0); transform: scale(1); }
-        }
-
-        /* --- واجهة الدخول --- */
-        #authPage { 
-            display: none; height: 100vh; justify-content: center; 
-            align-items: center; padding: 20px; 
-            background: radial-gradient(circle at center, #1a1a3a 0%, #050510 100%);
-        }
-        .card { 
-            background: rgba(255,255,255,0.03); backdrop-filter: blur(20px); 
-            padding: 40px; border-radius: 40px; width: 100%; max-width: 400px; 
-            text-align: center; border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-        }
-        .input-box { 
-            width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 15px; 
-            border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.4); 
-            color: white; text-align: center; font-size: 16px; outline: none;
-        }
-        .input-box:focus { border-color: var(--a); box-shadow: 0 0 10px rgba(0,210,255,0.2); }
-        .btn { 
-            width: 100%; padding: 16px; border-radius: 15px; border: none; 
-            background: linear-gradient(45deg, var(--s), var(--p)); 
-            color: white; font-weight: bold; cursor: pointer; font-size: 18px;
-            box-shadow: 0 10px 20px rgba(110, 72, 170, 0.3);
-        }
-        .btn:active { transform: scale(0.98); }
-
+        .hidden { display: none; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: var(--p); border-radius: 10px; }
     </style>
 </head>
 <body>
 
-    <div id="splash">
-        <div class="energy-ball"></div>
-        <div class="oren-reveal">OREN</div>
-    </div>
+<div id="splash"><div class="energy-ball"></div><div class="oren-reveal">OREN</div></div>
 
-    <div id="authPage">
-        <div class="card">
-            <h2 style="margin-bottom: 30px; letter-spacing: 2px;">تسجيل الدخول</h2>
-            <input type="text" class="input-box" placeholder="اسم المستخدم">
-            <input type="password" class="input-box" placeholder="كلمة المرور">
-            <button class="btn" onclick="alert('جاهز للفكرة الجديدة!')">دخول</button>
-            <p style="margin-top: 20px; font-size: 13px; color: #888;">نظام OREN المطور v2.0</p>
+<div id="authPage">
+    <div class="card">
+        <div style="font-size: 35px; font-weight: 900; background: linear-gradient(to right, var(--a), var(--p)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px;">OREN</div>
+        
+        <div class="tabs">
+            <div class="tab active" id="tL">دخول</div>
+            <div class="tab" id="tR">جديد</div>
+        </div>
+
+        <div id="fL">
+            <input type="text" id="lUser" class="input-box" placeholder="الإيميل أو الهاتف">
+            <input type="password" id="lPass" class="input-box" placeholder="كلمة المرور">
+            <button class="btn" id="btnLogin">دخول</button>
+            <div style="margin: 15px 0; color: #777;">أو بواسطة</div>
+            <button class="google-btn" onclick="loginWithGoogle()">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" width="20">
+                متابعة باستخدام جوجل
+            </button>
+        </div>
+
+        <div id="fR" class="hidden">
+            <input type="text" id="rName" class="input-box" placeholder="الاسم بالكامل">
+            <input type="email" id="rEmail" class="input-box" placeholder="البريد الإلكتروني">
+            <input type="tel" id="rPhone" class="input-box" placeholder="رقم الهاتف">
+            
+            <select id="rGov" class="input-box">
+                <option value="" disabled selected>المحافظة</option>
+                <option>القاهرة</option><option>الجيزة</option><option>الإسكندرية</option>
+                <option>الدقهلية</option><option>الغربية</option><option>المنوفية</option>
+            </select>
+
+            <input type="text" id="rArea" class="input-box" placeholder="المنطقة / المدينة">
+            
+            <div style="font-size: 12px; color: #888; text-align: right; margin-right: 10px;">تاريخ الميلاد</div>
+            <input type="date" id="rDob" class="input-box">
+            
+            <input type="password" id="rPass" class="input-box" placeholder="كلمة المرور">
+            <button class="btn" id="btnReg">إنشاء الحساب</button>
         </div>
     </div>
+</div>
 
-    <script>
-        // إخفاء الـ Splash وإظهار صفحة الدخول بعد الأنيميشن
-        setTimeout(() => {
-            document.getElementById('splash').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('splash').style.display = 'none';
-                document.getElementById('authPage').style.display = 'flex';
-                // أنيميشن ظهور خفيف للكارت
-                document.querySelector('.card').style.animation = 'fadeInUp 0.8s ease';
-            }, 500);
-        }, 3800);
-    </script>
+<script type="module">
+    // إعدادات Firebase (تأكد من وضع إعداداتك هنا)
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-    <style>
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+    const firebaseConfig = {
+      apiKey: "AIzaSyALgV2v3lmxvEoP0HosqGSqm727vZrYUq4",
+      authDomain: "orenapp-f2f1e.firebaseapp.com",
+      projectId: "orenapp-f2f1e",
+      storageBucket: "orenapp-f2f1e.firebasestorage.app",
+      messagingSenderId: "973368909449",
+      appId: "1:973368909449:web:ce364a309f622f575c3058"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    // Splash
+    setTimeout(() => {
+        document.getElementById('splash').style.display = 'none';
+        document.getElementById('authPage').style.display = 'flex';
+    }, 3800);
+
+    // التبديل بين التابس
+    const tL = document.getElementById('tL'), tR = document.getElementById('tR'), fL = document.getElementById('fL'), fR = document.getElementById('fR');
+    tL.onclick = () => { tL.classList.add('active'); tR.classList.remove('active'); fL.classList.remove('hidden'); fR.classList.add('hidden'); };
+    tR.onclick = () => { tR.classList.add('active'); tL.classList.remove('active'); fR.classList.remove('hidden'); fL.classList.add('hidden'); };
+
+    // وظيفة جوجل
+    window.loginWithGoogle = () => {
+        signInWithPopup(auth, provider)
+            .then((result) => {
+                const user = result.user;
+                alert("أهلاً يا " + user.displayName);
+                // هنا توجهه للفكرة الجديدة
+            }).catch((error) => {
+                alert("حدث خطأ في تسجيل جوجل");
+            });
+    };
+</script>
+
 </body>
 </html>
