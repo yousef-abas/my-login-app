@@ -3,55 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OREN - تجربة فريدة</title>
+    <title>OREN - التجربة الفخمة</title>
     <style>
-        :root { --p: #9d50bb; --s: #6e48aa; --a: #00d2ff; --bg: #0f0c29; }
-        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body, html { margin: 0; padding: 0; background: var(--bg); color: white; overflow-x: hidden; height: 100%; }
+        :root { --p: #9d50bb; --s: #6e48aa; --a: #00d2ff; --bg: #050510; }
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: 0.3s; }
+        body, html { margin: 0; padding: 0; background: var(--bg); color: white; height: 100%; overflow-x: hidden; }
 
-        /* --- Splash Screen --- */
+        /* --- Splash Screen Cinematic --- */
         #splash {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg);
             display: flex; justify-content: center; align-items: center; z-index: 9999;
         }
-        .ball {
-            width: 50px; height: 50px; background: var(--a); border-radius: 50%;
-            animation: drop 1s ease-in forwards, expand 1s 1.2s ease-in-out forwards, contract 0.8s 3s ease-in-out forwards;
-            display: flex; justify-content: center; align-items: center; font-weight: 900; color: var(--bg); overflow: hidden; white-space: nowrap;
+        .energy-ball {
+            width: 15px; height: 15px; background: #fff; border-radius: 50%;
+            box-shadow: 0 0 20px var(--a), 0 0 40px var(--p);
+            animation: dropAndShock 1.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+            position: absolute;
         }
-        @keyframes drop { 0% { transform: translateY(-500px); } 60% { transform: translateY(0); } 80% { transform: translateY(-20px); } 100% { transform: translateY(0); } }
-        @keyframes expand { 0% { width: 50px; border-radius: 50%; } 100% { width: 250px; height: 80px; border-radius: 40px; font-size: 40px; content: 'OREN'; background: white; box-shadow: 0 0 30px var(--a); } }
-        @keyframes contract { 0% { width: 250px; opacity: 1; } 100% { width: 0; opacity: 0; transform: scale(0); } }
+        .oren-reveal {
+            font-size: 60px; font-weight: 900; letter-spacing: 15px; opacity: 0;
+            background: linear-gradient(to bottom, #fff, var(--a));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: blur(15px);
+            animation: textReveal 1.2s 1.4s ease-out forwards;
+        }
+        @keyframes dropAndShock {
+            0% { transform: translateY(-700px) scale(1); opacity: 1; }
+            45% { transform: translateY(0) scale(1.3, 0.7); }
+            55% { transform: translateY(-30px) scale(1); }
+            65% { transform: translateY(0) scale(1); box-shadow: 0 0 150px 70px rgba(0, 210, 255, 0.5); }
+            100% { transform: scale(50); opacity: 0; }
+        }
+        @keyframes textReveal {
+            0% { opacity: 0; filter: blur(15px); letter-spacing: 25px; }
+            100% { opacity: 1; filter: blur(0); letter-spacing: 8px; }
+        }
 
-        /* --- Auth Styling --- */
-        .main-wrapper { display: none; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; opacity: 0; transition: 1s; }
-        .card { background: rgba(255,255,255,0.03); backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.1); padding: 35px; border-radius: 30px; width: 100%; max-width: 450px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-        .logo-text { font-size: 35px; font-weight: 900; background: linear-gradient(to right, var(--a), var(--p)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 25px; }
+        /* --- Main UI --- */
+        .main-wrapper { display: none; min-height: 100vh; justify-content: center; align-items: center; padding: 20px; opacity: 0; background: radial-gradient(circle at center, #1a1a2e 0%, #050510 100%); }
+        .card { background: rgba(255,255,255,0.02); backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.08); padding: 40px 25px; border-radius: 35px; width: 100%; max-width: 450px; box-shadow: 0 30px 60px rgba(0,0,0,0.7); text-align: center; }
         
-        .tabs { display: flex; background: rgba(0,0,0,0.3); padding: 5px; border-radius: 15px; margin-bottom: 25px; }
-        .tab { flex: 1; padding: 12px; cursor: pointer; border-radius: 12px; font-weight: bold; font-size: 14px; opacity: 0.5; text-align: center; }
-        .tab.active { background: linear-gradient(to right, var(--p), var(--s)); opacity: 1; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .logo-static { font-size: 45px; font-weight: 900; background: linear-gradient(45deg, var(--a), var(--p)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 30px; letter-spacing: 2px; }
 
-        .input-box { width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: white; outline: none; font-size: 14px; }
-        .input-box:focus { border-color: var(--a); background: rgba(255,255,255,0.1); }
-        select.input-box { cursor: pointer; color: #ccc; }
-        select option { background: var(--bg); color: white; }
+        .tabs { display: flex; background: rgba(255,255,255,0.05); padding: 5px; border-radius: 20px; margin-bottom: 25px; }
+        .tab { flex: 1; padding: 14px; cursor: pointer; border-radius: 15px; font-weight: bold; opacity: 0.4; font-size: 14px; }
+        .tab.active { background: rgba(255,255,255,0.1); opacity: 1; color: var(--a); }
 
-        .btn { width: 100%; padding: 16px; border-radius: 12px; border: none; background: linear-gradient(to right, var(--p), var(--s)); color: white; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        .input-box { width: 100%; padding: 16px; margin-bottom: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.3); color: white; outline: none; font-size: 15px; text-align: center; }
+        .input-box:focus { border-color: var(--a); box-shadow: 0 0 15px rgba(0, 210, 255, 0.2); }
+        
+        select.input-box { color: #aaa; appearance: none; }
+
+        .btn { width: 100%; padding: 18px; border-radius: 15px; border: none; background: linear-gradient(45deg, var(--s), var(--p)); color: white; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px; text-transform: uppercase; }
         .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(157, 80, 187, 0.4); }
-        
-        .lang-btn { position: absolute; top: 20px; left: 20px; background: rgba(255,255,255,0.1); padding: 8px 15px; border-radius: 10px; cursor: pointer; font-size: 12px; }
+
+        .lang-btn { position: absolute; top: 25px; left: 25px; background: rgba(255,255,255,0.05); padding: 8px 18px; border-radius: 12px; cursor: pointer; font-size: 13px; border: 1px solid rgba(255,255,255,0.1); z-index: 10; }
         .hidden { display: none; }
     </style>
 </head>
 <body>
 
-<div id="splash"><div class="ball" id="ballText"></div></div>
+<div id="splash">
+    <div class="energy-ball"></div>
+    <div class="oren-reveal">OREN</div>
+</div>
 
 <div class="main-wrapper" id="mainApp">
     <div class="lang-btn" id="toggleLang">English</div>
     <div class="card">
-        <div class="logo-text">OREN</div>
+        <div class="logo-static">OREN</div>
         
         <div class="tabs">
             <div class="tab active" id="tL" data-ar="تسجيل الدخول" data-en="Login">تسجيل الدخول</div>
@@ -83,7 +103,6 @@
             </select>
 
             <input type="text" id="rArea" class="input-box" placeholder="المنطقة / المدينة">
-            <label style="font-size: 12px; color: #aaa; display: block; text-align: right; margin: 5px 10px;">تاريخ الميلاد</label>
             <input type="date" id="rDob" class="input-box">
             <input type="password" id="rPass" class="input-box" placeholder="كلمة المرور">
             <button class="btn" id="btnReg" data-ar="إنشاء حساب" data-en="Create Account">إنشاء حساب</button>
@@ -108,24 +127,27 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // Splash Control
-    setTimeout(() => { document.getElementById('ballText').innerText = 'OREN'; }, 1200);
-    setTimeout(() => { 
-        document.getElementById('splash').style.display = 'none';
-        const main = document.getElementById('mainApp');
-        main.style.display = 'flex';
-        setTimeout(() => main.style.opacity = '1', 50);
-    }, 4000);
+    // Splash Screen Logic
+    setTimeout(() => {
+        document.getElementById('splash').style.opacity = '0';
+        setTimeout(() => {
+            document.getElementById('splash').style.display = 'none';
+            const main = document.getElementById('mainApp');
+            main.style.display = 'flex';
+            setTimeout(() => main.style.opacity = '1', 50);
+        }, 600);
+    }, 3800);
 
-    // Tab Switching
+    // Tab Logic
     const tL = document.getElementById('tL'), tR = document.getElementById('tR');
     const fL = document.getElementById('fL'), fR = document.getElementById('fR');
     tL.onclick = () => { tL.classList.add('active'); tR.classList.remove('active'); fL.classList.remove('hidden'); fR.classList.add('hidden'); };
     tR.onclick = () => { tR.classList.add('active'); tL.classList.remove('active'); fR.classList.remove('hidden'); fL.classList.add('hidden'); };
 
-    // Register Function
+    // Register Logic
     document.getElementById('btnReg').onclick = async () => {
-        const data = {
+        const btn = document.getElementById('btnReg');
+        const userData = {
             name: document.getElementById('rName').value,
             email: document.getElementById('rEmail').value,
             phone: document.getElementById('rPhone').value,
@@ -134,44 +156,46 @@
             dob: document.getElementById('rDob').value,
             pass: document.getElementById('rPass').value
         };
-        if(!data.name || !data.email || !data.pass || !data.gov) return alert("اكمل كافة البيانات!");
-        
-        await set(push(ref(db, 'users')), data);
-        alert("تم تسجيلك في أورين بنجاح! جرب الدخول الآن.");
-        location.reload();
+
+        if(!userData.name || !userData.email || !userData.pass || !userData.phone) return alert("يرجى ملء جميع البيانات الأساسية!");
+
+        btn.disabled = true; btn.innerText = "...";
+        try {
+            await set(push(ref(db, 'users')), userData);
+            alert("تم تسجيل حسابك بنجاح في أورين!");
+            location.reload();
+        } catch (e) { alert("خطأ: " + e.message); btn.disabled = false; }
     };
 
-    // Login Function (The Verification)
+    // Login Logic
     document.getElementById('btnLogin').onclick = async () => {
         const userInp = document.getElementById('lUser').value.trim();
         const passInp = document.getElementById('lPass').value;
+        if(!userInp || !passInp) return alert("أدخل البيانات!");
 
-        if(!userInp || !passInp) return alert("من فضلك أدخل البيانات");
-
-        const snapshot = await get(ref(db, 'users'));
-        if(snapshot.exists()){
-            let found = false;
-            snapshot.forEach(child => {
-                const u = child.val();
-                if((u.email === userInp || u.phone === userInp) && u.pass === passInp){
-                    found = true;
-                    alert("أهلاً بك مجدداً في أورين: " + u.name);
-                }
-            });
-            if(!found) alert("البيانات غير صحيحة، تأكد من الإيميل/الهاتف والباسورد");
-        } else {
-            alert("لا يوجد مستخدمين مسجلين بعد");
-        }
+        try {
+            const snapshot = await get(ref(db, 'users'));
+            if(snapshot.exists()){
+                let found = false;
+                snapshot.forEach(child => {
+                    const u = child.val();
+                    if((u.email === userInp || u.phone === userInp) && u.pass === passInp){
+                        found = true;
+                        alert("تم تسجيل الدخول بنجاح! أهلاً بك " + u.name);
+                    }
+                });
+                if(!found) alert("البيانات غير صحيحة!");
+            } else { alert("لا يوجد مستخدمين!"); }
+        } catch (e) { alert("خطأ تقني!"); }
     };
 
-    // Lang Toggle
+    // Language Toggle
     let lang = 'ar';
     document.getElementById('toggleLang').onclick = () => {
         lang = lang === 'ar' ? 'en' : 'ar';
         document.body.dir = lang === 'ar' ? 'rtl' : 'ltr';
         document.getElementById('toggleLang').innerText = lang === 'ar' ? 'English' : 'عربي';
         document.querySelectorAll('[data-ar]').forEach(el => el.innerText = el.getAttribute('data-' + lang));
-        // Note: Placeholders can be updated similarly
     };
 </script>
 </body>
