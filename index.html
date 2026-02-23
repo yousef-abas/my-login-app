@@ -91,7 +91,17 @@
         <div id="logsContainer"></div>
         <button class="btn" onclick="location.reload()" style="margin-top:20px; color:red;">رجوع</button>
     </div>
-
+<div class="glass-card" style="background: white;">
+    <h2 style="color:var(--p); margin-top:0;">📊 تحليل الأداء</h2>
+    <div style="display: flex; gap: 10px; margin-bottom:15px;">
+        <div class="stat-item" style="flex:1; background:#f8f9fa;">إجمالي المكتمل<b id="totalDone">0</b></div>
+        <div class="stat-item" style="flex:1; background:#f8f9fa;">إجمالي المعلق<b id="totalPending">0</b></div>
+    </div>
+    
+    <h3 style="font-size:14px; color:var(--p); border-bottom:1px solid #eee; padding-bottom:5px;">🏆 ترتيب المناديب</h3>
+    <div id="leaderboard" style="text-align: right; font-size: 13px;">
+        </div>
+</div>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -133,10 +143,52 @@
         window.logout = () => signOut(auth);
 
         window.showAdmin = () => {
-            if(prompt("كلمة سر المدير:") === "123456") {
-                showSection('adminPanel');
-                loadAdminLogs();
-            }
+window.showAdmin = () => {
+    if(prompt("كلمة سر المدير:") === "123456") {
+        showSection('adminPanel');
+        loadAdminLogs(); // دي اللي بتجيب التقارير
+        runAnalytics();  // ضيف السطر ده: ده اللي بيشغل التحليل
+    }
+};
+
+// وضيف الدالة دي في أي مكان فاضي جوه الـ <script>
+function runAnalytics() {
+    // حساب المهام اللي لسه مخلصتش
+    onValue(ref(db, 'tasks'), (snap) => {
+        let pending = 0;
+        const data = snap.val();
+        if(data) {
+            Object.keys(data).forEach(u => {
+                pending += Object.keys(data[u]).filter(k => data[u][k].status === "pending").length;
+            });
+        }
+        document.getElementById('totalPending').innerText = pending;
+    });
+
+    // حساب المتصدرين
+    onValue(ref(db, 'history'), (snap) => {
+        const history = snap.val();
+        let total = 0;
+        let leaders = [];
+        if(history) {
+            Object.keys(history).forEach(u => {
+                let count = Object.keys(history[u]).length;
+                total += count;
+                leaders.push({ name: u.substring(0,5), score: count });
+            });
+            leaders.sort((a,b) => b.score - a.score); // ترتيب من الأكبر للأصغر
+            document.getElementById('totalDone').innerText = total;
+            let list = "";
+            leaders.forEach((m, i) => {
+                list += `<div style="display:flex; justify-content:space-between; padding:5px; border-bottom:1px solid #f9f9f9;">
+                            <span>${i+1}. مندوب (${m.name})</span>
+                            <b>${m.score} ✅</b>
+                         </div>`;
+            });
+            document.getElementById('leaderboard').innerHTML = list;
+        }
+    });
+}            }
         };
 
         function showSection(id) {
@@ -226,3 +278,4 @@
     </script>
 </body>
 </html>
+
