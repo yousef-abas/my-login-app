@@ -3,54 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OREN - Control Panel</title>
+    <title>OREN - Admin System</title>
     <style>
         :root { --p: #9d50bb; --s: #6e48aa; --a: #00d2ff; --bg: #050510; }
-        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; transition: 0.3s; }
-        body { margin: 0; background: var(--bg); color: white; }
-        
-        /* تصميم الكروت بتاعك */
-        .card { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.1); margin: 20px; }
-        .input-box { width: 100%; padding: 15px; margin-bottom: 12px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: white; text-align: center; outline: none; }
+        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { margin: 0; background: var(--bg); color: white; text-align: center; }
+        .card { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.1); margin: 20px; display: inline-block; width: 90%; max-width: 400px; }
+        .input-box { width: 100%; padding: 15px; margin-bottom: 12px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: white; text-align: center; }
         .btn { width: 100%; padding: 15px; border-radius: 15px; border: none; background: linear-gradient(45deg, var(--s), var(--p)); color: white; font-weight: bold; cursor: pointer; }
-        
         #adminPanel, #dashboard, #authPage { display: none; }
-        .hidden { display: none; }
-        
-        /* استايل المهمة للمندوب */
-        .task-card { background: linear-gradient(135deg, var(--s), var(--p)); padding: 20px; border-radius: 20px; text-align: center; }
     </style>
 </head>
 <body>
 
-    <div id="authPage" style="display: block; padding-top: 100px; text-align: center;">
-        <h1 style="color: var(--a);">OREN SYSTEM</h1>
+    <div id="authPage" style="display: block; margin-top: 50px;">
+        <h2>نظام OREN</h2>
         <div class="card">
-            <input type="email" id="email" class="input-box" placeholder="البريد الإلكتروني">
-            <input type="password" id="pass" class="input-box" placeholder="كلمة المرور">
-            <button class="btn" onclick="login()">دخول</button>
-            <p onclick="showAdmin()" style="margin-top: 20px; font-size: 12px; opacity: 0.5;">دخول المدير</p>
+            <input type="email" id="email" class="input-box" placeholder="الإيميل">
+            <input type="password" id="pass" class="input-box" placeholder="الباسورد">
+            <button class="btn" onclick="window.login()">دخول المندوب</button>
+            <p onclick="window.showAdmin()" style="margin-top:20px; cursor:pointer; color:var(--a)">دخول المدير</p>
         </div>
     </div>
 
-    <div id="adminPanel" class="card">
-        <h2 style="color: var(--a);">إضافة مهمة لمندوب</h2>
-        <input type="text" id="mUid" class="input-box" placeholder="ضع الـ UID الخاص بالمندوب">
-        <input type="text" id="mClient" class="input-box" placeholder="اسم العميل">
-        <input type="text" id="mAddress" class="input-box" placeholder="العنوان">
-        <input type="text" id="mPhone" class="input-box" placeholder="رقم تليفون العميل">
-        <button class="btn" onclick="sendTask()">إرسال المهمة فوراً 🚀</button>
-        <button class="btn" onclick="location.reload()" style="margin-top: 10px; background: #333;">خروج</button>
+    <div id="adminPanel">
+        <h2>لوحة تحكم المدير</h2>
+        <div class="card">
+            <input type="text" id="mUid" class="input-box" placeholder="UID المندوب">
+            <input type="text" id="mClient" class="input-box" placeholder="اسم العميل">
+            <input type="text" id="mAddress" class="input-box" placeholder="العنوان">
+            <input type="text" id="mPhone" class="input-box" placeholder="رقم التليفون">
+            <button class="btn" onclick="window.sendTask()">إرسال المهمة الآن</button>
+            <button onclick="location.reload()" style="background:none; color:red; border:none; margin-top:15px; cursor:pointer;">خروج</button>
+        </div>
     </div>
 
-    <div id="dashboard" class="card">
-        <div class="task-card">
-            <h3 id="cName">لا توجد مهام حالياً</h3>
+    <div id="dashboard">
+        <div class="card">
+            <h3 id="cName">لا توجد مهام</h3>
             <p id="cAddr"></p>
-        </div>
-        <div style="margin-top: 20px;">
-            <textarea id="report" class="input-box" placeholder="تقرير الزيارة..."></textarea>
-            <button class="btn" onclick="finishTask()">تم إنهاء المهمة ✅</button>
+            <textarea id="report" class="input-box" placeholder="تقريرك هنا"></textarea>
+            <button class="btn" onclick="window.finishTask()">إنهاء المهمة</button>
         </div>
     </div>
 
@@ -75,70 +68,57 @@
 
         let userUid = "";
 
-        // دخول المندوب أو المدير
-        window.login = async function() {
-            const e = document.getElementById('email').value;
-            const p = document.getElementById('pass').value;
+        // تعريف الدوال على window عشان تشتغل من الـ HTML
+        window.showAdmin = () => {
+            let p = prompt("باسورد المدير:");
+            if(p === "123456") {
+                document.getElementById('authPage').style.display='none';
+                document.getElementById('adminPanel').style.display='block';
+            }
+        };
+
+        window.login = async () => {
             try {
-                const res = await signInWithEmailAndPassword(auth, e, p);
+                const res = await signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('pass').value);
                 userUid = res.user.uid;
                 loadDashboard();
-            } catch { alert("خطأ في البيانات"); }
-        }
+            } catch (err) { alert("بيانات غلط"); }
+        };
 
-        // إظهار لوحة المدير بباسورد بسيط (عشان ماحدش يفتحها غيرك)
-        window.showAdmin = function() {
-            let p = prompt("أدخل كلمة سر المدير:");
-            if(p === "123456") { // تقدر تغيرها
-                document.getElementById('authPage').style.display = 'none';
-                document.getElementById('adminPanel').style.display = 'block';
+        window.sendTask = async () => {
+            const uid = document.getElementById('mUid').value.trim();
+            const client = document.getElementById('mClient').value;
+            if(!uid) return alert("اكتب الـ UID");
+
+            try {
+                await set(ref(db, 'tasks/' + uid), {
+                    client: client,
+                    address: document.getElementById('mAddress').value,
+                    phone: document.getElementById('mPhone').value,
+                    active: true
+                });
+                alert("تم الإرسال بنجاح!");
+            } catch (err) {
+                console.error(err);
+                alert("فشل الإرسال: " + err.message);
             }
-        }
+        };
 
-        // [للمدير] إرسال مهمة لمندوب
-        window.sendTask = async function() {
-            const uid = document.getElementById('mUid').value;
-            const data = {
-                client: document.getElementById('mClient').value,
-                address: document.getElementById('mAddress').value,
-                phone: document.getElementById('mPhone').value,
-                active: true
-            };
-            if(!uid) return alert("حط الـ UID بتاع المندوب الأول");
-            await set(ref(db, 'tasks/' + uid), data);
-            alert("تم إرسال المهمة للمندوب بنجاح!");
-        }
-
-        // [للمندوب] تحميل المهام
         async function loadDashboard() {
             const snap = await get(ref(db, 'tasks/' + userUid));
             if(snap.exists() && snap.val().active) {
-                const task = snap.val();
-                document.getElementById('cName').innerText = task.client;
-                document.getElementById('cAddr').innerText = task.address;
-                document.getElementById('authPage').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'block';
-            } else {
-                alert("لا توجد مهام جديدة لك حالياً");
-            }
+                document.getElementById('authPage').style.display='none';
+                document.getElementById('dashboard').style.display='block';
+                document.getElementById('cName').innerText = snap.val().client;
+                document.getElementById('cAddr').innerText = snap.val().address;
+            } else { alert("مفيش شغل حالياً"); }
         }
 
-        // [للمندوب] إنهاء المهمة
-        window.finishTask = async function() {
-            const note = document.getElementById('report').value;
-            if(!note) return alert("اكتب التقرير");
-            
-            // تسجيل في السجل للإدارة
-            await set(ref(db, 'history/' + userUid + '/' + Date.now()), {
-                client: document.getElementById('cName').innerText,
-                report: note,
-                time: new Date().toLocaleString('ar-EG')
-            });
-            // إخفاء المهمة
+        window.finishTask = async () => {
             await update(ref(db, 'tasks/' + userUid), { active: false });
-            alert("تم تسليم التقرير");
+            alert("تم التقفيل");
             location.reload();
-        }
+        };
     </script>
 </body>
 </html>
