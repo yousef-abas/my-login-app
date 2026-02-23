@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OREN Task Management</title>
+    <title>OREN - Admin Control</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -11,55 +11,70 @@
 
     <style>
         :root { --bg: #e0e5ec; --primary: #6366f1; --shadow: 9px 9px 16px #babecc, -9px -9px 16px #ffffff; --inner: inset 6px 6px 12px #babecc, inset -6px -6px 12px #ffffff; }
-        body { font-family: 'Cairo', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #444; }
+        body { font-family: 'Cairo', sans-serif; background: var(--bg); margin: 0; padding: 15px; color: #444; }
         .container { max-width: 500px; margin: auto; }
-        .card { background: var(--bg); padding: 20px; border-radius: 25px; box-shadow: var(--shadow); margin-bottom: 20px; transition: 0.3s; }
-        input, select, button { width: 100%; padding: 15px; margin: 10px 0; border: none; border-radius: 15px; font-family: 'Cairo'; outline: none; box-sizing: border-box; }
-        input, select { background: var(--bg); box-shadow: var(--inner); font-weight: bold; }
-        button { background: var(--bg); box-shadow: var(--shadow); color: var(--primary); font-weight: 900; cursor: pointer; }
+        .card { background: var(--bg); padding: 20px; border-radius: 25px; box-shadow: var(--shadow); margin-bottom: 20px; }
+        input, select, button, textarea { width: 100%; padding: 12px; margin: 8px 0; border: none; border-radius: 12px; font-family: 'Cairo'; outline: none; box-sizing: border-box; background: var(--bg); box-shadow: var(--inner); font-weight: bold; }
+        button { box-shadow: var(--shadow); color: var(--primary); font-weight: 900; cursor: pointer; }
         button:active { box-shadow: var(--inner); }
-        .task-item { border-right: 5px solid var(--primary); padding: 10px; margin: 10px 0; background: #f8f9fa; border-radius: 10px; box-shadow: var(--shadow); }
-        .status-done { border-right-color: #2ecc71; opacity: 0.7; }
+        .task-item { border-right: 5px solid var(--primary); padding: 15px; margin: 10px 0; background: #f8f9fa; border-radius: 15px; box-shadow: var(--shadow); position: relative; }
+        .status-done { border-right-color: #2ecc71; background: #f0fff4; }
         .hidden { display: none; }
-        .header { display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
+        .label { font-size: 12px; color: var(--primary); font-weight: bold; margin-top: 5px; display: block; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div id="login-screen" class="card">
-        <h2 style="text-align:center">OREN SYSTEM</h2>
-        <input type="email" id="email" placeholder="بريد المندوب أو المدير">
+        <h2 style="text-align:center">OREN LOGIN</h2>
+        <input type="email" id="email" placeholder="الإيميل">
         <input type="password" id="pass" placeholder="كلمة المرور">
         <button onclick="login()">دخول</button>
     </div>
 
     <div id="admin-screen" class="hidden">
-        <div class="card header">
-            <span>لوحة المدير 👑</span>
-            <button onclick="logout()" style="width:auto; padding:5px 10px; font-size:10px; background:#ff4d4d; color:white;">خروج</button>
+        <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
+            <b>لوحة التحكم - المدير 👑</b>
+            <button onclick="logout()" style="width:auto; padding:5px 15px; background:#ff4d4d; color:white;">خروج</button>
         </div>
+
         <div class="card">
-            <h3>تكليف مهمة جديدة</h3>
-            <input type="text" id="assign-task" placeholder="تفاصيل الطلب (مثلاً: طرد 50ج)">
-            <input type="text" id="assign-loc" placeholder="العنوان بالتفصيل">
-            <input type="text" id="target-agent" placeholder="اسم المندوب (كما سجل به)">
-            <button onclick="sendTaskToAgent()">إرسال للمندوب 🚀</button>
+            <h3>توزيع مهمة جديدة 📝</h3>
+            <span class="label">اسم العميل</span>
+            <input type="text" id="cust-name" placeholder="مثلاً: محمد علي">
+            
+            <span class="label">رقم الهاتف</span>
+            <input type="tel" id="cust-phone" placeholder="010xxxxxxx">
+            
+            <span class="label">العنوان بالتفصيل</span>
+            <input type="text" id="cust-address" placeholder="المنطقة، الشارع، الدور">
+            
+            <span class="label">المشكلة / الطلب</span>
+            <textarea id="cust-issue" placeholder="اشرح المشكلة هنا..."></textarea>
+            
+            <span class="label">اختر المندوب</span>
+            <select id="agents-dropdown">
+                <option value="">-- اختر المندوب من هنا --</option>
+            </select>
+            
+            <button onclick="assignTask()">إسناد المهمة للمندوب 🚀</button>
         </div>
-        <div id="all-tasks-monitor" class="card">
-            <h3>مراقبة الأوردرات</h3>
-            </div>
+
+        <div id="admin-monitor" class="card">
+            <h3>متابعة كافة المهام 📊</h3>
+            <div id="all-tasks-list"></div>
+        </div>
     </div>
 
     <div id="agent-screen" class="hidden">
-        <div class="card header">
-            <span>أهلاً، <b id="agent-name-tag"></b> 👋</span>
-            <button onclick="logout()" style="width:auto; padding:5px 10px; font-size:10px; background:#ff4d4d; color:white;">خروج</button>
-        </div>
         <div class="card">
-            <h3>أوردراتك المطلوبة اليوم</h3>
-            <div id="my-tasks-list">
-                </div>
+            <h3>أهلاً <span id="agent-name-display"></span> 👋</h3>
+            <button onclick="logout()" style="width:auto; background:#ff4d4d; color:white;">خروج</button>
+        </div>
+        <div id="my-tasks" class="card">
+            <h3>مهامي المطلوبة</h3>
+            <div id="agent-tasks-list"></div>
         </div>
     </div>
 </div>
@@ -80,19 +95,23 @@
     function login() {
         const e = document.getElementById('email').value;
         const p = document.getElementById('pass').value;
-        firebase.auth().signInWithEmailAndPassword(e, p).catch(err => alert(err.message));
+        firebase.auth().signInWithEmailAndPassword(e, p).catch(err => alert("خطأ: " + err.message));
     }
 
     firebase.auth().onAuthStateChanged(user => {
         if (user) {
             document.getElementById('login-screen').classList.add('hidden');
-            if(user.email === "admin@oren.com") {
+            if (user.email === "admin@oren.com") {
                 document.getElementById('admin-screen').classList.remove('hidden');
-                monitorAllTasks();
+                fetchAgents(); // جلب المناديب للقائمة
+                monitorAll();
             } else {
                 document.getElementById('agent-screen').classList.remove('hidden');
-                document.getElementById('agent-name-tag').innerText = user.email.split('@')[0];
-                loadAgentTasks(user.email.split('@')[0]);
+                const name = user.email.split('@')[0];
+                document.getElementById('agent-name-display').innerText = name;
+                loadAgentTasks(name);
+                // تسجيل المندوب في قاعدة البيانات ليظهر للمدير
+                db.ref('active_agents/' + name).set({ name: name, email: user.email });
             }
         } else {
             document.getElementById('login-screen').classList.remove('hidden');
@@ -101,67 +120,78 @@
         }
     });
 
-    // للمدير: إرسال مهمة
-    function sendTaskToAgent() {
-        const task = document.getElementById('assign-task').value;
-        const loc = document.getElementById('assign-loc').value;
-        const agent = document.getElementById('target-agent').value;
-
-        if(!task || !agent) return alert("اكمل البيانات");
-
-        db.ref('system_tasks/').push({
-            task: task,
-            location: loc,
-            agentName: agent,
-            status: "مطلوب",
-            time: new Date().toLocaleString('ar-EG')
-        }).then(() => {
-            alert("تم التكليف!");
-            document.getElementById('assign-task').value = "";
-            document.getElementById('assign-loc').value = "";
+    // جلب أسماء المناديب للقائمة المنسدلة
+    function fetchAgents() {
+        db.ref('active_agents').on('value', snap => {
+            const dropdown = document.getElementById('agents-dropdown');
+            dropdown.innerHTML = '<option value="">-- اختر المندوب من هنا --</option>';
+            snap.forEach(child => {
+                const agent = child.val();
+                dropdown.innerHTML += `<option value="${agent.name}">${agent.name}</option>`;
+            });
         });
     }
 
-    // للمندوب: رؤية مهامه فقط
-    function loadAgentTasks(name) {
-        db.ref('system_tasks').on('value', snap => {
-            const list = document.getElementById('my-tasks-list');
+    function assignTask() {
+        const name = document.getElementById('cust-name').value;
+        const phone = document.getElementById('cust-phone').value;
+        const addr = document.getElementById('cust-address').value;
+        const issue = document.getElementById('cust-issue').value;
+        const agent = document.getElementById('agents-dropdown').value;
+
+        if (!name || !agent) return alert("اختار مندوب واكتب اسم العميل");
+
+        db.ref('tasks_data').push({
+            customer: name,
+            phone: phone,
+            address: addr,
+            issue: issue,
+            agentName: agent,
+            status: "قيد الانتظار",
+            time: new Date().toLocaleString('ar-EG')
+        }).then(() => {
+            alert("تم التكليف بنجاح ✅");
+            document.getElementById('cust-name').value = "";
+            document.getElementById('cust-phone').value = "";
+            document.getElementById('cust-address').value = "";
+            document.getElementById('cust-issue').value = "";
+        });
+    }
+
+    function loadAgentTasks(myUsername) {
+        db.ref('tasks_data').on('value', snap => {
+            const list = document.getElementById('agent-tasks-list');
             list.innerHTML = "";
             snap.forEach(child => {
-                const val = child.val();
-                if(val.agentName === name) {
+                const t = child.val();
+                if (t.agentName === myUsername) {
                     list.innerHTML += `
-                        <div class="task-item ${val.status === 'تم' ? 'status-done' : ''}">
-                            <b>📍 العنوان:</b> ${val.location}<br>
-                            <b>📦 الطلب:</b> ${val.task}<br>
-                            <b>⏰ الوقت:</b> ${val.time}<br>
-                            ${val.status === 'مطلوب' ? `<button onclick="updateStatus('${child.key}')" style="margin-top:5px; padding:5px; font-size:12px;">تحديد كتم التسليم ✅</button>` : '✅ خلصت'}
-                        </div>
-                    `;
+                        <div class="task-item ${t.status === 'تم' ? 'status-done' : ''}">
+                            <b>👤 العميل:</b> ${t.customer}<br>
+                            <b>📞 هاتف:</b> ${t.phone}<br>
+                            <b>🏠 العنوان:</b> ${t.address}<br>
+                            <b>🛠 المشكلة:</b> ${t.issue}<br>
+                            <hr>
+                            ${t.status !== 'تم' ? `<button onclick="finishTask('${child.key}')">تم الحل ✅</button>` : '✨ تم الانتهاء'}
+                        </div>`;
                 }
             });
         });
     }
 
-    // تحديث الحالة من المندوب
-    function updateStatus(key) {
-        db.ref('system_tasks/' + key).update({ status: "تم" });
-    }
+    function finishTask(key) { db.ref('tasks_data/' + key).update({ status: "تم" }); }
 
-    // للمدير: مراقبة الكل
-    function monitorAllTasks() {
-        db.ref('system_tasks').on('value', snap => {
-            const monitor = document.getElementById('all-tasks-monitor');
-            monitor.innerHTML = "<h3>مراقبة الأوردرات</h3>";
+    function monitorAll() {
+        db.ref('tasks_data').on('value', snap => {
+            const list = document.getElementById('all-tasks-list');
+            list.innerHTML = "";
             snap.forEach(child => {
-                const val = child.val();
-                monitor.innerHTML += `
-                    <div class="task-item" style="border-right-color: ${val.status === 'تم' ? '#2ecc71' : '#f1c40f'}">
-                        <b>👤 المندوب:</b> ${val.agentName}<br>
-                        <b>📦 المهمة:</b> ${val.task}<br>
-                        <b>🚩 الحالة:</b> ${val.status}
-                    </div>
-                `;
+                const t = child.val();
+                list.innerHTML += `
+                    <div class="task-item ${t.status === 'تم' ? 'status-done' : ''}">
+                        <b>🛵 للمندوب: ${t.agentName}</b><br>
+                        <b>👤 العميل:</b> ${t.customer} | ${t.status}
+                    </div>`;
             });
         });
     }
