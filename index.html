@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OREN System Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -12,11 +13,11 @@
     <style>
         :root {
             --primary: #6366f1;
-            --bg: #f0f2f5;
-            --card-bg: #ffffff;
-            --shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #ffffff;
-            --inner-shadow: inset 6px 6px 12px #d1d9e6, inset -6px -6px 12px #ffffff;
-            --hover-shadow: 12px 12px 20px #c2ccdb, -12px -12px 20px #ffffff;
+            --bg: #e0e5ec; /* لون خلفية للبروز */
+            --card-bg: #e0e5ec;
+            --shadow: 9px 9px 16px rgb(163,177,198,0.6), -9px -9px 16px rgba(255,255,255, 0.5);
+            --inner-shadow: inset 6px 6px 12px #c1c9d7, inset -6px -6px 12px #ffffff;
+            --text-color: #444;
         }
 
         body {
@@ -26,97 +27,90 @@
             display: flex;
             justify-content: center;
             min-height: 100vh;
-            color: #333;
+            color: var(--text-color);
         }
 
-        .container {
-            width: 100%;
-            max-width: 500px;
-            padding: 20px;
-        }
+        .container { width: 100%; max-width: 450px; padding: 20px; }
 
-        /* الكروت والبروز */
+        /* ستايل الكروت البارزة */
         .glass-card {
             background: var(--card-bg);
-            border-radius: 20px;
+            border-radius: 30px;
             padding: 25px;
             box-shadow: var(--shadow);
-            transition: all 0.3s ease;
             margin-bottom: 25px;
             border: 1px solid rgba(255,255,255,0.2);
+            transition: 0.3s ease-in-out;
         }
 
-        .glass-card:hover {
-            box-shadow: var(--hover-shadow);
-            transform: translateY(-5px);
-        }
+        .glass-card:hover { transform: scale(1.02); }
 
-        h2 { text-align: center; color: var(--primary); margin-bottom: 30px; }
+        h2, h3 { text-align: center; color: var(--primary); }
 
-        /* مدخلات البيانات مع البروز الداخلي */
+        /* مدخلات البيانات (محفورة) */
         input, select {
             width: 100%;
             padding: 15px;
-            margin: 10px 0;
+            margin: 12px 0;
             border: none;
-            border-radius: 12px;
+            border-radius: 15px;
             background: var(--bg);
             box-shadow: var(--inner-shadow);
             font-family: 'Cairo';
             box-sizing: border-box;
             outline: none;
-            transition: 0.3s;
+            color: var(--text-color);
+            font-weight: 600;
         }
 
         input:focus {
-            box-shadow: var(--shadow);
-            border: 1px solid var(--primary);
+            box-shadow: var(--shadow); /* يبرز لما تضغط عليه */
+            color: var(--primary);
         }
 
+        /* الأزرار (بارزة) */
         button {
             width: 100%;
             padding: 15px;
-            background: var(--primary);
-            color: white;
+            background: var(--bg);
+            color: var(--primary);
             border: none;
-            border-radius: 12px;
-            font-weight: bold;
+            border-radius: 15px;
+            font-weight: 900;
             cursor: pointer;
-            box-shadow: 4px 4px 10px rgba(99, 102, 241, 0.3);
-            transition: 0.3s;
+            box-shadow: var(--shadow);
+            transition: 0.2s;
             margin-top: 15px;
         }
 
-        button:active { transform: scale(0.95); }
-
-        /* ستايل صفحة الإحصائيات (الأدمن) */
-        .admin-stat-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 20px;
+        button:active {
+            box-shadow: var(--inner-shadow);
+            transform: scale(0.98);
         }
 
-        .stat-item {
-            background: var(--bg);
-            padding: 15px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: var(--shadow);
-        }
-
-        .stat-item span { display: block; font-size: 20px; font-weight: 900; color: var(--primary); }
+        .user-header { display: flex; justify-content: space-between; align-items: center; }
+        .logout-btn { width: auto; padding: 8px 15px; background: #ff4d4d; color: white; box-shadow: none; font-size: 11px; }
 
         .hidden { display: none; }
-        .user-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .logout-btn { width: auto; padding: 5px 15px; background: #ff4757; font-size: 12px; }
+
+        /* صفحة الأدمن والتحليل */
+        .stat-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+            border-radius: 20px;
+            box-shadow: var(--inner-shadow);
+            margin-bottom: 15px;
+        }
+        .stat-value { font-size: 24px; font-weight: 900; color: var(--primary); }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div id="login-section" class="glass-card">
-        <h2>تسجيل الدخول</h2>
+        <h2>OREN LOGO</h2>
         <input type="email" id="login-email" placeholder="البريد الإلكتروني">
         <input type="password" id="login-pass" placeholder="كلمة المرور">
         <button onclick="login()">دخول للسيستم</button>
@@ -124,59 +118,60 @@
 
     <div id="user-section" class="hidden">
         <div class="user-header glass-card">
-            <div>أهلاً بك، <span id="user-name-display" style="color:var(--primary); font-weight:bold;">...</span></div>
+            <div>أهلاً بك يا <span id="user-name-display" style="color:var(--primary)">...</span></div>
             <button class="logout-btn" onclick="logout()">خروج</button>
         </div>
 
         <div class="glass-card">
-            <h3>إضافة مهمة جديدة</h3>
-            <input type="text" id="task-name" placeholder="اسم العميل / المنطقة">
+            <h3>إضافة أوردر جديد</h3>
+            <input type="text" id="cust-name" placeholder="اسم العميل">
+            <input type="text" id="cust-region" placeholder="المنطقة / العنوان">
             <select id="task-status">
-                <option value="قيد التنفيذ">قيد التنفيذ</option>
-                <option value="تم التسليم">تم التسليم</option>
-                <option value="مرتجع">مرتجع</option>
+                <option value="قيد التنفيذ">🚚 قيد التنفيذ</option>
+                <option value="تم التسليم">✅ تم التسليم</option>
+                <option value="مرتجع">❌ مرتجع</option>
             </select>
-            <button onclick="addTask()">إرسال المهمة</button>
+            <button onclick="addTask()">إرسال البيانات</button>
         </div>
     </div>
 
     <div id="admin-section" class="hidden">
-        <div class="user-header glass-card">
-            <h2>لوحة التحكم (الأدمن)</h2>
+        <div class="glass-card user-header">
+            <h3>لوحة المدير</h3>
             <button class="logout-btn" onclick="logout()">خروج</button>
         </div>
 
-        <div class="admin-stat-grid">
-            <div class="stat-item"><span>120</span>إجمالي المهام</div>
-            <div class="stat-item"><span id="active-agents">0</span>مناديب نشطين</div>
-        </div>
-
-        <div id="agents-analysis" style="margin-top: 20px;">
+        <div id="admin-stats" class="glass-card">
+            <div class="stat-card">
+                <div class="stat-value" id="total-tasks">0</div>
+                <div>إجمالي الأوردرات</div>
             </div>
+            <div id="agents-list">
+                </div>
+        </div>
     </div>
 </div>
 
 <script>
-    // --- إعدادات Firebase (ضع بياناتك هنا) ---
+    // بيانات Firebase الخاصة بك
     const firebaseConfig = {
-        apiKey: "AIzaSy...",
+        apiKey: "AIzaSyALgV2v3lmxvEoP0HosqGSqm727vZrYUq4",
         authDomain: "orenapp-f2f1e.firebaseapp.com",
         databaseURL: "https://orenapp-f2f1e-default-rtdb.firebaseio.com",
         projectId: "orenapp-f2f1e",
-        storageBucket: "orenapp-f2f1e.appspot.com",
-        messagingSenderId: "...",
-        appId: "..."
+        storageBucket: "orenapp-f2f1e.firebasestorage.app",
+        messagingSenderId: "973368909449",
+        appId: "1:973368909449:web:ce364a309f622f575c3058"
     };
+
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const auth = firebase.auth();
 
-    // --- وظائف النظام ---
-
-    // حفظ الجلسة (لو المندوب عمل ريفرش)
+    // فحص الجلسة (عشان الريفرش)
     auth.onAuthStateChanged(user => {
         if (user) {
-            showPanel(user.email);
+            showCorrectPanel(user.email);
         } else {
             document.getElementById('login-section').classList.remove('hidden');
             document.getElementById('user-section').classList.add('hidden');
@@ -187,64 +182,69 @@
     function login() {
         const email = document.getElementById('login-email').value;
         const pass = document.getElementById('login-pass').value;
-        auth.signInWithEmailAndPassword(email, pass)
-            .catch(err => alert("خطأ: " + err.message));
+        auth.signInWithEmailAndPassword(email, pass).catch(err => alert("بياناتك غلط يا بطل: " + err.message));
     }
 
-    function showPanel(email) {
+    function showCorrectPanel(email) {
         document.getElementById('login-section').classList.add('hidden');
         if (email === "admin@oren.com") {
             document.getElementById('admin-section').classList.remove('hidden');
-            loadAdminData();
+            loadAdminAnalysis();
         } else {
             document.getElementById('user-section').classList.remove('hidden');
-            const userName = email.split('@')[0];
-            document.getElementById('user-name-display').innerText = userName;
+            document.getElementById('user-name-display').innerText = email.split('@')[0];
         }
     }
 
     function addTask() {
         const user = auth.currentUser;
-        const task = document.getElementById('task-name').value;
+        const name = document.getElementById('cust-name').value;
+        const region = document.getElementById('cust-region').value;
         const status = document.getElementById('task-status').value;
 
-        if(!task) return alert("اكتب اسم المهمة");
+        if(!name || !region) return alert("املى البيانات كاملة");
 
-        db.ref('tasks/' + Date.now()).set({
-            agent: user.email,
+        db.ref('orders/' + Date.now()).set({
+            agentEmail: user.email,
             agentName: user.email.split('@')[0],
-            task: task,
+            customer: name,
+            region: region,
             status: status,
-            date: new Date().toLocaleString('ar-EG')
+            time: new Date().toLocaleString('ar-EG')
         }).then(() => {
-            alert("تمت الإضافة بنجاح!");
-            document.getElementById('task-name').value = "";
+            alert("تم الإرسال بنجاح!");
+            document.getElementById('cust-name').value = "";
+            document.getElementById('cust-region').value = "";
         });
     }
 
-    function loadAdminData() {
-        db.ref('tasks').on('value', snapshot => {
+    function loadAdminAnalysis() {
+        db.ref('orders').on('value', snapshot => {
             const data = snapshot.val();
-            const analysisDiv = document.getElementById('agents-analysis');
-            analysisDiv.innerHTML = "<h3>تحليل أداء المناديب</h3>";
+            const listDiv = document.getElementById('agents-list');
+            const totalDisplay = document.getElementById('total-tasks');
+            listDiv.innerHTML = "<h4 style='text-align:center'>تحليل المناديب</h4>";
             
-            // تجميع البيانات لكل مندوب
-            let agents = {};
+            if(!data) return;
+
+            totalDisplay.innerText = Object.keys(data).length;
+            let summary = {};
+
             for(let id in data) {
-                let task = data[id];
-                if(!agents[task.agentName]) agents[task.agentName] = [];
-                agents[task.agentName].push(task);
+                let order = data[id];
+                if(!summary[order.agentName]) summary[order.agentName] = { count: 0, last: "" };
+                summary[order.agentName].count++;
+                summary[order.agentName].last = order.time;
             }
 
-            for(let name in agents) {
-                let card = document.createElement('div');
-                card.className = 'glass-card';
-                card.innerHTML = `
-                    <div style="font-weight:bold; color:var(--primary)">المندوب: ${name}</div>
-                    <div style="font-size:13px; margin-top:5px;">عدد المهام: ${agents[name].length}</div>
-                    <div style="font-size:11px; color:#666">آخر مهمة: ${agents[name][agents[name].length-1].date}</div>
+            for(let name in summary) {
+                listDiv.innerHTML += `
+                    <div class="stat-card" style="margin-top:10px; align-items:flex-start">
+                        <div style="font-weight:900; color:var(--primary)">👤 المندوب: ${name}</div>
+                        <div style="font-size:14px">📦 عدد الأوردرات: ${summary[name].count}</div>
+                        <div style="font-size:11px; color:#777">🕒 آخر نشاط: ${summary[name].last}</div>
+                    </div>
                 `;
-                analysisDiv.appendChild(card);
             }
         });
     }
