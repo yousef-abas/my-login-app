@@ -3,127 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OREN PREMIUM - Field Operations</title>
+    <title>OREN PREMIUM PRO</title>
     <style>
         :root { 
-            --bg: #e0e5ec; /* لون ناعم عشان البروز يبان */
+            --bg: #e0e5ec; 
             --p: #6e48aa; 
             --a: #00d2ff;
             --shadow: 9px 9px 16px rgb(163,177,198,0.6), -9px -9px 16px rgba(255,255,255, 0.5);
-            --inner-shadow: inset 6px 6px 12px #b8bec5, inset -6px -6px 12px #ffffff;
+            --inner: inset 6px 6px 12px #b8bec5, inset -6px -6px 12px #ffffff;
         }
-        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: 0.4s ease; }
-        body { margin: 0; background: var(--bg); color: #444; min-height: 100vh; display: flex; flex-direction: column; }
+        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; transition: 0.3s; }
+        body { margin: 0; background: var(--bg); color: #444; overflow-x: hidden; }
 
         /* Splash Screen */
         #splash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #050510; display: flex; justify-content: center; align-items: center; z-index: 9999; }
-        .oren-reveal { font-size: 50px; font-weight: 900; color: #fff; letter-spacing: 5px; text-shadow: 0 0 20px var(--a); animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { opacity: 0.5; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1); } 100% { opacity: 0.5; transform: scale(0.9); } }
+        .energy-ball { width: 15px; height: 15px; background: #fff; border-radius: 50%; box-shadow: 0 0 20px var(--a); animation: dropAndShock 1.5s forwards; }
+        @keyframes dropAndShock { 0% { transform: translateY(-800px); } 65% { transform: translateY(0); box-shadow: 0 0 150px 70px rgba(0, 210, 255, 0.6); } 100% { transform: scale(60); opacity: 0; } }
 
-        /* الأوعية البارزة */
-        .glass-card { background: var(--bg); border-radius: 30px; box-shadow: var(--shadow); padding: 25px; margin: 15px; border: 1px solid rgba(255,255,255,0.2); }
-        
-        /* تسجيل الدخول */
-        #authPage { display: none; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
-        .input-box { width: 100%; padding: 15px; margin-bottom: 20px; border-radius: 15px; border: none; background: var(--bg); box-shadow: var(--inner-shadow); outline: none; text-align: center; font-size: 16px; color: #333; }
-        .btn { width: 100%; padding: 15px; border-radius: 15px; border: none; background: var(--bg); box-shadow: var(--shadow); color: var(--p); font-weight: 900; cursor: pointer; font-size: 17px; }
-        .btn:active { box-shadow: var(--inner-shadow); transform: scale(0.98); }
+        /* Containers */
+        .container { display: none; padding: 15px; max-width: 500px; margin: auto; }
+        .active { display: block !important; }
 
-        /* الداشبورد */
-        #dashboard { display: none; padding: 10px; }
-        .top-bar { display: flex; justify-content: space-between; align-items: center; }
-        .user-info b { color: var(--p); font-size: 20px; }
-        
-        /* العدادات */
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-        .stat-item { text-align: center; padding: 15px; border-radius: 20px; box-shadow: var(--shadow); }
-        .stat-num { display: block; font-size: 24px; font-weight: 900; color: var(--p); }
-        .stat-label { font-size: 11px; font-weight: bold; opacity: 0.7; }
+        /* Neumorphism Cards */
+        .glass-card { background: var(--bg); border-radius: 30px; box-shadow: var(--shadow); padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.2); }
+        .input-box { width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 15px; border: none; background: var(--bg); box-shadow: var(--inner); outline: none; text-align: center; font-size: 16px; }
+        .btn { width: 100%; padding: 15px; border-radius: 15px; border: none; background: var(--bg); box-shadow: var(--shadow); color: var(--p); font-weight: 900; cursor: pointer; font-size: 16px; }
+        .btn:active { box-shadow: var(--inner); transform: scale(0.98); }
 
-        /* كارت المهمة */
-        .task-card { background: var(--bg); box-shadow: var(--shadow); border-radius: 25px; padding: 20px; position: relative; }
-        .task-tag { position: absolute; top: -10px; left: 20px; background: var(--p); color: white; padding: 5px 15px; border-radius: 10px; font-size: 12px; box-shadow: 0 5px 10px rgba(110, 72, 170, 0.3); }
-        .client-name { font-size: 22px; font-weight: 900; margin: 15px 0; color: #333; display: block; }
-        
-        .info-row { background: var(--bg); box-shadow: var(--inner-shadow); padding: 12px; border-radius: 15px; margin-bottom: 12px; font-size: 14px; }
-        .info-row b { color: var(--p); }
+        /* Stats */
+        .stats-bar { display: flex; gap: 10px; margin-bottom: 20px; }
+        .stat-item { flex: 1; background: var(--bg); box-shadow: var(--inner); padding: 10px; border-radius: 15px; text-align: center; }
+        .stat-item b { display: block; font-size: 20px; color: var(--p); }
 
-        .report-area { width: 100%; padding: 15px; border-radius: 15px; background: var(--bg); box-shadow: var(--inner-shadow); border: none; outline: none; margin-bottom: 15px; height: 100px; }
-
-        #loading { text-align: center; padding: 20px; font-weight: bold; color: var(--p); }
-        .hidden { display: none; }
+        /* Logs */
+        .log-card { background: var(--bg); box-shadow: var(--shadow); border-radius: 20px; padding: 15px; margin-bottom: 15px; border-right: 5px solid #00b09b; animation: slideIn 0.4s ease; }
+        .log-header { display: flex; justify-content: space-between; font-size: 10px; border-bottom: 1px dashed #ccc; padding-bottom: 5px; margin-bottom: 8px; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
     </style>
 </head>
 <body>
 
-    <div id="splash"><div class="oren-reveal">OREN PRO</div></div>
+    <div id="splash"><div class="energy-ball"></div></div>
 
-    <div id="authPage">
-        <h1 style="color: var(--p); font-weight: 900; letter-spacing: 2px;">OREN</h1>
-        <div class="glass-card" style="width: 85%;">
-            <input type="email" id="lEmail" class="input-box" placeholder="البريد الإلكتروني">
-            <input type="password" id="lPass" class="input-box" placeholder="كلمة المرور">
-            <button class="btn" onclick="login()">دخول آمن 🔓</button>
-        </div>
-        <p onclick="showAdmin()" style="margin-top: 20px; font-size: 12px; opacity: 0.5; cursor: pointer;">لوحة تحكم الإدارة</p>
-    </div>
-
-    <div id="dashboard">
-        <div class="glass-card top-bar">
-            <div class="user-info">
-                <span>أهلاً بك،</span><br>
-                <b id="uName">المندوب</b>
-            </div>
-            <button onclick="logout()" style="border:none; background:none; color:red; font-weight:bold;">خروج 🚪</button>
-        </div>
-
-        <div class="stats-grid">
-            <div class="stat-item">
-                <span class="stat-num" id="uDone">0</span>
-                <span class="stat-label">مهام مكتملة</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-num" id="uWait">0</span>
-                <span class="stat-label">مهام قادمة</span>
-            </div>
-        </div>
-
-        <div id="taskContainer">
-            <div class="task-card">
-                <span class="task-tag">المهمة الحالية ⚡</span>
-                <span class="client-name" id="cName">جاري البحث عن مهام...</span>
-                
-                <div class="info-row">📍 <b>العنوان:</b> <span id="cAddr">--</span></div>
-                <div class="info-row">📞 <b>تليفون:</b> <span id="cPhone">--</span></div>
-                <div class="info-row">📝 <b>المطلوب:</b> <span id="cDesc">--</span></div>
-
-                <textarea id="visitReport" class="report-area" placeholder="اكتب تقريرك هنا لإغلاق المهمة..."></textarea>
-                <button class="btn" onclick="finishTask()" style="background: var(--p); color: white;">إرسال التقرير وإنهاء ✅</button>
-            </div>
-        </div>
-
-        <div id="noTasks" class="glass-card hidden" style="text-align: center; padding: 50px;">
-            <p>لا يوجد مهام حالياً. استمتع بوقتك! 😎</p>
-        </div>
-    </div>
-
-    <div id="adminPanel" class="hidden" style="padding: 20px;">
+    <div id="authPage" class="container active" style="padding-top: 80px; text-align: center;">
+        <h1 style="color: var(--p); font-size: 45px; margin-bottom: 5px;">OREN</h1>
+        <p style="opacity: 0.6; margin-bottom: 30px;">نظام إدارة المناديب</p>
         <div class="glass-card">
-            <h2 style="color: var(--p);">إضافة مهمة جديدة</h2>
+            <input type="email" id="lEmail" class="input-box" placeholder="الإيميل">
+            <input type="password" id="lPass" class="input-box" placeholder="الباسورد">
+            <button class="btn" onclick="login()">دخول 🔓</button>
+            <p onclick="showAdmin()" style="margin-top:20px; font-size:12px; cursor:pointer; color: var(--p);">لوحة تحكم المدير</p>
+        </div>
+    </div>
+
+    <div id="dashboard" class="container">
+        <div class="glass-card" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 20px;">
+            <b>أهلاً: <span id="uName" style="color:var(--p)">...</span></b>
+            <button onclick="logout()" style="border:none; background:none; color:red; font-weight:bold;">خروج</button>
+        </div>
+        <div class="stats-bar">
+            <div class="stat-item">باقي<b id="uWait">0</b></div>
+            <div class="stat-item">تم<b id="uDone">0</b></div>
+        </div>
+        <div id="taskCard" class="glass-card">
+            <h3 id="cName" style="margin:0 0 15px 0; color: var(--p);">جاري البحث عن مهام...</h3>
+            <div style="text-align: right; font-size: 14px;">
+                <p>📍 <b>العنوان:</b> <span id="cAddr">--</span></p>
+                <p>📞 <b>تليفون:</b> <span id="cPhone">--</span></p>
+                <p>📝 <b>المطلوب:</b> <span id="cDesc">--</span></p>
+            </div>
+            <textarea id="vReport" class="input-box" style="height:100px; text-align:right;" placeholder="اكتب تقرير الزيارة هنا..."></textarea>
+            <button class="btn" onclick="finishTask()" style="background: var(--p); color: white;">إنهاء المهمة ✅</button>
+        </div>
+    </div>
+
+    <div id="adminPanel" class="container">
+        <div class="glass-card">
+            <h2 style="color:var(--p); margin-top:0;">إضافة مهمة 🎯</h2>
             <input type="text" id="mUid" class="input-box" placeholder="UID المندوب">
             <input type="text" id="mClient" class="input-box" placeholder="اسم العميل">
             <input type="text" id="mAddress" class="input-box" placeholder="العنوان">
-            <input type="text" id="mPhone" class="input-box" placeholder="التليفون">
-            <textarea id="mDesc" class="input-box" style="height:70px" placeholder="تفاصيل المهمة"></textarea>
-            <button class="btn" onclick="sendTask()">إضافة للطابور 🚀</button>
-            <button class="btn" onclick="location.reload()" style="margin-top: 15px; color: red;">العودة</button>
+            <input type="text" id="mPhone" class="input-box" placeholder="تليفون العميل">
+            <textarea id="mDesc" class="input-box" placeholder="وصف المهمة"></textarea>
+            <button class="btn" onclick="sendTask()">إرسال للطابور 🚀</button>
         </div>
+        <h2 style="text-align:center; color:var(--p);">سجل النشاط اللحظي 📋</h2>
+        <div id="logsContainer"></div>
+        <button class="btn" onclick="location.reload()" style="margin-top:20px; color:red;">رجوع</button>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getDatabase, ref, push, set, get, update, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, push, set, onValue, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyALgV2v3lmxvEoP0HosqGSqm727vZrYUq4",
@@ -142,106 +114,114 @@
         let userUid = null;
         let currentTaskId = null;
 
-        // التحقق من الجلسة (عشان الريفريش)
+        // التحقق من حالة الدخول (حل مشكلة الريفريش)
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 userUid = user.uid;
-                document.getElementById('authPage').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'block';
-                loadTasks();
-            } else {
-                document.getElementById('authPage').style.display = 'flex';
-                document.getElementById('dashboard').style.display = 'none';
-            }
-            hideSplash();
+                showSection('dashboard');
+                loadUserData();
+            } else { showSection('authPage'); }
+            setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 1500);
         });
 
-        window.login = async () => {
+        window.login = () => {
             const e = document.getElementById('lEmail').value;
             const p = document.getElementById('lPass').value;
-            try { await signInWithEmailAndPassword(auth, e, p); } catch { alert("خطأ في البيانات"); }
+            signInWithEmailAndPassword(auth, e, p).catch(() => alert("بيانات غلط يا بطل"));
         };
 
         window.logout = () => signOut(auth);
 
         window.showAdmin = () => {
-            if(prompt("باسورد المدير:") === "123456") {
-                document.getElementById('authPage').style.display = 'none';
-                document.getElementById('adminPanel').classList.remove('hidden');
+            if(prompt("كلمة سر المدير:") === "123456") {
+                showSection('adminPanel');
+                loadAdminLogs();
             }
         };
 
-        function loadTasks() {
-            // مراقبة المهام
-            onValue(ref(db, 'tasks/' + userUid), (snapshot) => {
-                const tasks = snapshot.val();
-                let pendingTasks = [];
-                if(tasks) {
-                    pendingTasks = Object.keys(tasks).filter(key => tasks[key].status === "pending").sort();
-                }
+        function showSection(id) {
+            document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
 
-                document.getElementById('uWait').innerText = pendingTasks.length;
-                
-                if(pendingTasks.length > 0) {
-                    const firstId = pendingTasks[0];
-                    const task = tasks[firstId];
-                    currentTaskId = firstId;
-                    document.getElementById('cName').innerText = task.client;
-                    document.getElementById('cAddr').innerText = task.address;
-                    document.getElementById('cPhone').innerText = task.phone;
-                    document.getElementById('cDesc').innerText = task.desc;
-                    document.getElementById('taskContainer').classList.remove('hidden');
-                    document.getElementById('noTasks').classList.add('hidden');
+        // إرسال مهمة (للمدير)
+        window.sendTask = async () => {
+            const uid = document.getElementById('mUid').value.trim();
+            if(!uid) return alert("فين الـ UID؟");
+            try {
+                const newTask = push(ref(db, 'tasks/' + uid));
+                await set(newTask, {
+                    client: document.getElementById('mClient').value,
+                    address: document.getElementById('mAddress').value,
+                    phone: document.getElementById('mPhone').value,
+                    desc: document.getElementById('mDesc').value,
+                    status: "pending",
+                    time: new Date().toLocaleString('ar-EG')
+                });
+                alert("تمت الإضافة للطابور ✅");
+                ["mClient", "mAddress", "mPhone", "mDesc"].forEach(i => document.getElementById(i).value = "");
+            } catch(e) { alert("فشل: " + e.message); }
+        };
+
+        // تحميل بيانات المندوب
+        function loadUserData() {
+            onValue(ref(db, 'tasks/' + userUid), (snap) => {
+                const tasks = snap.val();
+                let pending = tasks ? Object.keys(tasks).filter(k => tasks[k].status === "pending").sort() : [];
+                document.getElementById('uWait').innerText = pending.length;
+                if(pending.length > 0) {
+                    currentTaskId = pending[0];
+                    const t = tasks[currentTaskId];
+                    document.getElementById('cName').innerText = t.client;
+                    document.getElementById('cAddr').innerText = t.address;
+                    document.getElementById('cPhone').innerText = t.phone;
+                    document.getElementById('cDesc').innerText = t.desc;
+                    document.getElementById('uName').innerText = "مندوب " + userUid.substring(0,4);
                 } else {
-                    document.getElementById('taskContainer').classList.add('hidden');
-                    document.getElementById('noTasks').classList.remove('hidden');
+                    document.getElementById('cName').innerText = "لا يوجد مهام حالياً";
+                    ["cAddr", "cPhone", "cDesc"].forEach(i => document.getElementById(i).innerText = "--");
                 }
             });
-
-            // مراقبة عداد المكتمل
-            onValue(ref(db, 'history/' + userUid), (snapshot) => {
-                document.getElementById('uDone').innerText = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
+            onValue(ref(db, 'history/' + userUid), snap => {
+                document.getElementById('uDone').innerText = snap.exists() ? Object.keys(snap.val()).length : 0;
             });
         }
 
+        // إنهاء مهمة (للمندوب)
         window.finishTask = async () => {
-            const report = document.getElementById('visitReport').value;
-            if(!report) return alert("اكتب التقرير أولاً");
-
-            const historyRef = push(ref(db, 'history/' + userUid));
-            await set(historyRef, {
-                client: document.getElementById('cName').innerText,
-                report: report,
-                time: new Date().toLocaleString('ar-EG')
+            const report = document.getElementById('vReport').value;
+            if(!report) return alert("اكتب التقرير!");
+            const hRef = push(ref(db, 'history/' + userUid));
+            await set(hRef, { 
+                client: document.getElementById('cName').innerText, 
+                report, 
+                time: new Date().toLocaleString('ar-EG') 
             });
-
             await update(ref(db, 'tasks/' + userUid + '/' + currentTaskId), { status: "completed" });
-            document.getElementById('visitReport').value = "";
-            alert("تم إرسال التقرير وسحب المهمة التالية!");
+            document.getElementById('vReport').value = "";
+            alert("تم التقفيل وسحب التالية! 🚀");
         };
 
-        window.sendTask = async () => {
-            const uid = document.getElementById('mUid').value;
-            const client = document.getElementById('mClient').value;
-            if(!uid || !client) return alert("اكمل البيانات");
-            
-            const newTaskRef = push(ref(db, 'tasks/' + uid));
-            await set(newTaskRef, {
-                client: client,
-                address: document.getElementById('mAddress').value,
-                phone: document.getElementById('mPhone').value,
-                desc: document.getElementById('mDesc').value,
-                status: "pending"
+        // سجل المدير (مراقبة حية)
+        function loadAdminLogs() {
+            onValue(ref(db, 'history'), (snap) => {
+                const container = document.getElementById('logsContainer');
+                container.innerHTML = "";
+                const data = snap.val();
+                if(!data) return container.innerHTML = "<p>لا يوجد نشاط</p>";
+                Object.keys(data).forEach(uid => {
+                    Object.keys(data[uid]).forEach(logId => {
+                        const log = data[uid][logId];
+                        const card = document.createElement('div');
+                        card.className = 'log-card';
+                        card.innerHTML = `
+                            <div class="log-header"><b>👤 مندوب: ${uid.substring(0,5)}</b> <span>⏰ ${log.time}</span></div>
+                            <p style="margin:5px 0"><b>العميل:</b> ${log.client}</p>
+                            <p style="margin:0; font-size:13px; opacity:0.8"><b>التقرير:</b> ${log.report}</p>`;
+                        container.prepend(card);
+                    });
+                });
             });
-            alert("تمت إضافة المهمة للطابور!");
-            ["mClient", "mAddress", "mPhone", "mDesc"].forEach(id => document.getElementById(id).value = "");
-        };
-
-        function hideSplash() {
-            setTimeout(() => {
-                document.getElementById('splash').style.opacity = '0';
-                setTimeout(() => document.getElementById('splash').style.display = 'none', 500);
-            }, 2000);
         }
     </script>
 </body>
