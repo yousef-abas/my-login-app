@@ -3,157 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OREN System Pro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
-    
+    <title>OREN Task Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 
     <style>
-        :root {
-            --primary: #6366f1;
-            --bg: #e0e5ec; /* لون خلفية للبروز */
-            --card-bg: #e0e5ec;
-            --shadow: 9px 9px 16px rgb(163,177,198,0.6), -9px -9px 16px rgba(255,255,255, 0.5);
-            --inner-shadow: inset 6px 6px 12px #c1c9d7, inset -6px -6px 12px #ffffff;
-            --text-color: #444;
-        }
-
-        body {
-            font-family: 'Cairo', sans-serif;
-            background-color: var(--bg);
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            min-height: 100vh;
-            color: var(--text-color);
-        }
-
-        .container { width: 100%; max-width: 450px; padding: 20px; }
-
-        /* ستايل الكروت البارزة */
-        .glass-card {
-            background: var(--card-bg);
-            border-radius: 30px;
-            padding: 25px;
-            box-shadow: var(--shadow);
-            margin-bottom: 25px;
-            border: 1px solid rgba(255,255,255,0.2);
-            transition: 0.3s ease-in-out;
-        }
-
-        .glass-card:hover { transform: scale(1.02); }
-
-        h2, h3 { text-align: center; color: var(--primary); }
-
-        /* مدخلات البيانات (محفورة) */
-        input, select {
-            width: 100%;
-            padding: 15px;
-            margin: 12px 0;
-            border: none;
-            border-radius: 15px;
-            background: var(--bg);
-            box-shadow: var(--inner-shadow);
-            font-family: 'Cairo';
-            box-sizing: border-box;
-            outline: none;
-            color: var(--text-color);
-            font-weight: 600;
-        }
-
-        input:focus {
-            box-shadow: var(--shadow); /* يبرز لما تضغط عليه */
-            color: var(--primary);
-        }
-
-        /* الأزرار (بارزة) */
-        button {
-            width: 100%;
-            padding: 15px;
-            background: var(--bg);
-            color: var(--primary);
-            border: none;
-            border-radius: 15px;
-            font-weight: 900;
-            cursor: pointer;
-            box-shadow: var(--shadow);
-            transition: 0.2s;
-            margin-top: 15px;
-        }
-
-        button:active {
-            box-shadow: var(--inner-shadow);
-            transform: scale(0.98);
-        }
-
-        .user-header { display: flex; justify-content: space-between; align-items: center; }
-        .logout-btn { width: auto; padding: 8px 15px; background: #ff4d4d; color: white; box-shadow: none; font-size: 11px; }
-
+        :root { --bg: #e0e5ec; --primary: #6366f1; --shadow: 9px 9px 16px #babecc, -9px -9px 16px #ffffff; --inner: inset 6px 6px 12px #babecc, inset -6px -6px 12px #ffffff; }
+        body { font-family: 'Cairo', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #444; }
+        .container { max-width: 500px; margin: auto; }
+        .card { background: var(--bg); padding: 20px; border-radius: 25px; box-shadow: var(--shadow); margin-bottom: 20px; transition: 0.3s; }
+        input, select, button { width: 100%; padding: 15px; margin: 10px 0; border: none; border-radius: 15px; font-family: 'Cairo'; outline: none; box-sizing: border-box; }
+        input, select { background: var(--bg); box-shadow: var(--inner); font-weight: bold; }
+        button { background: var(--bg); box-shadow: var(--shadow); color: var(--primary); font-weight: 900; cursor: pointer; }
+        button:active { box-shadow: var(--inner); }
+        .task-item { border-right: 5px solid var(--primary); padding: 10px; margin: 10px 0; background: #f8f9fa; border-radius: 10px; box-shadow: var(--shadow); }
+        .status-done { border-right-color: #2ecc71; opacity: 0.7; }
         .hidden { display: none; }
-
-        /* صفحة الأدمن والتحليل */
-        .stat-card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 15px;
-            border-radius: 20px;
-            box-shadow: var(--inner-shadow);
-            margin-bottom: 15px;
-        }
-        .stat-value { font-size: 24px; font-weight: 900; color: var(--primary); }
+        .header { display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div id="login-section" class="glass-card">
-        <h2>OREN LOGO</h2>
-        <input type="email" id="login-email" placeholder="البريد الإلكتروني">
-        <input type="password" id="login-pass" placeholder="كلمة المرور">
-        <button onclick="login()">دخول للسيستم</button>
+    <div id="login-screen" class="card">
+        <h2 style="text-align:center">OREN SYSTEM</h2>
+        <input type="email" id="email" placeholder="بريد المندوب أو المدير">
+        <input type="password" id="pass" placeholder="كلمة المرور">
+        <button onclick="login()">دخول</button>
     </div>
 
-    <div id="user-section" class="hidden">
-        <div class="user-header glass-card">
-            <div>أهلاً بك يا <span id="user-name-display" style="color:var(--primary)">...</span></div>
-            <button class="logout-btn" onclick="logout()">خروج</button>
+    <div id="admin-screen" class="hidden">
+        <div class="card header">
+            <span>لوحة المدير 👑</span>
+            <button onclick="logout()" style="width:auto; padding:5px 10px; font-size:10px; background:#ff4d4d; color:white;">خروج</button>
         </div>
-
-        <div class="glass-card">
-            <h3>إضافة أوردر جديد</h3>
-            <input type="text" id="cust-name" placeholder="اسم العميل">
-            <input type="text" id="cust-region" placeholder="المنطقة / العنوان">
-            <select id="task-status">
-                <option value="قيد التنفيذ">🚚 قيد التنفيذ</option>
-                <option value="تم التسليم">✅ تم التسليم</option>
-                <option value="مرتجع">❌ مرتجع</option>
-            </select>
-            <button onclick="addTask()">إرسال البيانات</button>
+        <div class="card">
+            <h3>تكليف مهمة جديدة</h3>
+            <input type="text" id="assign-task" placeholder="تفاصيل الطلب (مثلاً: طرد 50ج)">
+            <input type="text" id="assign-loc" placeholder="العنوان بالتفصيل">
+            <input type="text" id="target-agent" placeholder="اسم المندوب (كما سجل به)">
+            <button onclick="sendTaskToAgent()">إرسال للمندوب 🚀</button>
         </div>
-    </div>
-
-    <div id="admin-section" class="hidden">
-        <div class="glass-card user-header">
-            <h3>لوحة المدير</h3>
-            <button class="logout-btn" onclick="logout()">خروج</button>
-        </div>
-
-        <div id="admin-stats" class="glass-card">
-            <div class="stat-card">
-                <div class="stat-value" id="total-tasks">0</div>
-                <div>إجمالي الأوردرات</div>
+        <div id="all-tasks-monitor" class="card">
+            <h3>مراقبة الأوردرات</h3>
             </div>
-            <div id="agents-list">
+    </div>
+
+    <div id="agent-screen" class="hidden">
+        <div class="card header">
+            <span>أهلاً، <b id="agent-name-tag"></b> 👋</span>
+            <button onclick="logout()" style="width:auto; padding:5px 10px; font-size:10px; background:#ff4d4d; color:white;">خروج</button>
+        </div>
+        <div class="card">
+            <h3>أوردراتك المطلوبة اليوم</h3>
+            <div id="my-tasks-list">
                 </div>
         </div>
     </div>
 </div>
 
 <script>
-    // بيانات Firebase الخاصة بك
     const firebaseConfig = {
         apiKey: "AIzaSyALgV2v3lmxvEoP0HosqGSqm727vZrYUq4",
         authDomain: "orenapp-f2f1e.firebaseapp.com",
@@ -163,93 +74,99 @@
         messagingSenderId: "973368909449",
         appId: "1:973368909449:web:ce364a309f622f575c3058"
     };
-
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-    const auth = firebase.auth();
 
-    // فحص الجلسة (عشان الريفرش)
-    auth.onAuthStateChanged(user => {
+    function login() {
+        const e = document.getElementById('email').value;
+        const p = document.getElementById('pass').value;
+        firebase.auth().signInWithEmailAndPassword(e, p).catch(err => alert(err.message));
+    }
+
+    firebase.auth().onAuthStateChanged(user => {
         if (user) {
-            showCorrectPanel(user.email);
+            document.getElementById('login-screen').classList.add('hidden');
+            if(user.email === "admin@oren.com") {
+                document.getElementById('admin-screen').classList.remove('hidden');
+                monitorAllTasks();
+            } else {
+                document.getElementById('agent-screen').classList.remove('hidden');
+                document.getElementById('agent-name-tag').innerText = user.email.split('@')[0];
+                loadAgentTasks(user.email.split('@')[0]);
+            }
         } else {
-            document.getElementById('login-section').classList.remove('hidden');
-            document.getElementById('user-section').classList.add('hidden');
-            document.getElementById('admin-section').classList.add('hidden');
+            document.getElementById('login-screen').classList.remove('hidden');
+            document.getElementById('admin-screen').classList.add('hidden');
+            document.getElementById('agent-screen').classList.add('hidden');
         }
     });
 
-    function login() {
-        const email = document.getElementById('login-email').value;
-        const pass = document.getElementById('login-pass').value;
-        auth.signInWithEmailAndPassword(email, pass).catch(err => alert("بياناتك غلط يا بطل: " + err.message));
-    }
+    // للمدير: إرسال مهمة
+    function sendTaskToAgent() {
+        const task = document.getElementById('assign-task').value;
+        const loc = document.getElementById('assign-loc').value;
+        const agent = document.getElementById('target-agent').value;
 
-    function showCorrectPanel(email) {
-        document.getElementById('login-section').classList.add('hidden');
-        if (email === "admin@oren.com") {
-            document.getElementById('admin-section').classList.remove('hidden');
-            loadAdminAnalysis();
-        } else {
-            document.getElementById('user-section').classList.remove('hidden');
-            document.getElementById('user-name-display').innerText = email.split('@')[0];
-        }
-    }
+        if(!task || !agent) return alert("اكمل البيانات");
 
-    function addTask() {
-        const user = auth.currentUser;
-        const name = document.getElementById('cust-name').value;
-        const region = document.getElementById('cust-region').value;
-        const status = document.getElementById('task-status').value;
-
-        if(!name || !region) return alert("املى البيانات كاملة");
-
-        db.ref('orders/' + Date.now()).set({
-            agentEmail: user.email,
-            agentName: user.email.split('@')[0],
-            customer: name,
-            region: region,
-            status: status,
+        db.ref('system_tasks/').push({
+            task: task,
+            location: loc,
+            agentName: agent,
+            status: "مطلوب",
             time: new Date().toLocaleString('ar-EG')
         }).then(() => {
-            alert("تم الإرسال بنجاح!");
-            document.getElementById('cust-name').value = "";
-            document.getElementById('cust-region').value = "";
+            alert("تم التكليف!");
+            document.getElementById('assign-task').value = "";
+            document.getElementById('assign-loc').value = "";
         });
     }
 
-    function loadAdminAnalysis() {
-        db.ref('orders').on('value', snapshot => {
-            const data = snapshot.val();
-            const listDiv = document.getElementById('agents-list');
-            const totalDisplay = document.getElementById('total-tasks');
-            listDiv.innerHTML = "<h4 style='text-align:center'>تحليل المناديب</h4>";
-            
-            if(!data) return;
+    // للمندوب: رؤية مهامه فقط
+    function loadAgentTasks(name) {
+        db.ref('system_tasks').on('value', snap => {
+            const list = document.getElementById('my-tasks-list');
+            list.innerHTML = "";
+            snap.forEach(child => {
+                const val = child.val();
+                if(val.agentName === name) {
+                    list.innerHTML += `
+                        <div class="task-item ${val.status === 'تم' ? 'status-done' : ''}">
+                            <b>📍 العنوان:</b> ${val.location}<br>
+                            <b>📦 الطلب:</b> ${val.task}<br>
+                            <b>⏰ الوقت:</b> ${val.time}<br>
+                            ${val.status === 'مطلوب' ? `<button onclick="updateStatus('${child.key}')" style="margin-top:5px; padding:5px; font-size:12px;">تحديد كتم التسليم ✅</button>` : '✅ خلصت'}
+                        </div>
+                    `;
+                }
+            });
+        });
+    }
 
-            totalDisplay.innerText = Object.keys(data).length;
-            let summary = {};
+    // تحديث الحالة من المندوب
+    function updateStatus(key) {
+        db.ref('system_tasks/' + key).update({ status: "تم" });
+    }
 
-            for(let id in data) {
-                let order = data[id];
-                if(!summary[order.agentName]) summary[order.agentName] = { count: 0, last: "" };
-                summary[order.agentName].count++;
-                summary[order.agentName].last = order.time;
-            }
-
-            for(let name in summary) {
-                listDiv.innerHTML += `
-                    <div class="stat-card" style="margin-top:10px; align-items:flex-start">
-                        <div style="font-weight:900; color:var(--primary)">👤 المندوب: ${name}</div>
-                        <div style="font-size:14px">📦 عدد الأوردرات: ${summary[name].count}</div>
-                        <div style="font-size:11px; color:#777">🕒 آخر نشاط: ${summary[name].last}</div>
+    // للمدير: مراقبة الكل
+    function monitorAllTasks() {
+        db.ref('system_tasks').on('value', snap => {
+            const monitor = document.getElementById('all-tasks-monitor');
+            monitor.innerHTML = "<h3>مراقبة الأوردرات</h3>";
+            snap.forEach(child => {
+                const val = child.val();
+                monitor.innerHTML += `
+                    <div class="task-item" style="border-right-color: ${val.status === 'تم' ? '#2ecc71' : '#f1c40f'}">
+                        <b>👤 المندوب:</b> ${val.agentName}<br>
+                        <b>📦 المهمة:</b> ${val.task}<br>
+                        <b>🚩 الحالة:</b> ${val.status}
                     </div>
                 `;
-            }
+            });
         });
     }
 
-    function logout() { auth.signOut(); }
+    function logout() { firebase.auth().signOut(); }
 </script>
 </body>
 </html>
