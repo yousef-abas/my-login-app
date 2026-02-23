@@ -3,252 +3,253 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OREN PREMIUM PRO</title>
+    <title>OREN System Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
     <style>
-        :root { 
-            --bg: #e0e5ec; 
-            --p: #6e48aa; 
-            --a: #00d2ff;
-            --shadow: 9px 9px 16px rgb(163,177,198,0.6), -9px -9px 16px rgba(255,255,255, 0.5);
-            --inner: inset 6px 6px 12px #b8bec5, inset -6px -6px 12px #ffffff;
+        :root {
+            --primary: #6366f1;
+            --bg: #f0f2f5;
+            --card-bg: #ffffff;
+            --shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #ffffff;
+            --inner-shadow: inset 6px 6px 12px #d1d9e6, inset -6px -6px 12px #ffffff;
+            --hover-shadow: 12px 12px 20px #c2ccdb, -12px -12px 20px #ffffff;
         }
-        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; transition: 0.3s; }
-        body { margin: 0; background: var(--bg); color: #444; overflow-x: hidden; }
 
-        /* Splash Screen */
-        #splash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #050510; display: flex; justify-content: center; align-items: center; z-index: 9999; }
-        .energy-ball { width: 15px; height: 15px; background: #fff; border-radius: 50%; box-shadow: 0 0 20px var(--a); animation: dropAndShock 1.5s forwards; }
-        @keyframes dropAndShock { 0% { transform: translateY(-800px); } 65% { transform: translateY(0); box-shadow: 0 0 150px 70px rgba(0, 210, 255, 0.6); } 100% { transform: scale(60); opacity: 0; } }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            color: #333;
+        }
 
-        /* Containers */
-        .container { display: none; padding: 15px; max-width: 500px; margin: auto; }
-        .active { display: block !important; }
+        .container {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+        }
 
-        /* Neumorphism Cards */
-        .glass-card { background: var(--bg); border-radius: 30px; box-shadow: var(--shadow); padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.2); }
-        .input-box { width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 15px; border: none; background: var(--bg); box-shadow: var(--inner); outline: none; text-align: center; font-size: 16px; }
-        .btn { width: 100%; padding: 15px; border-radius: 15px; border: none; background: var(--bg); box-shadow: var(--shadow); color: var(--p); font-weight: 900; cursor: pointer; font-size: 16px; }
-        .btn:active { box-shadow: var(--inner); transform: scale(0.98); }
+        /* الكروت والبروز */
+        .glass-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
 
-        /* Stats & Analytics */
-        .stats-bar { display: flex; gap: 10px; margin-bottom: 20px; }
-        .stat-item { flex: 1; background: var(--bg); box-shadow: var(--inner); padding: 10px; border-radius: 15px; text-align: center; }
-        .stat-item b { display: block; font-size: 20px; color: var(--p); }
+        .glass-card:hover {
+            box-shadow: var(--hover-shadow);
+            transform: translateY(-5px);
+        }
 
-        /* Logs */
-        .log-card { background: var(--bg); box-shadow: var(--shadow); border-radius: 20px; padding: 15px; margin-bottom: 15px; border-right: 5px solid #00b09b; animation: slideIn 0.4s ease; }
-        .log-header { display: flex; justify-content: space-between; font-size: 10px; border-bottom: 1px dashed #ccc; padding-bottom: 5px; margin-bottom: 8px; }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+        h2 { text-align: center; color: var(--primary); margin-bottom: 30px; }
+
+        /* مدخلات البيانات مع البروز الداخلي */
+        input, select {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 12px;
+            background: var(--bg);
+            box-shadow: var(--inner-shadow);
+            font-family: 'Cairo';
+            box-sizing: border-box;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            box-shadow: var(--shadow);
+            border: 1px solid var(--primary);
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 4px 4px 10px rgba(99, 102, 241, 0.3);
+            transition: 0.3s;
+            margin-top: 15px;
+        }
+
+        button:active { transform: scale(0.95); }
+
+        /* ستايل صفحة الإحصائيات (الأدمن) */
+        .admin-stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            background: var(--bg);
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .stat-item span { display: block; font-size: 20px; font-weight: 900; color: var(--primary); }
+
+        .hidden { display: none; }
+        .user-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .logout-btn { width: auto; padding: 5px 15px; background: #ff4757; font-size: 12px; }
     </style>
 </head>
 <body>
 
-    <div id="splash"><div class="energy-ball"></div></div>
+<div class="container">
+    <div id="login-section" class="glass-card">
+        <h2>تسجيل الدخول</h2>
+        <input type="email" id="login-email" placeholder="البريد الإلكتروني">
+        <input type="password" id="login-pass" placeholder="كلمة المرور">
+        <button onclick="login()">دخول للسيستم</button>
+    </div>
 
-    <div id="authPage" class="container active" style="padding-top: 80px; text-align: center;">
-        <h1 style="color: var(--p); font-size: 45px; margin-bottom: 5px;">OREN</h1>
+    <div id="user-section" class="hidden">
+        <div class="user-header glass-card">
+            <div>أهلاً بك، <span id="user-name-display" style="color:var(--primary); font-weight:bold;">...</span></div>
+            <button class="logout-btn" onclick="logout()">خروج</button>
+        </div>
+
         <div class="glass-card">
-            <input type="email" id="lEmail" class="input-box" placeholder="الإيميل">
-            <input type="password" id="lPass" class="input-box" placeholder="الباسورد">
-            <button class="btn" onclick="login()">دخول 🔓</button>
-            <p onclick="showAdmin()" style="margin-top:20px; font-size:12px; cursor:pointer; color: var(--p);">لوحة تحكم المدير</p>
+            <h3>إضافة مهمة جديدة</h3>
+            <input type="text" id="task-name" placeholder="اسم العميل / المنطقة">
+            <select id="task-status">
+                <option value="قيد التنفيذ">قيد التنفيذ</option>
+                <option value="تم التسليم">تم التسليم</option>
+                <option value="مرتجع">مرتجع</option>
+            </select>
+            <button onclick="addTask()">إرسال المهمة</button>
         </div>
     </div>
 
-    <div id="dashboard" class="container">
-        <div class="glass-card" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 20px;">
-            <b>أهلاً: <span id="uName" style="color:var(--p)">...</span></b>
-            <button onclick="logout()" style="border:none; background:none; color:red; font-weight:bold;">خروج</button>
+    <div id="admin-section" class="hidden">
+        <div class="user-header glass-card">
+            <h2>لوحة التحكم (الأدمن)</h2>
+            <button class="logout-btn" onclick="logout()">خروج</button>
         </div>
-        <div class="stats-bar">
-            <div class="stat-item">باقي<b id="uWait">0</b></div>
-            <div class="stat-item">تم<b id="uDone">0</b></div>
+
+        <div class="admin-stat-grid">
+            <div class="stat-item"><span>120</span>إجمالي المهام</div>
+            <div class="stat-item"><span id="active-agents">0</span>مناديب نشطين</div>
         </div>
-        <div id="taskCard" class="glass-card">
-            <h3 id="cName" style="margin:0 0 15px 0; color: var(--p);">جاري البحث...</h3>
-            <div style="text-align: right; font-size: 14px;">
-                <p>📍 <b>العنوان:</b> <span id="cAddr">--</span></p>
-                <p>📞 <b>تليفون:</b> <span id="cPhone">--</span></p>
-                <p>📝 <b>المطلوب:</b> <span id="cDesc">--</span></p>
+
+        <div id="agents-analysis" style="margin-top: 20px;">
             </div>
-            <textarea id="vReport" class="input-box" style="height:100px; text-align:right;" placeholder="تقرير الزيارة..."></textarea>
-            <button class="btn" onclick="finishTask()" style="background: var(--p); color: white;">إنهاء المهمة ✅</button>
-        </div>
     </div>
+</div>
 
-    <div id="adminPanel" class="container">
-        <div class="glass-card">
-            <h2 style="color:var(--p); margin:0 0 15px 0;">إضافة مهمة 🎯</h2>
-            <input type="text" id="mUid" class="input-box" placeholder="UID المندوب">
-            <input type="text" id="mClient" class="input-box" placeholder="اسم العميل">
-            <input type="text" id="mAddress" class="input-box" placeholder="العنوان">
-            <input type="text" id="mPhone" class="input-box" placeholder="تليفون العميل">
-            <textarea id="mDesc" class="input-box" placeholder="وصف المهمة"></textarea>
-            <button class="btn" onclick="sendTask()">إرسال للطابور 🚀</button>
-        </div>
+<script>
+    // --- إعدادات Firebase (ضع بياناتك هنا) ---
+    const firebaseConfig = {
+        apiKey: "AIzaSy...",
+        authDomain: "orenapp-f2f1e.firebaseapp.com",
+        databaseURL: "https://orenapp-f2f1e-default-rtdb.firebaseio.com",
+        projectId: "orenapp-f2f1e",
+        storageBucket: "orenapp-f2f1e.appspot.com",
+        messagingSenderId: "...",
+        appId: "..."
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const auth = firebase.auth();
 
-        <div class="glass-card" style="background: #fff;">
-            <h2 style="color:var(--p); margin:0 0 15px 0;">📊 تحليل الأداء</h2>
-            <div class="stats-bar">
-                <div class="stat-item" style="background:#f8f9fa;">مكتمل<b id="totalDone">0</b></div>
-                <div class="stat-item" style="background:#f8f9fa;">معلق<b id="totalPending">0</b></div>
-            </div>
-            <h3 style="font-size:14px; border-bottom:1px solid #eee; padding-bottom:5px;">🏆 ترتيب المناديب</h3>
-            <div id="leaderboard"></div>
-        </div>
+    // --- وظائف النظام ---
 
-        <h2 style="text-align:center; color:var(--p);">سجل النشاط اللحظي 📋</h2>
-        <div id="logsContainer"></div>
-        <button class="btn" onclick="location.reload()" style="margin:20px 0; color:red;">رجوع</button>
-    </div>
+    // حفظ الجلسة (لو المندوب عمل ريفرش)
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            showPanel(user.email);
+        } else {
+            document.getElementById('login-section').classList.remove('hidden');
+            document.getElementById('user-section').classList.add('hidden');
+            document.getElementById('admin-section').classList.add('hidden');
+        }
+    });
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getDatabase, ref, push, set, onValue, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    function login() {
+        const email = document.getElementById('login-email').value;
+        const pass = document.getElementById('login-pass').value;
+        auth.signInWithEmailAndPassword(email, pass)
+            .catch(err => alert("خطأ: " + err.message));
+    }
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyALgV2v3lmxvEoP0HosqGSqm727vZrYUq4",
-            authDomain: "orenapp-f2f1e.firebaseapp.com",
-            databaseURL: "https://orenapp-f2f1e-default-rtdb.firebaseio.com",
-            projectId: "orenapp-f2f1e",
-            storageBucket: "orenapp-f2f1e.firebasestorage.app",
-            messagingSenderId: "973368909449",
-            appId: "1:973368909449:web:ce364a309f622f575c3058"
-        };
+    function showPanel(email) {
+        document.getElementById('login-section').classList.add('hidden');
+        if (email === "admin@oren.com") {
+            document.getElementById('admin-section').classList.remove('hidden');
+            loadAdminData();
+        } else {
+            document.getElementById('user-section').classList.remove('hidden');
+            const userName = email.split('@')[0];
+            document.getElementById('user-name-display').innerText = userName;
+        }
+    }
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getDatabase(app);
+    function addTask() {
+        const user = auth.currentUser;
+        const task = document.getElementById('task-name').value;
+        const status = document.getElementById('task-status').value;
 
-        let userUid = null;
-        let currentTaskId = null;
+        if(!task) return alert("اكتب اسم المهمة");
 
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                userUid = user.uid;
-                showSection('dashboard');
-                loadUserData();
-            } else { showSection('authPage'); }
-            setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 1500);
+        db.ref('tasks/' + Date.now()).set({
+            agent: user.email,
+            agentName: user.email.split('@')[0],
+            task: task,
+            status: status,
+            date: new Date().toLocaleString('ar-EG')
+        }).then(() => {
+            alert("تمت الإضافة بنجاح!");
+            document.getElementById('task-name').value = "";
         });
+    }
 
-        window.login = () => {
-            const e = document.getElementById('lEmail').value;
-            const p = document.getElementById('lPass').value;
-            signInWithEmailAndPassword(auth, e, p).catch(() => alert("بيانات خطأ"));
-        };
-
-        window.logout = () => signOut(auth);
-
-        window.showAdmin = () => {
-            if(prompt("كلمة سر المدير:") === "123456") {
-                showSection('adminPanel');
-                loadAdminLogs();
-                runAnalytics();
+    function loadAdminData() {
+        db.ref('tasks').on('value', snapshot => {
+            const data = snapshot.val();
+            const analysisDiv = document.getElementById('agents-analysis');
+            analysisDiv.innerHTML = "<h3>تحليل أداء المناديب</h3>";
+            
+            // تجميع البيانات لكل مندوب
+            let agents = {};
+            for(let id in data) {
+                let task = data[id];
+                if(!agents[task.agentName]) agents[task.agentName] = [];
+                agents[task.agentName].push(task);
             }
-        };
 
-        function showSection(id) {
-            document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-        }
+            for(let name in agents) {
+                let card = document.createElement('div');
+                card.className = 'glass-card';
+                card.innerHTML = `
+                    <div style="font-weight:bold; color:var(--primary)">المندوب: ${name}</div>
+                    <div style="font-size:13px; margin-top:5px;">عدد المهام: ${agents[name].length}</div>
+                    <div style="font-size:11px; color:#666">آخر مهمة: ${agents[name][agents[name].length-1].date}</div>
+                `;
+                analysisDiv.appendChild(card);
+            }
+        });
+    }
 
-        window.sendTask = async () => {
-            const uid = document.getElementById('mUid').value.trim();
-            if(!uid) return alert("فين الـ UID؟");
-            try {
-                const newTask = push(ref(db, 'tasks/' + uid));
-                await set(newTask, {
-                    client: document.getElementById('mClient').value,
-                    address: document.getElementById('mAddress').value,
-                    phone: document.getElementById('mPhone').value,
-                    desc: document.getElementById('mDesc').value,
-                    status: "pending",
-                    time: new Date().toLocaleString('ar-EG')
-                });
-                alert("تمت الإضافة للطابور ✅");
-                ["mClient", "mAddress", "mPhone", "mDesc"].forEach(i => document.getElementById(i).value = "");
-            } catch(e) { alert("فشل الإرسال"); }
-        };
-
-        function loadUserData() {
-            onValue(ref(db, 'tasks/' + userUid), (snap) => {
-                const tasks = snap.val();
-                let pending = tasks ? Object.keys(tasks).filter(k => tasks[k].status === "pending").sort() : [];
-                document.getElementById('uWait').innerText = pending.length;
-                if(pending.length > 0) {
-                    currentTaskId = pending[0];
-                    const t = tasks[currentTaskId];
-                    document.getElementById('cName').innerText = t.client;
-                    document.getElementById('cAddr').innerText = t.address;
-                    document.getElementById('cPhone').innerText = t.phone;
-                    document.getElementById('cDesc').innerText = t.desc;
-                    document.getElementById('uName').innerText = "مندوب " + userUid.substring(0,4);
-                } else {
-                    document.getElementById('cName').innerText = "لا يوجد مهام";
-                    ["cAddr", "cPhone", "cDesc"].forEach(i => document.getElementById(i).innerText = "--");
-                }
-            });
-            onValue(ref(db, 'history/' + userUid), snap => {
-                document.getElementById('uDone').innerText = snap.exists() ? Object.keys(snap.val()).length : 0;
-            });
-        }
-
-        window.finishTask = async () => {
-            const report = document.getElementById('vReport').value;
-            if(!report) return alert("اكتب التقرير!");
-            await set(push(ref(db, 'history/' + userUid)), { 
-                client: document.getElementById('cName').innerText, 
-                report, 
-                time: new Date().toLocaleString('ar-EG') 
-            });
-            await update(ref(db, 'tasks/' + userUid + '/' + currentTaskId), { status: "completed" });
-            document.getElementById('vReport').value = "";
-        };
-
-        function loadAdminLogs() {
-            onValue(ref(db, 'history'), (snap) => {
-                const container = document.getElementById('logsContainer');
-                container.innerHTML = "";
-                const data = snap.val();
-                if(data) {
-                    Object.keys(data).forEach(uid => {
-                        Object.keys(data[uid]).forEach(logId => {
-                            const log = data[uid][logId];
-                            const card = document.createElement('div');
-                            card.className = 'log-card';
-                            card.innerHTML = `<div class="log-header"><b>👤 مندوب: ${uid.substring(0,5)}</b> <span>⏰ ${log.time}</span></div>
-                                <p><b>العميل:</b> ${log.client}</p><p style="font-size:13px; opacity:0.8">${log.report}</p>`;
-                            container.prepend(card);
-                        });
-                    });
-                }
-            });
-        }
-
-        function runAnalytics() {
-            onValue(ref(db, 'tasks'), snap => {
-                let p = 0; const data = snap.val();
-                if(data) Object.keys(data).forEach(u => p += Object.keys(data[u]).filter(k => data[u][k].status === "pending").length);
-                document.getElementById('totalPending').innerText = p;
-            });
-            onValue(ref(db, 'history'), snap => {
-                const hist = snap.val(); let total = 0; let leaders = [];
-                if(hist) {
-                    Object.keys(hist).forEach(u => {
-                        let c = Object.keys(hist[u]).length;
-                        total += c; leaders.push({ n: u.substring(0,5), s: c });
-                    });
-                    leaders.sort((a,b) => b.s - a.s);
-                    document.getElementById('totalDone').innerText = total;
-                    let list = ""; leaders.forEach((m,i) => {
-                        list += `<div style="display:flex; justify-content:space-between; padding:5px; font-size:13px;"><span>${i+1}. مندوب (${m.n})</span><b>${m.s} ✅</b></div>`;
-                    });
-                    document.getElementById('leaderboard').innerHTML = list;
-                }
-            });
-        }
-    </script>
+    function logout() { auth.signOut(); }
+</script>
 </body>
 </html>
