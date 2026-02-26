@@ -59,16 +59,6 @@
         .hidden { display: none !important; }
         .badge { background: rgba(255, 255, 255, 0.2); color: #fff; padding: 5px 15px; border-radius: 12px; font-size: 11px; font-weight: bold; }
         .stat-card { background: #f8f9fa; padding: 15px; border-radius: 20px; text-align: center; border: 1px solid var(--border); }
-
-        /* --- الإضافة الجديدة: تصميم الهيد لاين الخاص بالمندوب --- */
-        .agent-headline {
-            background: #fff; padding: 15px; border-radius: 20px; margin-bottom: 20px;
-            display: flex; justify-content: space-around; border: 1px solid var(--border);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
-        }
-        .headline-item { text-align: center; }
-        .headline-item span { display: block; font-size: 11px; color: var(--text-sub); }
-        .headline-item b { font-size: 18px; color: var(--accent); }
     </style>
 </head>
 <body>
@@ -121,17 +111,7 @@
     <div class="glass-card hidden" id="agentUI" style="max-width: 500px; padding: 20px;">
         <div class="logo-box">
             <h2 id="welcomeMsg" style="color:var(--accent)">أهلاً بك</h2>
-            
-            <div class="agent-headline">
-                <div class="headline-item">
-                    <span>مهمة منجزة</span>
-                    <b id="countDone">0</b>
-                </div>
-                <div class="headline-item">
-                    <span>في انتظارك</span>
-                    <b id="countPending">0</b>
-                </div>
-            </div>
+            <p>قائمة المهام المسندة إليك</p>
         </div>
         <div id="tasksContainer"></div>
         <button class="btn-modern" style="background:#f1f4f9; color:#636e72; margin-top:20px;" onclick="logout()">تسجيل خروج</button>
@@ -151,9 +131,6 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
-
-        // تفعيل الإشعارات
-        if (Notification.permission !== "granted") { Notification.requestPermission(); }
 
         setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 2000);
 
@@ -176,37 +153,9 @@
                     document.getElementById('welcomeMsg').innerText = "أهلاً، " + n;
                     db.ref('active_list/' + n).set({name: n});
                     loadTasks(n);
-                    loadAgentCounts(n); // تحميل أرقام الهيد لاين
-                    listenForNewTasks(n); // تشغيل مراقب الإشعارات
                 }
             } else { document.getElementById('loginUI').classList.remove('hidden'); }
         });
-
-        // مراقب الإشعارات للمهام الجديدة
-        function listenForNewTasks(name) {
-            db.ref('modern_tasks').on('child_added', snap => {
-                const t = snap.val();
-                // إذا كانت المهمة مرسلة لي الآن (خلال آخر 10 ثواني)
-                if(t.to === name && (Date.now() - t.timestamp < 10000)) {
-                    if (Notification.permission === "granted") {
-                        new Notification("مهمة جديدة من OREN! 🔔", {
-                            body: `لديك تكليف جديد للعميل: ${t.c}`,
-                            icon: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-                        });
-                    }
-                }
-            });
-        }
-
-        function loadAgentCounts(name) {
-            // حساب المهام المنجزة
-            db.ref('completed_tasks').on('value', snap => {
-                let count = 0;
-                snap.forEach(c => { if(c.val().to === name) count++; });
-                document.getElementById('countDone').innerText = count;
-            });
-            // حساب المهام الحالية (يتم تحديثه داخل loadTasks أيضاً)
-        }
 
         function loadAgents() {
             db.ref('active_list').on('value', snap => {
@@ -239,11 +188,9 @@
         function loadTasks(name) {
             db.ref('modern_tasks').on('value', snap => {
                 const container = document.getElementById('tasksContainer'); container.innerHTML = "";
-                let pCount = 0;
                 snap.forEach(c => {
                     const t = c.val();
                     if(t.to === name) {
-                        pCount++;
                         container.innerHTML += `
                             <div class="task-premium-card">
                                 <div class="customer-info">
@@ -271,7 +218,6 @@
                             </div>`;
                     }
                 });
-                document.getElementById('countPending').innerText = pCount;
             });
         }
 
@@ -283,7 +229,7 @@
                 db.ref('modern_tasks/' + id).once('value', snap => {
                     const data = snap.val();
                     data.doneTime = Date.now();
-                    data.agentNote = note; 
+                    data.agentNote = note; // حفظ ملاحظة الفني
                     db.ref('completed_tasks').push(data).then(() => {
                         db.ref('modern_tasks/' + id).remove();
                     });
