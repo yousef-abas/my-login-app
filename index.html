@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OREN PRO SYSTEM</title>
+    <title>OREN BLACK EDITION</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -11,75 +11,84 @@
 
     <style>
         :root {
-            --bg-color: #6c5ce7; /* البنفسجي الأساسي */
-            --neu-shadow: 10px 10px 20px #5c4ec4, -10px -10px 20px #7c6aff;
-            --neu-inner: inset 5px 5px 10px #5c4ec4, inset -5px -5px 10px #7c6aff;
-            --white: #ffffff;
+            --dark-bg: #1a1a1a; /* الأسود الفخم */
+            --neu-bg: #1e1e2e;  /* البنفسجي الغامق جداً للداخل */
+            --neon-purple: #9d85ff;
+            --shadow-dark: #12121a;
+            --shadow-light: #2a2a3e;
         }
 
         body {
             font-family: 'Cairo', sans-serif;
-            background-color: var(--bg-color);
+            background-color: var(--dark-bg);
             margin: 0;
             display: flex;
             justify-content: center;
-            color: var(--white);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        /* Splash Screen */
+        /* شاشة الافتتاحية السودة اللي بتنور وتطفي */
         #splash {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-color); display: flex; flex-direction: column;
-            justify-content: center; align-items: center; z-index: 9999; transition: 1s;
+            background: #000; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 10000; transition: 1s ease-in-out;
         }
-        .loader { font-size: 60px; font-weight: 900; letter-spacing: 10px; animation: glow 1.5s infinite; }
-        @keyframes glow { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.1); } }
+        .neon-text {
+            font-size: 70px; font-weight: 900; color: #fff;
+            text-transform: uppercase;
+            animation: neonPulse 1.5s ease-in-out infinite alternate;
+        }
+        @keyframes neonPulse {
+            from { text-shadow: 0 0 10px #fff, 0 0 20px var(--neon-purple), 0 0 30px var(--neon-purple); opacity: 1; }
+            to { text-shadow: 0 0 5px #fff, 0 0 10px var(--neon-purple), 0 0 15px var(--neon-purple); opacity: 0.3; }
+        }
 
-        .container { width: 100%; max-width: 420px; padding: 20px; margin-top: 30px; }
+        .container { width: 100%; max-width: 420px; padding: 20px; margin-top: 20px; }
 
-        /* الكروت البارزة بنفسجية */
+        /* الكروت ببروز حاد */
         .neu-card {
-            background: var(--bg-color);
-            border-radius: 40px;
-            padding: 30px;
-            box-shadow: var(--neu-shadow);
-            margin-bottom: 30px;
-            border: 1px solid rgba(255,255,255,0.1);
+            background: var(--neu-bg);
+            border-radius: 30px;
+            padding: 25px;
+            box-shadow: 10px 10px 20px var(--shadow-dark), -8px -8px 20px var(--shadow-light);
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.03);
         }
 
-        h2 { text-align: center; font-weight: 900; font-size: 28px; margin-bottom: 25px; }
+        h2 { text-align: center; color: var(--neon-purple); font-weight: 900; margin-bottom: 20px; }
 
-        /* مدخلات بنفسجية محفورة */
+        /* المدخلات المحفورة داخل التصميم */
         input, select, textarea {
-            width: 100%; padding: 18px; margin: 12px 0; border: none; border-radius: 20px;
-            background: var(--bg-color); box-shadow: var(--neu-inner); font-family: 'Cairo';
-            outline: none; color: white; font-weight: 700; box-sizing: border-box;
+            width: 100%; padding: 16px; margin: 10px 0; border: none; border-radius: 15px;
+            background: var(--neu-bg); box-shadow: inset 6px 6px 12px var(--shadow-dark), inset -6px -6px 12px var(--shadow-light);
+            font-family: 'Cairo'; outline: none; color: #fff; font-weight: 700; box-sizing: border-box;
         }
-        input::placeholder { color: rgba(255,255,255,0.6); }
 
-        /* الزرار البارز جداً */
-        .btn-neu {
-            width: 100%; padding: 20px; background: var(--bg-color); color: white;
-            border: none; border-radius: 25px; font-weight: 900; font-size: 18px;
-            box-shadow: var(--neu-shadow); cursor: pointer; transition: 0.3s; margin-top: 15px;
+        /* الزرار البارز */
+        .btn-neon {
+            width: 100%; padding: 18px; background: var(--neu-bg); color: var(--neon-purple);
+            border: none; border-radius: 20px; font-weight: 900; font-size: 18px;
+            box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);
+            cursor: pointer; transition: 0.3s; margin-top: 15px;
         }
-        .btn-neu:active { box-shadow: var(--neu-inner); transform: scale(0.97); }
+        .btn-neon:active { box-shadow: inset 4px 4px 8px var(--shadow-dark); transform: scale(0.98); }
 
-        /* كارت المندوب */
-        .agent-task {
-            background: rgba(255,255,255,0.1); border-radius: 25px; padding: 20px;
-            margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.2);
+        .task-item {
+            background: rgba(255,255,255,0.05); padding: 15px; border-radius: 20px; margin-bottom: 15px;
+            border-right: 5px solid var(--neon-purple);
         }
 
         .hidden { display: none; }
-        .label { font-size: 14px; font-weight: 700; margin-right: 15px; opacity: 0.9; }
+        .label { font-size: 12px; color: var(--neon-purple); font-weight: bold; margin-right: 10px; }
     </style>
 </head>
 <body>
 
 <div id="splash">
-    <div class="loader">OREN</div>
-    <div style="font-weight: 700; margin-top: 10px;">PREMIUM SYSTEM</div>
+    <div class="neon-text">OREN</div>
+    <p style="color: #666; letter-spacing: 5px; margin-top: 10px;">PREMIUM EDITION</p>
 </div>
 
 <div class="container">
@@ -87,35 +96,35 @@
         <h2>تسجيل الدخول</h2>
         <input type="email" id="email" placeholder="البريد الإلكتروني">
         <input type="password" id="pass" placeholder="كلمة المرور">
-        <button class="btn-neu" onclick="login()">دخول 🔓</button>
+        <button class="btn-neon" onclick="login()">دخول</button>
     </div>
 
     <div id="admin-screen" class="hidden">
-        <div class="neu-card" style="display: flex; justify-content: space-between; align-items: center;">
-            <b style="font-size: 20px;">المدير يوسف 👑</b>
-            <button onclick="logout()" style="background:none; border:none; color:white; cursor:pointer; font-weight:900;">خروج</button>
+        <div class="neu-card" style="display: flex; justify-content: space-between; align-items: center; padding: 15px;">
+            <b style="color: var(--neon-purple)">المدير يوسف 👑</b>
+            <button onclick="logout()" style="background:none; border:none; color:white; cursor:pointer;">خروج</button>
         </div>
 
         <div class="neu-card">
-            <h2>توزيع المهام 🚀</h2>
+            <h2>توزيع مهمة ➕</h2>
             <span class="label">اسم العميل</span><input type="text" id="c-name">
             <span class="label">رقم الهاتف</span><input type="tel" id="c-phone">
             <span class="label">العنوان</span><input type="text" id="c-addr">
-            <span class="label">المشكلة</span><textarea id="c-issue" rows="3"></textarea>
+            <span class="label">المشكلة</span><textarea id="c-issue" rows="2"></textarea>
             
             <span class="label">اختر المندوب</span>
-            <select id="agent-select"><option value="">جاري التحميل...</option></select>
+            <select id="agent-select"><option value="">جاري البحث عن مناديب...</option></select>
             
-            <button class="btn-neu" onclick="assign()">إسناد المهمة للمندوب</button>
+            <button class="btn-neon" onclick="assign()">إرسال المهمة</button>
         </div>
     </div>
 
     <div id="agent-screen" class="hidden">
         <div class="neu-card">
-            <h2>أهلاً <span id="agent-name"></span> 👋</h2>
-            <button class="btn-neu" style="background:#ff4757; box-shadow:none;" onclick="logout()">تسجيل خروج</button>
+            <h2>أهلاً يا <span id="agent-name"></span> 👋</h2>
+            <button class="btn-neon" style="color:#ff5555" onclick="logout()">خروج</button>
         </div>
-        <div id="my-tasks-container"></div>
+        <div id="my-tasks-list"></div>
     </div>
 </div>
 
@@ -133,13 +142,15 @@
     const db = firebase.database();
 
     // إخفاء الـ Splash
-    setTimeout(() => { document.getElementById('splash').style.opacity = '0'; 
-    setTimeout(() => document.getElementById('splash').style.display = 'none', 1000); }, 2500);
+    setTimeout(() => { 
+        document.getElementById('splash').style.opacity = '0';
+        setTimeout(() => document.getElementById('splash').style.display = 'none', 1000);
+    }, 3000);
 
     function login() {
         const e = document.getElementById('email').value;
         const p = document.getElementById('pass').value;
-        firebase.auth().signInWithEmailAndPassword(e, p).catch(err => alert("خطأ: " + err.message));
+        firebase.auth().signInWithEmailAndPassword(e, p).catch(err => alert(err.message));
     }
 
     firebase.auth().onAuthStateChanged(user => {
@@ -147,13 +158,13 @@
             document.getElementById('login-screen').classList.add('hidden');
             if(user.email === "admin@oren.com") {
                 document.getElementById('admin-screen').classList.remove('hidden');
-                loadAgents();
+                loadAgentsToSelect();
             } else {
                 document.getElementById('agent-screen').classList.remove('hidden');
                 const n = user.email.split('@')[0];
                 document.getElementById('agent-name').innerText = n;
                 db.ref('active_agents/' + n).set({name: n});
-                loadTasks(n);
+                loadAgentTasks(n);
             }
         } else {
             document.getElementById('login-screen').classList.remove('hidden');
@@ -162,7 +173,7 @@
         }
     });
 
-    function loadAgents() {
+    function loadAgentsToSelect() {
         db.ref('active_agents').on('value', snap => {
             const s = document.getElementById('agent-select');
             s.innerHTML = '<option value="">-- اختار المندوب --</option>';
@@ -172,38 +183,38 @@
 
     function assign() {
         const ag = document.getElementById('agent-select').value;
-        if(!ag) return alert("اختار مندوب الأول!");
-        db.ref('tasks_v3').push({
+        if(!ag) return alert("اختار مندوب!");
+        db.ref('final_tasks_secure').push({
             customer: document.getElementById('c-name').value,
             phone: document.getElementById('c-phone').value,
             addr: document.getElementById('c-addr').value,
             issue: document.getElementById('c-issue').value,
             to: ag
         }).then(() => {
-            alert("تم الإسناد!");
+            alert("تم التكليف ✅");
             document.getElementById('c-name').value = "";
         });
     }
 
-    function loadTasks(name) {
-        db.ref('tasks_v3').on('value', snap => {
-            const container = document.getElementById('my-tasks-container');
-            container.innerHTML = "<h3>مهامك الجديدة 👇</h3>";
+    function loadAgentTasks(name) {
+        db.ref('final_tasks_secure').on('value', snap => {
+            const list = document.getElementById('my-tasks-list');
+            list.innerHTML = "<h3>مهامك الجديدة 👇</h3>";
             snap.forEach(c => {
                 const t = c.val();
                 if(t.to === name) {
-                    container.innerHTML += `
-                        <div class="agent-task">
-                            <b>👤 العميل: ${t.customer}</b><br>
+                    list.innerHTML += `
+                        <div class="task-item">
+                            <b style="color:var(--neon-purple)">👤 العميل: ${t.customer}</b><br>
                             📞 ${t.phone}<br>📍 ${t.addr}<br>📝 ${t.issue}<br>
-                            <button class="btn-neu" style="padding:10px; font-size:14px;" onclick="finishTask('${c.key}')">تم التنفيذ ✅</button>
+                            <button class="btn-neon" style="padding:10px; font-size:14px; margin-top:10px;" onclick="finish('${c.key}')">تم التنفيذ ✅</button>
                         </div>`;
                 }
             });
         });
     }
 
-    function finishTask(id) { db.ref('tasks_v3/' + id).remove(); }
+    function finish(id) { db.ref('final_tasks_secure/' + id).remove(); }
     function logout() { firebase.auth().signOut(); }
 </script>
 </body>
