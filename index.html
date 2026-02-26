@@ -39,17 +39,20 @@
 
         .logo-box h1 { font-size: 35px; margin: 0; font-weight: 900; background: linear-gradient(to right, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* Inputs & Select Fix */
         .input-wrapper { margin-bottom: 15px; text-align: right; }
         label { display: block; font-size: 12px; color: var(--accent); margin-bottom: 5px; margin-right: 10px; }
+        
         input, select, textarea {
             width: 100%; padding: 15px; background: rgba(0,0,0,0.3);
             border: 1px solid var(--glass-border); border-radius: 18px; color: #fff;
             font-size: 15px; outline: none;
         }
-        /* تصحيح شكل الـ Select والمناديب */
-        select option { background: #1e1e2f; color: #fff; padding: 10px; }
-        input:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 10px rgba(0, 210, 255, 0.2); }
+
+        /* --- تعديل الدروب ليست القاتل --- */
+        select option { 
+            background: #1e1e2f !important; 
+            color: #fff !important; 
+        }
 
         .btn-modern {
             width: 100%; padding: 15px; background: linear-gradient(45deg, #00d2ff, #3a7bd5);
@@ -57,7 +60,6 @@
             font-size: 16px; cursor: pointer; margin-top: 10px;
         }
 
-        /* --- نظام التحليل (Analysis Section) --- */
         .analysis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
         .stat-card { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 20px; text-align: center; border: 1px solid var(--glass-border); }
         .stat-card h3 { margin: 0; font-size: 20px; color: var(--accent); }
@@ -95,7 +97,7 @@
             <div class="input-wrapper"><label>العميل</label><input type="text" id="cName"></div>
             <div class="input-wrapper"><label>رقم الهاتف</label><input type="tel" id="cPhone"></div>
             <div class="input-wrapper"><label>المندوب</label>
-                <select id="agentSelect" style="color: #fff;"><option value="">تحميل المناديب...</option></select>
+                <select id="agentSelect"><option value="">جاري التحميل...</option></select>
             </div>
             <div class="input-wrapper"><label>المشكلة</label><textarea id="cIssue"></textarea></div>
             <button class="btn-modern" onclick="assign()">توزيع المهمة <i class="fas fa-paper-plane"></i></button>
@@ -166,9 +168,16 @@
         function loadAgents() {
             db.ref('agents').on('value', snap => {
                 const s = document.getElementById('agentSelect');
-                s.innerHTML = '<option value="" style="color:#000">-- اختر مندوب --</option>';
+                s.innerHTML = '<option value="">-- اختر مندوب --</option>';
                 snap.forEach(c => {
-                    s.innerHTML += `<option value="${c.val().name}" style="color:#fff">${c.val().name}</option>`;
+                    const agentName = c.val().name;
+                    // إضافة الخيار مع التأكد من اللون
+                    let opt = document.createElement("option");
+                    opt.value = agentName;
+                    opt.innerText = agentName;
+                    opt.style.color = "#fff"; 
+                    opt.style.background = "#1e1e2f";
+                    s.appendChild(opt);
                 });
             });
         }
