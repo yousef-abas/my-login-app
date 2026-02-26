@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OREN PREMIUM</title>
+    <title>OREN VIP SYSTEM</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -11,95 +11,120 @@
 
     <style>
         :root {
-            --bg: #e0e5ec;
-            --main-purple: #6c5ce7;
-            --shadow: 9px 9px 16px rgba(163,177,198,0.6), -9px -9px 16px rgba(255,255,255, 0.5);
-            --inner: inset 6px 6px 12px #c1c9d7, inset -6px -6px 12px #ffffff;
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --soft-purple: #f3f0ff;
+            --dark-purple: #4834d4;
+            --neu-shadow: 10px 10px 20px #bebebe, -10px -10px 20px #ffffff;
+            --neu-inner: inset 6px 6px 12px #bebebe, inset -6px -6px 12px #ffffff;
         }
 
-        body { font-family: 'Cairo', sans-serif; background: var(--bg); margin: 0; overflow-x: hidden; }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: #e0e0e0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
 
-        /* شاشة الافتتاحية */
-        #splash-screen {
+        /* شاشة الافتتاحية الجامدة */
+        #splash {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--main-purple); display: flex; flex-direction: column;
-            justify-content: center; align-items: center; z-index: 1000; transition: 0.8s;
+            background: var(--primary-gradient);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 2000; transition: 1s ease-out;
         }
-        .loader-logo { font-size: 50px; color: white; font-weight: 900; letter-spacing: 5px; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        .logo-box {
+            width: 120px; height: 120px; background: white; border-radius: 30px;
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); animation: bounce 2s infinite;
+        }
+        .logo-box span { font-size: 30px; font-weight: 900; color: #764ba2; }
 
-        .container { max-width: 450px; margin: auto; padding: 20px; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
 
-        /* كروت بنفسجية بارزة */
+        .container { width: 100%; max-width: 450px; padding: 20px; margin-top: 20px; }
+
+        /* كروت بنفسجية فخمة */
         .glass-card {
-            background: var(--bg); border-radius: 30px; padding: 25px;
-            box-shadow: var(--shadow); margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.3);
+            background: #e0e0e0; border-radius: 35px; padding: 30px;
+            box-shadow: var(--neu-shadow); margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
-        h2, h3 { color: var(--main-purple); text-align: center; font-weight: 900; }
+        h2 { color: var(--dark-purple); text-align: center; font-weight: 900; font-size: 26px; }
 
+        /* مدخلات بارزة */
         input, select, textarea {
-            width: 100%; padding: 15px; margin: 10px 0; border: none; border-radius: 20px;
-            background: var(--bg); box-shadow: var(--inner); font-family: 'Cairo';
-            outline: none; color: #444; font-weight: 700; box-sizing: border-box;
+            width: 100%; padding: 16px; margin: 12px 0; border: none; border-radius: 18px;
+            background: #e0e0e0; box-shadow: var(--neu-inner); font-family: 'Cairo';
+            outline: none; font-weight: 700; box-sizing: border-box; color: var(--dark-purple);
         }
 
-        button {
-            width: 100%; padding: 18px; background: var(--main-purple); color: white;
-            border: none; border-radius: 20px; font-weight: 900; font-size: 18px;
-            box-shadow: 0 10px 20px rgba(108, 92, 231, 0.3); cursor: pointer; transition: 0.3s;
+        /* الزرار البنفسجي الجامد */
+        .btn-main {
+            width: 100%; padding: 18px; background: var(--primary-gradient);
+            color: white; border: none; border-radius: 20px; font-weight: 900;
+            font-size: 18px; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(118, 75, 162, 0.4);
         }
-        button:active { transform: scale(0.95); box-shadow: none; }
+        .btn-main:active { transform: scale(0.95); box-shadow: none; }
 
-        .task-card {
-            background: #fff; padding: 15px; border-radius: 20px; margin-bottom: 15px;
-            border-right: 8px solid var(--main-purple); box-shadow: var(--shadow);
+        /* كارت المهمة للمندوب */
+        .task-box {
+            background: white; border-radius: 25px; padding: 20px; margin-bottom: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden;
+        }
+        .task-box::before {
+            content: ''; position: absolute; top: 0; right: 0; width: 10px; height: 100%;
+            background: var(--primary-gradient);
         }
 
         .hidden { display: none; }
-        .label { font-size: 13px; color: var(--main-purple); font-weight: 900; margin-right: 10px; }
+        .label { font-size: 13px; color: var(--dark-purple); font-weight: 800; margin-right: 10px; }
     </style>
 </head>
 <body>
 
-<div id="splash-screen">
-    <div class="loader-logo">OREN</div>
-    <p style="color: white; font-weight: 600;">جاري تحميل النظام...</p>
+<div id="splash">
+    <div class="logo-box"><span>OREN</span></div>
+    <h1 style="color:white; margin-top:20px;">نظام أورن برو</h1>
 </div>
 
 <div class="container">
-    <div id="login-section" class="glass-card hidden">
-        <h2>تسجيل دخول</h2>
-        <input type="email" id="login-email" placeholder="البريد الإلكتروني">
-        <input type="password" id="login-pass" placeholder="كلمة المرور">
-        <button onclick="login()">دخول للسيستم</button>
+    <div id="login-screen" class="glass-card hidden">
+        <h2>تسجيل الدخول</h2>
+        <input type="email" id="email" placeholder="البريد الإلكتروني">
+        <input type="password" id="pass" placeholder="كلمة المرور">
+        <button class="btn-main" onclick="login()">دخول الآن 🔓</button>
     </div>
 
-    <div id="admin-section" class="hidden">
-        <div class="glass-card" style="display: flex; justify-content: space-between; align-items: center;">
-            <h3 style="margin:0">لوحة المدير 👑</h3>
-            <button onclick="logout()" style="width:auto; padding:5px 15px; font-size:12px; background:#ff4757;">خروج</button>
+    <div id="admin-screen" class="hidden">
+        <div class="glass-card" style="padding: 15px; display: flex; justify-content: space-between; align-items: center;">
+            <b style="color:var(--dark-purple)">المدير يوسف 👑</b>
+            <button onclick="logout()" style="background:#ff4757; color:white; border:none; border-radius:10px; padding:5px 10px;">خروج</button>
         </div>
 
         <div class="glass-card">
-            <h3>توزيع مهام 📝</h3>
-            <span class="label">اسم العميل</span><input type="text" id="c-name">
-            <span class="label">رقم التليفون</span><input type="tel" id="c-phone">
-            <span class="label">العنوان</span><input type="text" id="c-addr">
-            <span class="label">المشكلة</span><textarea id="c-issue"></textarea>
+            <h2>توزيع المهام 📤</h2>
+            <span class="label">اسم العميل</span><input type="text" id="cust-name">
+            <span class="label">رقم الهاتف</span><input type="tel" id="cust-tel">
+            <span class="label">العنوان</span><input type="text" id="cust-addr">
+            <span class="label">المشكلة / الطلب</span><textarea id="cust-issue"></textarea>
+            
             <span class="label">اختر المندوب</span>
-            <select id="agents-list"><option value="">جاري جلب المناديب...</option></select>
-            <button onclick="sendTask()">إسناد المهمة فوراً</button>
+            <select id="agent-select"><option value="">جاري التحميل...</option></select>
+            
+            <button class="btn-main" onclick="assign()">إسناد المهمة للمندوب</button>
         </div>
     </div>
 
-    <div id="agent-section" class="hidden">
+    <div id="agent-screen" class="hidden">
         <div class="glass-card">
-            <h3>أهلاً <span id="agent-display-name"></span> 👋</h3>
-            <button onclick="logout()" style="background:#ff4757;">تسجيل خروج</button>
+            <h2>أهلاً يا <span id="my-name"></span> 👋</h2>
+            <button class="btn-main" style="background:#ff4757;" onclick="logout()">خروج</button>
         </div>
-        <div id="tasks-container">
-            </div>
+        <div id="tasks-list"></div>
     </div>
 </div>
 
@@ -116,76 +141,78 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // إخفاء الـ Splash بعد ثانيتين
-    setTimeout(() => { document.getElementById('splash-screen').style.opacity = '0'; 
-    setTimeout(() => document.getElementById('splash-screen').style.display = 'none', 800); }, 2000);
+    // إخفاء الـ Splash
+    setTimeout(() => { document.getElementById('splash').style.transform = 'translateY(-100%)'; }, 2500);
 
     function login() {
-        const e = document.getElementById('login-email').value;
-        const p = document.getElementById('login-pass').value;
-        firebase.auth().signInWithEmailAndPassword(e, p).catch(err => alert(err.message));
+        const e = document.getElementById('email').value;
+        const p = document.getElementById('pass').value;
+        firebase.auth().signInWithEmailAndPassword(e, p).catch(err => alert("غلط يا يوسف: " + err.message));
     }
 
     firebase.auth().onAuthStateChanged(user => {
         if (user) {
-            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('login-screen').classList.add('hidden');
             if(user.email === "admin@oren.com") {
-                document.getElementById('admin-section').classList.remove('hidden');
-                loadAgents();
+                document.getElementById('admin-screen').classList.remove('hidden');
+                loadAgentsToSelect();
             } else {
-                document.getElementById('agent-section').classList.remove('hidden');
-                const name = user.email.split('@')[0];
-                document.getElementById('agent-display-name').innerText = name;
-                db.ref('active_agents/' + name).set({name: name});
-                loadMyTasks(name);
+                document.getElementById('agent-screen').classList.remove('hidden');
+                const n = user.email.split('@')[0];
+                document.getElementById('my-name').innerText = n;
+                db.ref('active_agents/' + n).set({name: n});
+                loadAgentTasks(n);
             }
         } else {
-            document.getElementById('login-section').classList.remove('hidden');
-            document.getElementById('admin-section').classList.add('hidden');
-            document.getElementById('agent-section').classList.add('hidden');
+            document.getElementById('login-screen').classList.remove('hidden');
+            document.getElementById('admin-screen').classList.add('hidden');
+            document.getElementById('agent-screen').classList.add('hidden');
         }
     });
 
-    function loadAgents() {
+    function loadAgentsToSelect() {
         db.ref('active_agents').on('value', snap => {
-            const sel = document.getElementById('agents-list');
-            sel.innerHTML = '<option value="">-- اختر المندوب --</option>';
-            snap.forEach(c => sel.innerHTML += `<option value="${c.val().name}">${c.val().name}</option>`);
+            const s = document.getElementById('agent-select');
+            s.innerHTML = '<option value="">-- اضغط للاختيار --</option>';
+            snap.forEach(c => s.innerHTML += `<option value="${c.val().name}">${c.val().name}</option>`);
         });
     }
 
-    function sendTask() {
-        const agent = document.getElementById('agents-list').value;
-        if(!agent) return alert("اختار مندوب!");
-        db.ref('new_tasks').push({
-            customer: document.getElementById('c-name').value,
-            phone: document.getElementById('c-phone').value,
-            addr: document.getElementById('c-addr').value,
-            issue: document.getElementById('c-issue').value,
-            assignedTo: agent,
-            status: "جديد"
-        }).then(() => alert("تم التكليف!"));
+    function assign() {
+        const agent = document.getElementById('agent-select').value;
+        if(!agent) return alert("اختار المندوب الأول!");
+        db.ref('tasks_final').push({
+            name: document.getElementById('cust-name').value,
+            tel: document.getElementById('cust-tel').value,
+            addr: document.getElementById('cust-addr').value,
+            issue: document.getElementById('cust-issue').value,
+            to: agent,
+            status: "انتظار"
+        }).then(() => {
+            alert("تم التوزيع بنجاح! 🚀");
+            document.getElementById('cust-name').value = "";
+        });
     }
 
-    function loadMyTasks(name) {
-        db.ref('new_tasks').on('value', snap => {
-            const container = document.getElementById('tasks-container');
-            container.innerHTML = "<h3>مهامك اليومية</h3>";
+    function loadAgentTasks(n) {
+        db.ref('tasks_final').on('value', snap => {
+            const list = document.getElementById('tasks-list');
+            list.innerHTML = "<h3>مهامك المطلوبة 👇</h3>";
             snap.forEach(c => {
                 const t = c.val();
-                if(t.assignedTo === name) {
-                    container.innerHTML += `
-                        <div class="task-card">
-                            <b style="color:var(--main-purple)">👤 العميل: ${t.customer}</b><br>
-                            📞 ${t.phone}<br>📍 ${t.addr}<br>📝 ${t.issue}<br>
-                            <button onclick="done('${c.key}')" style="padding:10px; font-size:14px; margin-top:10px;">تم الإنجاز ✅</button>
+                if(t.to === n) {
+                    list.innerHTML += `
+                        <div class="task-box">
+                            <b style="color:var(--dark-purple)">👤 العميل: ${t.name}</b><br>
+                            📞 ${t.tel}<br>📍 ${t.addr}<br>🛠 ${t.issue}<br>
+                            <button class="btn-main" style="margin-top:15px; padding:10px; font-size:14px;" onclick="done('${c.key}')">تم التنفيذ ✅</button>
                         </div>`;
                 }
             });
         });
     }
 
-    function done(key) { db.ref('new_tasks/' + key).remove(); }
+    function done(k) { db.ref('tasks_final/' + k).remove(); }
     function logout() { firebase.auth().signOut(); }
 </script>
 </body>
