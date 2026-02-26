@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" id="mainHtml">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OREN - Elite Edition</title>
+    <title>OREN - Final Fix</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -11,84 +11,51 @@
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
+        :root { --accent: #00d2ff; --bg: radial-gradient(circle at top right, #1e1e2f, #0d0d1a); }
+        * { box-sizing: border-box; transition: 0.3s; font-family: 'Cairo', sans-serif; }
+        body { margin: 0; background: var(--bg); min-height: 100vh; display: flex; justify-content: center; align-items: center; color: #fff; padding: 20px; }
 
-        :root {
-            --glass: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --accent: #00d2ff;
-            --btn-grad: linear-gradient(45deg, #00d2ff, #3a7bd5);
-            --bg-grad: radial-gradient(circle at top right, #1e1e2f, #0d0d1a);
-        }
+        /* الشاشة الافتتاحية */
+        #splash { position: fixed; inset: 0; background: #000; display: flex; justify-content: center; align-items: center; z-index: 10000; }
+        .loader-text { font-size: 60px; font-weight: 900; letter-spacing: 10px; animation: pulse 1.5s infinite alternate; }
+        @keyframes pulse { from { opacity: 0.3; } to { opacity: 1; text-shadow: 0 0 20px var(--accent); } }
 
-        * { box-sizing: border-box; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); font-family: 'Cairo', sans-serif; }
-        
-        body {
-            margin: 0; background: var(--bg-grad); min-height: 100vh;
-            display: flex; justify-content: center; align-items: center;
-            overflow-x: hidden; color: #fff; padding: 20px;
-        }
-
-        /* --- شاشة الافتتاحية الخرافية --- */
-        #splash {
-            position: fixed; inset: 0; background: #000;
-            display: flex; flex-direction: column; justify-content: center;
-            align-items: center; z-index: 10000;
-        }
-        .loader-text {
-            font-size: 80px; font-weight: 900; letter-spacing: 15px;
-            background: linear-gradient(to bottom, #fff, #444);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 20px rgba(0, 210, 255, 0.5));
-            animation: orenScale 2s infinite alternate;
-        }
-        @keyframes orenScale { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.1); opacity: 1; } }
-
-        /* --- الكروت البارزة (نفس ستايلك اللي فات) --- */
+        /* الكارت الزجاجي */
         .glass-card {
-            background: var(--glass); backdrop-filter: blur(20px);
-            border-radius: 40px; border: 1px solid var(--glass-border);
-            box-shadow: 0 40px 100px rgba(0,0,0,0.5);
-            padding: 40px; width: 95%; max-width: 450px;
+            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px);
+            border-radius: 40px; border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 30px; width: 100%; max-width: 450px; box-shadow: 0 40px 100px rgba(0,0,0,0.5);
             animation: float 6s ease-in-out infinite;
         }
-        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0px); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-        .logo-box h1 { font-size: 40px; margin: 0; font-weight: 900; color: var(--accent); }
-
-        .input-wrapper { margin-bottom: 20px; position: relative; text-align: right; }
-        label { display: block; margin-bottom: 8px; font-size: 13px; color: var(--accent); }
+        h1 { color: var(--accent); margin: 0 0 20px; text-align: center; }
+        .input-group { margin-bottom: 15px; text-align: right; }
+        label { display: block; font-size: 13px; margin-bottom: 5px; color: var(--accent); }
         
         input, textarea {
-            width: 100%; padding: 18px 25px; background: rgba(0,0,0,0.2);
-            border: 2px solid transparent; border-radius: 20px; color: #fff;
-            font-size: 16px; outline: none;
+            width: 100%; padding: 15px; background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; color: #fff; outline: none;
         }
 
-        /* --- حل مشكلة الدروب ليست --- */
+        /* حل نهائي للدروب ليست */
+        .select-container { display: flex; gap: 10px; align-items: center; }
         select {
-            width: 100%; padding: 18px 25px; 
-            background: #ffffff !important; /* خلفية بيضاء سادة */
-            color: #000000 !important;    /* كلام أسود واضح */
-            border-radius: 20px; font-size: 16px; font-weight: bold;
-            outline: none; cursor: pointer; border: none;
+            flex: 1; padding: 15px; border-radius: 15px; border: none;
+            background: #ffffff !important; color: #000000 !important;
+            font-weight: bold; font-size: 16px; cursor: pointer;
         }
-        select option { background: #ffffff; color: #000000; }
+        .refresh-btn { background: var(--accent); border: none; border-radius: 10px; color: #000; padding: 10px; cursor: pointer; }
 
-        .btn-modern {
-            width: 100%; padding: 18px; background: var(--btn-grad);
-            border: none; border-radius: 20px; color: #fff; font-weight: 900;
-            font-size: 18px; cursor: pointer; box-shadow: 0 10px 30px rgba(0, 210, 255, 0.4);
+        .main-btn {
+            width: 100%; padding: 15px; background: linear-gradient(45deg, #00d2ff, #3a7bd5);
+            border: none; border-radius: 15px; color: #fff; font-weight: bold; cursor: pointer; margin-top: 10px;
         }
-
-        /* --- كروت التحليل --- */
-        .analysis-box { margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .stat-item { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 20px; text-align: center; border: 1px solid var(--glass-border); }
-        .stat-item h3 { margin: 0; color: var(--accent); font-size: 24px; }
-
-        .agent-row { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid var(--glass-border); font-size: 14px; }
+        
+        .analysis-box { background: rgba(255,255,255,0.05); border-radius: 20px; padding: 15px; margin-top: 20px; }
+        .stat { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
 
         .hidden { display: none; }
-        ::placeholder { color: rgba(255,255,255,0.2); }
     </style>
 </head>
 <body>
@@ -96,41 +63,37 @@
     <div id="splash"><div class="loader-text">OREN</div></div>
 
     <div class="glass-card" id="loginUI">
-        <div class="logo-box"><h1>OREN</h1><p>LOGIN SYSTEM</p></div>
-        <div class="input-wrapper"><input type="email" placeholder="البريد الإلكتروني" id="email"></div>
-        <div class="input-wrapper"><input type="password" placeholder="كلمة المرور" id="pass"></div>
-        <button class="btn-modern" onclick="login()">دخول</button>
+        <h1>OREN</h1>
+        <div class="input-group"><input type="email" id="email" placeholder="البريد الإلكتروني"></div>
+        <div class="input-group"><input type="password" id="pass" placeholder="كلمة المرور"></div>
+        <button class="main-btn" onclick="login()">دخول</button>
     </div>
 
-    <div class="glass-card hidden" id="adminUI" style="max-width: 500px;">
-        <div class="logo-box"><h1>ADMIN</h1><p>أهلاً يا مدير يوسف 👑</p></div>
-        
-        <div id="adminForm">
-            <div class="input-wrapper"><label>اسم العميل</label><input type="text" id="cName"></div>
-            <div class="input-wrapper"><label>الهاتف</label><input type="tel" id="cPhone"></div>
-            <div class="input-wrapper">
-                <label>اختار المندوب</label>
-                <select id="agentSelect"></select> </div>
-            <div class="input-wrapper"><label>التفاصيل</label><textarea id="cIssue" rows="2"></textarea></div>
-            <button class="btn-modern" onclick="assign()">إرسال المهمة</button>
+    <div class="glass-card hidden" id="adminUI">
+        <h1>ADMIN 👑</h1>
+        <div class="input-group"><label>اسم العميل</label><input type="text" id="cName"></div>
+        <div class="input-group"><label>رقم الهاتف</label><input type="tel" id="cPhone"></div>
+        <div class="input-group">
+            <label>المندوب</label>
+            <div class="select-container">
+                <select id="agentSelect"><option value="">-- اضغط للتحديث --</option></select>
+                <button class="refresh-btn" onclick="loadAgents()"><i class="fas fa-sync-alt"></i></button>
+            </div>
         </div>
+        <div class="input-group"><label>المشكلة</label><textarea id="cIssue"></textarea></div>
+        <button class="main-btn" onclick="assign()">توزيع المهمة ✅</button>
 
-        <hr style="opacity: 0.1; margin: 30px 0;">
-        
-        <div class="logo-box"><h1 style="font-size: 20px;">تحليل الأداء</h1></div>
         <div class="analysis-box">
-            <div class="stat-item"><h3 id="totalCount">0</h3><p>الطلبات</p></div>
-            <div class="stat-item"><h3 id="doneCount">0</h3><p>أنجزت</p></div>
+            <div style="color: var(--accent); font-weight: bold; margin-bottom: 10px;">تحليل الأداء</div>
+            <div id="statsList">جاري التحليل...</div>
         </div>
-        <div id="agentsAnalysis" style="margin-top: 20px;"></div>
-
-        <p onclick="logout()" style="cursor:pointer; color:#ff4757; text-align:center; margin-top:20px;">تسجيل خروج</p>
+        <p onclick="logout()" style="text-align:center; color:red; cursor:pointer; margin-top:15px;">خروج</p>
     </div>
 
     <div class="glass-card hidden" id="agentUI">
-        <div class="logo-box"><h1 id="agName">TASKS</h1></div>
-        <div id="tasksContainer" style="margin-top:20px;"></div>
-        <button class="btn-modern" style="background:#444" onclick="logout()">خروج</button>
+        <h1 id="agName">TASKS</h1>
+        <div id="tasksList"></div>
+        <button class="main-btn" style="background:#444" onclick="logout()">خروج</button>
     </div>
 
     <script>
@@ -146,11 +109,11 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        setTimeout(() => { document.getElementById('splash').style.display='none'; }, 2500);
+        setTimeout(() => document.getElementById('splash').style.display='none', 2000);
 
         function login() {
             const e = document.getElementById('email').value, p = document.getElementById('pass').value;
-            firebase.auth().signInWithEmailAndPassword(e, p).catch(err => alert("خطأ"));
+            firebase.auth().signInWithEmailAndPassword(e, p).catch(err => alert("خطأ في بيانات الدخول"));
         }
 
         firebase.auth().onAuthStateChanged(user => {
@@ -163,63 +126,66 @@
                     a.classList.remove('hidden');
                     const n = user.email.split('@')[0];
                     document.getElementById('agName').innerText = n;
-                    db.ref('agents_v2/' + n).set({name: n});
+                    db.ref('Oren_Agents/' + n).set({name: n}); // تسجيل المندوب كـ Active
                     loadTasks(n);
                 }
             } else { l.classList.remove('hidden'); }
         });
 
+        // دالة تحميل المناديب - تأكد إن المندوب فتح الأبلكيشن ولو مرة واحدة
         function loadAgents() {
-            db.ref('agents_v2').on('value', snap => {
+            db.ref('Oren_Agents').once('value', snap => {
                 const s = document.getElementById('agentSelect');
-                s.innerHTML = '<option value="">-- اضغط لاختيار المندوب --</option>';
-                snap.forEach(c => s.innerHTML += `<option value="${c.val().name}">${c.val().name}</option>`);
+                s.innerHTML = '<option value="">-- اختر مندوب --</option>';
+                if(!snap.exists()) {
+                    s.innerHTML = '<option value="">لا يوجد مناديب متصلين</option>';
+                    return;
+                }
+                snap.forEach(c => {
+                    s.innerHTML += `<option value="${c.val().name}">${c.val().name}</option>`;
+                });
             });
         }
 
         function assign() {
             const ag = document.getElementById('agentSelect').value;
             if(!ag) return alert("اختار مندوب");
-            db.ref('final_orders').push({
+            db.ref('Oren_Orders').push({
                 c: document.getElementById('cName').value,
                 p: document.getElementById('cPhone').value,
                 i: document.getElementById('cIssue').value,
                 to: ag, status: 'pending'
-            }).then(() => { alert("تم!"); document.getElementById('cName').value=""; });
+            }).then(() => { alert("تم التوزيع!"); document.getElementById('cName').value=""; });
         }
 
         function loadTasks(name) {
-            db.ref('final_orders').on('value', snap => {
-                const container = document.getElementById('tasksContainer'); container.innerHTML = "";
+            db.ref('Oren_Orders').on('value', snap => {
+                const list = document.getElementById('tasksList'); list.innerHTML = "";
                 snap.forEach(c => {
                     const t = c.val();
                     if(t.to === name && t.status === 'pending') {
-                        container.innerHTML += `<div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:20px; margin-bottom:10px; border-right:4px solid var(--accent);">
+                        list.innerHTML += `<div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:15px; margin-bottom:10px; border-left:4px solid var(--accent);">
                             <b>${t.c}</b><br><small>${t.p}</small><p>${t.i}</p>
-                            <button onclick="finish('${c.key}')" style="width:100%; padding:10px; border-radius:10px; border:none; background:#2ed573; color:white; cursor:pointer;">تم ✅</button>
+                            <button class="main-btn" style="background:#2ed573; padding:8px;" onclick="done('${c.key}')">إتمام ✅</button>
                         </div>`;
                     }
                 });
             });
         }
 
-        function finish(id) { db.ref('final_orders/' + id).update({status: 'done'}); }
+        function done(id) { db.ref('Oren_Orders/' + id).update({status: 'done'}); }
 
         function runAnalysis() {
-            db.ref('final_orders').on('value', snap => {
-                let total = 0, done = 0, agents = {};
+            db.ref('Oren_Orders').on('value', snap => {
+                let agents = {};
                 snap.forEach(c => {
-                    const t = c.val(); total++;
-                    if(t.status === 'done') done++;
+                    const t = c.val();
                     if(!agents[t.to]) agents[t.to] = {d:0, p:0};
                     t.status === 'done' ? agents[t.to].d++ : agents[t.to].p++;
                 });
-                document.getElementById('totalCount').innerText = total;
-                document.getElementById('doneCount').innerText = done;
-                const container = document.getElementById('agentsAnalysis');
-                container.innerHTML = "<b>كفاءة المناديب:</b>";
+                const container = document.getElementById('statsList'); container.innerHTML = "";
                 for(let n in agents) {
-                    container.innerHTML += `<div class="agent-row"><span>${n}</span><span>المنجز: ${agents[n].d}</span></div>`;
+                    container.innerHTML += `<div class="stat"><span>${n}</span><span>المنجز: ${agents[n].d} | المعلق: ${agents[n].p}</span></div>`;
                 }
             });
         }
