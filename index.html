@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OREN - Light Era</title>
+    <title>OREN - Premium Era</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -75,41 +75,44 @@
         }
         .btn-modern:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0, 123, 255, 0.4); }
 
-        /* --- واجهة المندوب الاحترافية --- */
-        .agent-welcome-header {
-            background: #f8faff; border-radius: 25px; padding: 20px;
-            margin-bottom: 25px; text-align: center; border: 1px dashed var(--accent);
-        }
-
-        .task-item {
-            background: #ffffff; border-radius: 30px;
-            padding: 25px; margin-bottom: 25px; border: 1px solid #eee;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        /* --- واجهة المندوب (الشغل العالي) --- */
+        .agent-premium-header {
+            background: var(--btn-grad); border-radius: 25px; padding: 30px 20px;
+            text-align: center; margin-bottom: 30px; 
+            box-shadow: 0 15px 30px rgba(0, 123, 255, 0.25);
             position: relative; overflow: hidden;
-            border-right: 8px solid var(--accent);
+        }
+        .agent-premium-header h1 { color: #fff; font-size: 26px; margin: 0; text-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .agent-premium-header p { color: rgba(255,255,255,0.9); margin-top: 5px; font-size: 14px; }
+
+        .task-premium-card {
+            background: #ffffff; border-radius: 30px; padding: 25px;
+            margin-bottom: 20px; border: 1px solid rgba(0, 123, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05); /* بروز عالي */
+            position: relative; transition: 0.3s ease;
+        }
+        .task-premium-card:hover { transform: translateY(-5px); }
+
+        .info-row {
+            display: flex; align-items: center; gap: 15px;
+            margin-bottom: 15px; padding-bottom: 12px;
+            border-bottom: 1px solid #f8f9fa;
+        }
+        .icon-box {
+            width: 42px; height: 42px; background: #f0f7ff;
+            color: var(--accent); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center; font-size: 16px;
+        }
+        .info-content b { display: block; font-size: 11px; color: var(--text-sub); font-weight: 400; }
+        .info-content span { font-size: 15px; font-weight: 800; color: var(--text-main); }
+
+        .details-box {
+            background: #f8f9fa; border-radius: 20px; padding: 15px;
+            margin: 15px 0; border-right: 4px solid var(--accent);
         }
 
-        .task-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-        .task-row i { color: var(--accent); font-size: 18px; width: 25px; text-align: center; }
-        .task-row .label-info { font-size: 12px; color: var(--text-sub); display: block; }
-        .task-row .value-info { font-size: 16px; font-weight: 700; color: var(--text-main); }
-
-        .issue-box {
-            background: #fdfdfd; padding: 15px; border-radius: 20px;
-            margin: 15px 0; border: 1px solid #f0f0f0;
-            font-size: 14px; line-height: 1.6; color: #444;
-        }
-
-        .finish-btn {
-            width: 100%; padding: 15px; background: #2ed573;
-            border: none; border-radius: 15px; color: white;
-            font-weight: 800; font-size: 15px; cursor: pointer;
-            box-shadow: 0 8px 15px rgba(46, 213, 115, 0.2);
-            margin-top: 10px;
-        }
-
-        .badge { background: rgba(0, 123, 255, 0.1); color: var(--accent); padding: 5px 15px; border-radius: 12px; font-size: 12px; font-weight: bold; }
         .hidden { display: none !important; }
+        .badge { background: rgba(255, 255, 255, 0.2); color: #fff; padding: 5px 15px; border-radius: 12px; font-size: 11px; font-weight: bold; margin-bottom: 10px; display: inline-block; }
         
         ::placeholder { color: #b2bec3; }
     </style>
@@ -118,7 +121,7 @@
 
     <div id="splash">
         <div class="loader-text">OREN</div>
-        <div style="width: 120px; height: 4px; background: var(--accent); border-radius: 10px; margin-top: 15px; animation: lineGrow 2s forwards;"></div>
+        <div style="width: 120px; height: 4px; background: var(--accent); border-radius: 10px; margin-top: 15px;"></div>
     </div>
 
     <div class="glass-card" id="loginUI">
@@ -133,7 +136,7 @@
 
     <div class="glass-card hidden" id="adminUI">
         <div class="logo-box">
-            <span class="badge">نظام التحكم الإداري 👑</span>
+            <span class="badge" style="background: rgba(0, 123, 255, 0.1); color: var(--accent);">نظام التحكم الإداري 👑</span>
             <h1 style="font-size: 26px; margin-top: 10px;">تكليف جديد</h1>
         </div>
         <div class="input-wrapper"><label>اسم العميل</label><input type="text" id="cName" placeholder="الاسم الكامل"></div>
@@ -142,24 +145,24 @@
         <div class="input-wrapper"><label>توجيه المهمة إلى</label>
             <select id="agentSelect"><option value="">جاري التحميل...</option></select>
         </div>
-        <div class="input-wrapper"><label>التفاصيل الفنية</label><textarea id="cIssue" rows="2" placeholder="وصف العطل أو الطلب"></textarea></div>
+        <div class="input-wrapper"><label>التفاصيل الفنية</label><textarea id="cIssue" rows="2" placeholder="وصف العطل"></textarea></div>
         <button class="btn-modern" onclick="assign()">إرسال التكليف <i class="fas fa-paper-plane"></i></button>
         <p onclick="logout()" style="cursor:pointer; color:#ff4757; text-align:center; margin-top:20px; font-weight:700;">تسجيل الخروج</p>
     </div>
 
-    <div class="glass-card hidden" id="agentUI">
-        <div class="logo-box">
-            <div class="agent-welcome-header">
-                <span class="badge" id="agentNameBadge">مندوب أورين</span>
-                <h1 style="font-size: 24px; margin-top: 5px;" id="welcomeMsg">أهلاً بك</h1>
-            </div>
-            <p style="color: var(--text-sub); font-size: 14px;">لديك المهام التالية قيد التنفيذ:</p>
+    <div class="glass-card hidden" id="agentUI" style="max-width: 500px; padding: 20px;">
+        <div class="agent-premium-header">
+            <span class="badge">بوابة الفنيين</span>
+            <h1 id="welcomeMsg">أهلاً بك</h1>
+            <p>لديك مهام عمل جديدة بانتظارك</p>
         </div>
 
         <div id="tasksContainer">
             </div>
 
-        <button class="btn-modern" style="background:#636e72; margin-top:20px; font-size: 15px;" onclick="logout()">خروج من النظام</button>
+        <button class="btn-modern" style="background:#f1f4f9; color:#636e72; box-shadow:none; margin-top:20px; font-size:14px;" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> تسجيل خروج
+        </button>
     </div>
 
     <script>
@@ -219,48 +222,47 @@
                 p: document.getElementById('cPhone').value,
                 a: document.getElementById('cAddr').value,
                 i: document.getElementById('cIssue').value,
-                to: ag,
-                status: 'active'
-            }).then(() => { alert("تم التكليف بنجاح ✅"); document.getElementById('cName').value = ""; });
+                to: ag
+            }).then(() => { alert("تم الإرسال ✅"); document.getElementById('cName').value = ""; });
         }
 
         function loadTasks(name) {
             db.ref('modern_tasks').on('value', snap => {
                 const container = document.getElementById('tasksContainer'); container.innerHTML = "";
-                let count = 0;
+                let found = false;
                 snap.forEach(c => {
                     const t = c.val();
                     if(t.to === name) {
-                        count++;
+                        found = true;
                         container.innerHTML += `
-                            <div class="task-item">
-                                <div class="task-row">
-                                    <i class="fas fa-user-circle"></i>
-                                    <div><span class="label-info">العميل</span><span class="value-info">${t.c}</span></div>
+                            <div class="task-premium-card">
+                                <div class="info-row">
+                                    <div class="icon-box"><i class="fas fa-user"></i></div>
+                                    <div class="info-content"><b>اسم العميل</b><span>${t.c}</span></div>
                                 </div>
-                                <div class="task-row">
-                                    <i class="fas fa-phone-alt"></i>
-                                    <div><span class="label-info">رقم التواصل</span><span class="value-info" style="color:var(--accent)">${t.p}</span></div>
+                                <div class="info-row">
+                                    <div class="icon-box"><i class="fas fa-phone-alt"></i></div>
+                                    <div class="info-content"><b>رقم الهاتف</b><span style="color:var(--accent)">${t.p}</span></div>
                                 </div>
-                                <div class="task-row">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    <div><span class="label-info">الموقع</span><span class="value-info">${t.a}</span></div>
+                                <div class="info-row">
+                                    <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+                                    <div class="info-content"><b>العنوان</b><span>${t.a}</span></div>
                                 </div>
-                                <div class="issue-box">
-                                    <strong>الوصف الفني:</strong><br>${t.i}
+                                <div class="details-box">
+                                    <b style="font-size:11px; color:#888;">الوصف الفني:</b>
+                                    <p style="margin:5px 0; font-weight:700; font-size:14px;">${t.i}</p>
                                 </div>
-                                <button class="finish-btn" onclick="finishTask('${c.key}')">تأكيد إتمام المهمة ✅</button>
+                                <button class="btn-modern" style="background:#2ed573; padding:12px; font-size:15px;" onclick="finishTask('${c.key}')">
+                                    تم التنفيذ بنجاح ✅
+                                </button>
                             </div>`;
                     }
                 });
-                if(count === 0) container.innerHTML = "<p style='text-align:center; color:#999; margin:40px 0;'>لا توجد مهام حالية</p>";
+                if(!found) container.innerHTML = "<p style='text-align:center; color:#999; margin:40px 0;'>لا يوجد مهام حالية</p>";
             });
         }
 
-        function finishTask(id) {
-            if(confirm("هل انتهيت من العمل؟")) db.ref('modern_tasks/' + id).remove();
-        }
-
+        function finishTask(id) { if(confirm("تأكيد إتمام المهمة؟")) db.ref('modern_tasks/' + id).remove(); }
         function logout() { firebase.auth().signOut(); }
     </script>
 </body>
