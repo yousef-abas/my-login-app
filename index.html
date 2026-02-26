@@ -1,109 +1,72 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" id="mainHtml">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OREN - Professional System</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>OREN - Elite Fix</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <style>
-        :root { 
-            --primary-color: #1a73e8; 
-            --bg-color: #f0f2f5; 
-            --card-bg: #ffffff; 
-            --neon-purple: #9d85ff;
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
+        :root { --accent: #00d2ff; --bg: radial-gradient(circle at top right, #1e1e2f, #0d0d1a); }
+        * { box-sizing: border-box; font-family: 'Cairo', sans-serif; transition: 0.3s; }
+        body { margin: 0; background: var(--bg); min-height: 100vh; display: flex; justify-content: center; align-items: center; color: #fff; padding: 20px; }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(25px);
+            border-radius: 35px; border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 30px; width: 100%; max-width: 500px; box-shadow: 0 25px 50px rgba(0,0,0,0.4);
         }
 
-        /* --- شاشة الافتتاحية السودة (اللي إنت بتحبها) --- */
-        #splash {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; z-index: 10000; transition: 1s ease-in-out;
-        }
-        .neon-text {
-            font-size: 70px; font-weight: 900; color: #fff;
-            animation: neonPulse 1.5s ease-in-out infinite alternate;
-        }
-        @keyframes neonPulse {
-            from { text-shadow: 0 0 10px #fff, 0 0 20px var(--neon-purple); opacity: 1; }
-            to { text-shadow: 0 0 5px #fff, 0 0 10px var(--neon-purple); opacity: 0.4; }
+        input, select, textarea {
+            width: 100%; padding: 15px; background: rgba(0,0,0,0.5) !important;
+            border: 1px solid rgba(255,255,255,0.2); border-radius: 18px; color: #fff !important;
+            font-size: 15px; outline: none; margin-bottom: 15px;
         }
 
-        /* --- التصميم الأبيض الاحترافي --- */
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-color); margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        .top-bar { width: 100%; padding: 10px 20px; display: flex; justify-content: space-between; box-sizing: border-box; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .lang-btn { background: var(--primary-color); color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-weight: bold; }
-        .container { background: var(--card-bg); padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 450px; margin: 30px 0; }
-        h2 { text-align: center; color: var(--primary-color); margin-bottom: 25px; }
-        .input-group { margin-bottom: 15px; position: relative; }
-        label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 14px; color: #555; }
-        input, select, textarea { width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; outline: none; transition: 0.3s; }
-        .main-btn { width: 100%; padding: 12px; background: var(--primary-color); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .task-card { background: #fff; border-right: 5px solid var(--primary-color); padding: 15px; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); margin-bottom: 15px; }
+        /* حل نهائي لمشكلة لون الدروب ليست */
+        select option { background: #1e1e2f; color: #fff; }
+
+        .btn-modern {
+            width: 100%; padding: 15px; background: linear-gradient(45deg, #00d2ff, #3a7bd5);
+            border: none; border-radius: 18px; color: #fff; font-weight: 700; cursor: pointer;
+        }
         .hidden { display: none; }
+        .refresh-tag { font-size: 10px; color: var(--accent); cursor: pointer; text-align: center; display: block; margin-bottom: 5px; }
     </style>
 </head>
 <body>
 
-    <div id="splash">
-        <div class="neon-text">OREN</div>
-        <p style="color: #666; letter-spacing: 5px; margin-top: 10px;">PREMIUM EDITION</p>
+    <div class="glass-card" id="loginUI">
+        <h1 style="text-align:center; color:var(--accent)">OREN</h1>
+        <input type="email" placeholder="البريد الإلكتروني" id="email">
+        <input type="password" placeholder="كلمة المرور" id="pass">
+        <button class="btn-modern" onclick="login()">دخول</button>
     </div>
 
-    <div class="top-bar">
-        <div id="userInfo" class="hidden">
-            <b id="userEmailDisp" style="font-size: 12px; color: #666;"></b> 
-            <button onclick="logout()" style="border:none; background:none; color:red; cursor:pointer; font-weight:bold;">خروج</button>
-        </div>
-        <button class="lang-btn" onclick="toggleLanguage()" id="langToggle">English</button>
+    <div class="glass-card hidden" id="adminUI">
+        <h2 style="color:var(--accent)">لوحة الإدارة 👑</h2>
+        <input type="text" id="cName" placeholder="اسم العميل">
+        
+        <span class="refresh-tag" onclick="loadAgents()">🔄 تحديث قائمة المناديب</span>
+        <select id="agentSelect">
+            <option value="">-- اختر المندوب --</option>
+        </select>
+
+        <textarea id="cIssue" placeholder="التفاصيل"></textarea>
+        <button class="btn-modern" onclick="assign()">توزيع المهمة</button>
+        <p onclick="logout()" style="text-align:center; color:red; cursor:pointer; margin-top:10px;">خروج</p>
     </div>
 
-    <div class="container" id="loginForm">
-        <h2 id="loginTitle">تسجيل الدخول</h2>
-        <div class="input-group">
-            <label id="lblUser">البريد الإلكتروني</label>
-            <input type="email" id="email" placeholder="example@oren.com">
-        </div>
-        <div class="input-group">
-            <label id="lblPass">كلمة المرور</label>
-            <input type="password" id="pass" placeholder="••••••••">
-        </div>
-        <button class="main-btn" onclick="login()">دخول</button>
-    </div>
-
-    <div class="container hidden" id="adminForm">
-        <h2 id="adminTitle">لوحة المدير 👑</h2>
-        <div class="input-group">
-            <label>اسم العميل</label>
-            <input type="text" id="custName">
-        </div>
-        <div class="input-group">
-            <label>رقم الهاتف</label>
-            <input type="tel" id="custPhone">
-        </div>
-        <div class="input-group">
-            <label>العنوان</label>
-            <input type="text" id="custAddr">
-        </div>
-        <div class="input-group">
-            <label>المشكلة</label>
-            <textarea id="custIssue" rows="2"></textarea>
-        </div>
-        <div class="input-group">
-            <label>المندوب</label>
-            <select id="agentSelect"><option value="">جاري التحميل...</option></select>
-        </div>
-        <button class="main-btn" onclick="assignTask()">إرسال المهمة للمندوب</button>
-    </div>
-
-    <div class="container hidden" id="agentForm">
-        <h2 id="agentTitle">مهامي</h2>
-        <div id="tasksList"></div>
+    <div class="glass-card hidden" id="agentUI">
+        <h1 id="agTitle">مهامي</h1>
+        <div id="tasksContainer"></div>
+        <button class="btn-modern" style="background:#444" onclick="logout()">خروج</button>
     </div>
 
     <script>
+        // تأكد إن البيانات دي هي اللي في الفايربيز عندك بالظبط
         const firebaseConfig = {
             apiKey: "AIzaSyALgV2v3lmxvEoP0HosqGSqm727vZrYUq4",
             authDomain: "orenapp-f2f1e.firebaseapp.com",
@@ -116,85 +79,54 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // إخفاء الـ Splash
-        setTimeout(() => { 
-            document.getElementById('splash').style.opacity = '0';
-            setTimeout(() => document.getElementById('splash').style.display = 'none', 1000);
-        }, 3000);
-
         function login() {
-            const e = document.getElementById('email').value;
-            const p = document.getElementById('pass').value;
-            firebase.auth().signInWithEmailAndPassword(e, p).catch(err => alert(err.message));
+            const e = document.getElementById('email').value, p = document.getElementById('pass').value;
+            firebase.auth().signInWithEmailAndPassword(e, p).catch(err => alert("خطأ: " + err.message));
         }
 
         firebase.auth().onAuthStateChanged(user => {
-            const loginF = document.getElementById('loginForm'), adminF = document.getElementById('adminForm');
-            const agentF = document.getElementById('agentForm'), uInfo = document.getElementById('userInfo');
+            const l = document.getElementById('loginUI'), d = document.getElementById('adminUI'), a = document.getElementById('agentUI');
             if (user) {
-                loginF.classList.add('hidden'); uInfo.classList.remove('hidden');
-                document.getElementById('userEmailDisp').innerText = user.email;
-                if (user.email === "admin@oren.com") { adminF.classList.remove('hidden'); loadAgents(); }
-                else { 
-                    agentF.classList.remove('hidden'); 
+                l.classList.add('hidden');
+                if (user.email === "admin@oren.com") {
+                    d.classList.remove('hidden'); 
+                    loadAgents(); 
+                } else {
+                    a.classList.remove('hidden');
                     const n = user.email.split('@')[0];
+                    document.getElementById('agTitle').innerText = n;
+                    // تسجيل المندوب في قاعدة البيانات فوراً
                     db.ref('active_agents/' + n).set({name: n});
-                    loadAgentTasks(n);
+                    loadTasks(n);
                 }
             } else {
-                loginF.classList.remove('hidden'); adminF.classList.add('hidden');
-                agentF.classList.add('hidden'); uInfo.classList.add('hidden');
+                l.classList.remove('hidden'); d.classList.add('hidden'); a.classList.add('hidden');
             }
         });
 
         function loadAgents() {
+            console.log("جاري تحميل المناديب...");
             db.ref('active_agents').on('value', snap => {
                 const s = document.getElementById('agentSelect');
-                s.innerHTML = '<option value="">-- اختر --</option>';
-                snap.forEach(c => s.innerHTML += `<option value="${c.val().name}">${c.val().name}</option>`);
-            });
-        }
-
-        function assignTask() {
-            const ag = document.getElementById('agentSelect').value;
-            if(!ag) return alert("اختار مندوب");
-            db.ref('tasks_final').push({
-                customer: document.getElementById('custName').value,
-                phone: document.getElementById('custPhone').value,
-                addr: document.getElementById('custAddr').value,
-                issue: document.getElementById('custIssue').value,
-                to: ag
-            }).then(() => { alert("تم!"); document.getElementById('custName').value = ""; });
-        }
-
-        function loadAgentTasks(name) {
-            db.ref('tasks_final').on('value', snap => {
-                const list = document.getElementById('tasksList');
-                list.innerHTML = "";
+                s.innerHTML = '<option value="">-- اختر المندوب --</option>';
+                if(!snap.exists()) { console.log("لا يوجد مناديب في Database"); return; }
                 snap.forEach(c => {
-                    const t = c.val();
-                    if(t.to === name) {
-                        list.innerHTML += `<div class="task-card">
-                            <b>👤 ${t.customer}</b><br>📞 ${t.phone}<br>📍 ${t.addr}<br>📝 ${t.issue}<br>
-                            <button class="main-btn" style="padding:5px; font-size:12px;" onclick="finish('${c.key}')">تم ✅</button>
-                        </div>`;
-                    }
+                    const name = c.val().name;
+                    s.innerHTML += `<option value="${name}">${name}</option>`;
                 });
             });
         }
 
-        function finish(id) { db.ref('tasks_final/' + id).remove(); }
-        function logout() { firebase.auth().signOut(); }
-
-        let currentLang = 'ar';
-        function toggleLanguage() {
-            const html = document.getElementById('mainHtml'), btn = document.getElementById('langToggle');
-            if (currentLang === 'ar') {
-                html.dir = 'ltr'; currentLang = 'en'; btn.innerText = 'العربية';
-            } else {
-                html.dir = 'rtl'; currentLang = 'ar'; btn.innerText = 'English';
-            }
+        function assign() {
+            const ag = document.getElementById('agentSelect').value;
+            if(!ag) return alert("اختار مندوب");
+            db.ref('tasks').push({
+                c: document.getElementById('cName').value,
+                to: ag, status: 'pending'
+            }).then(() => alert("تم!"));
         }
+
+        function logout() { firebase.auth().signOut(); }
     </script>
 </body>
 </html>
