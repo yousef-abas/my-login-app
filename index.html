@@ -1,212 +1,198 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" id="mainHtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OREN VIP SYSTEM</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>OREN - Professional System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-
     <style>
-        :root {
-            --dark-bg: #1a1a1a;
-            --neu-bg: #1e1e2e;
-            --neon-purple: #9d85ff;
-            --shadow-dark: #12121a;
-            --shadow-light: #2a2a3e;
-        }
-
-        body {
-            font-family: 'Cairo', sans-serif;
-            background-color: var(--dark-bg);
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            color: white;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* شاشة الافتتاحية السوداء (Glow Animation) */
-        #splash {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; z-index: 10000; transition: 1s ease-in-out;
-        }
-        .neon-text {
-            font-size: 70px; font-weight: 900; color: #fff;
-            animation: neonPulse 1.5s ease-in-out infinite alternate;
-        }
-        @keyframes neonPulse {
-            from { text-shadow: 0 0 10px #fff, 0 0 20px var(--neon-purple); opacity: 1; }
-            to { text-shadow: 0 0 5px #fff, 0 0 10px var(--neon-purple); opacity: 0.4; }
-        }
-
-        .container { width: 100%; max-width: 420px; padding: 20px; }
-
-        /* الكروت البارزة - Neumorphism */
-        .neu-card {
-            background: var(--neu-bg);
-            border-radius: 30px;
-            padding: 25px;
-            box-shadow: 10px 10px 20px var(--shadow-dark), -8px -8px 20px var(--shadow-light);
-            margin-bottom: 25px;
-        }
-
-        h2 { text-align: center; color: var(--neon-purple); font-weight: 900; }
-
-        input, select, textarea {
-            width: 100%; padding: 16px; margin: 10px 0; border: none; border-radius: 15px;
-            background: var(--neu-bg); box-shadow: inset 6px 6px 12px var(--shadow-dark), inset -6px -6px 12px var(--shadow-light);
-            font-family: 'Cairo'; outline: none; color: #fff; font-weight: 700; box-sizing: border-box;
-        }
-
-        .btn-neon {
-            width: 100%; padding: 18px; background: var(--neu-bg); color: var(--neon-purple);
-            border: none; border-radius: 20px; font-weight: 900; font-size: 18px;
-            box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);
-            cursor: pointer; transition: 0.3s;
-        }
-        .btn-neon:active { box-shadow: inset 4px 4px 8px var(--shadow-dark); transform: scale(0.98); }
-
-        .task-item {
-            background: rgba(255,255,255,0.05); padding: 15px; border-radius: 20px; margin-bottom: 15px;
-            border-right: 5px solid var(--neon-purple);
-        }
-
+        :root { --primary-color: #1a73e8; --bg-color: #f0f2f5; --card-bg: #ffffff; --text-color: #333; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-color); margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .top-bar { width: 100%; padding: 10px 20px; display: flex; justify-content: space-between; box-sizing: border-box; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .lang-btn { background: var(--primary-color); color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-weight: bold; }
+        .container { background: var(--card-bg); padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 450px; margin: 30px 0; }
+        h2 { text-align: center; color: var(--primary-color); margin-bottom: 25px; }
+        .input-group { margin-bottom: 15px; position: relative; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 14px; color: #555; }
+        input, select, textarea { width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; outline: none; transition: 0.3s; font-family: inherit; }
+        input:focus, select:focus { border-color: var(--primary-color); box-shadow: 0 0 5px rgba(26,115,232,0.2); }
+        .main-btn { width: 100%; padding: 12px; background: var(--primary-color); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .main-btn:active { transform: scale(0.98); }
+        .task-card { background: #fff; border-right: 5px solid var(--primary-color); padding: 15px; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); margin-bottom: 15px; position: relative; }
         .hidden { display: none; }
-        .label { font-size: 13px; color: var(--neon-purple); font-weight: bold; margin-right: 10px; }
+        .logout-btn { background: #ea4335; color: white; border: none; padding: 5px 12px; border-radius: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-<div id="splash">
-    <div class="neon-text">OREN</div>
-    <p style="color: #666; letter-spacing: 5px; margin-top: 10px;">PREMIUM EDITION</p>
-</div>
-
-<div class="container">
-    <div id="login-screen" class="neu-card hidden">
-        <h2>تسجيل الدخول</h2>
-        <input type="email" id="email" placeholder="البريد الإلكتروني">
-        <input type="password" id="pass" placeholder="كلمة المرور">
-        <button class="btn-neon" onclick="login()">دخول</button>
+    <div class="top-bar">
+        <div id="userInfo" class="hidden"><b id="userEmailDisp"></b> <button class="logout-btn" onclick="logout()">خروج</button></div>
+        <button class="lang-btn" onclick="toggleLanguage()" id="langToggle">English</button>
     </div>
 
-    <div id="admin-screen" class="hidden">
-        <div class="neu-card" style="display: flex; justify-content: space-between; align-items: center; padding: 15px;">
-            <b style="color: var(--neon-purple)">المدير يوسف 👑</b>
-            <button onclick="logout()" style="background:none; border:none; color:white; cursor:pointer;">خروج</button>
+    <div class="container" id="loginForm">
+        <h2 id="loginTitle">تسجيل الدخول للنظام</h2>
+        <div class="input-group">
+            <label id="lblUser">البريد الإلكتروني</label>
+            <input type="email" id="email" placeholder="admin@oren.com">
         </div>
-
-        <div class="neu-card">
-            <h2>إضافة مهمة 📝</h2>
-            <span class="label">اسم العميل</span><input type="text" id="c-name">
-            <span class="label">رقم الهاتف</span><input type="tel" id="c-phone">
-            <span class="label">العنوان بالتفصيل</span><input type="text" id="c-addr">
-            <span class="label">المشكلة / الطلب</span><textarea id="c-issue" rows="2"></textarea>
-            
-            <span class="label">اختر المندوب</span>
-            <select id="agent-select"><option value="">جاري التحميل...</option></select>
-            
-            <button class="btn-neon" onclick="assign()">إسناد المهمة للمندوب</button>
+        <div class="input-group">
+            <label id="lblPass">كلمة المرور</label>
+            <input type="password" id="pass" placeholder="••••••••">
         </div>
+        <button class="main-btn" id="btnLogin" onclick="login()">دخول</button>
     </div>
 
-    <div id="agent-screen" class="hidden">
-        <div class="neu-card">
-            <h2>أهلاً <span id="agent-name"></span> 👋</h2>
-            <button class="btn-neon" style="color:#ff5555" onclick="logout()">خروج</button>
+    <div class="container hidden" id="adminForm">
+        <h2 id="adminTitle">لوحة توزيع المهام</h2>
+        <div class="input-group">
+            <label>اسم العميل</label>
+            <input type="text" id="custName">
         </div>
-        <div id="my-tasks-list"></div>
+        <div class="input-group">
+            <label>رقم الهاتف</label>
+            <input type="tel" id="custPhone">
+        </div>
+        <div class="input-group">
+            <label>العنوان</label>
+            <input type="text" id="custAddr">
+        </div>
+        <div class="input-group">
+            <label>وصف المشكلة</label>
+            <textarea id="custIssue" rows="3"></textarea>
+        </div>
+        <div class="input-group">
+            <label>اختيار المندوب المسئول</label>
+            <select id="agentSelect">
+                <option value="">جاري تحميل المناديب...</option>
+            </select>
+        </div>
+        <button class="main-btn" onclick="assignTask()">إرسال المهمة الآن</button>
     </div>
-</div>
 
-<script>
-    const firebaseConfig = {
-        apiKey: "AIzaSyALgV2v3lmxvEoP0HosqGSqm727vZrYUq4",
-        authDomain: "orenapp-f2f1e.firebaseapp.com",
-        databaseURL: "https://orenapp-f2f1e-default-rtdb.firebaseio.com",
-        projectId: "orenapp-f2f1e",
-        storageBucket: "orenapp-f2f1e.firebasestorage.app",
-        messagingSenderId: "973368909449",
-        appId: "1:973368909449:web:ce364a309f622f575c3058"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+    <div class="container hidden" id="agentForm">
+        <h2 id="agentTitle">مهامي الحالية</h2>
+        <div id="tasksList"></div>
+    </div>
 
-    // Splash Timer
-    setTimeout(() => { 
-        document.getElementById('splash').style.opacity = '0';
-        setTimeout(() => document.getElementById('splash').style.display = 'none', 1000);
-    }, 3000);
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyALgV2v3lmxvEoP0HosqGSqm727vZrYUq4",
+            authDomain: "orenapp-f2f1e.firebaseapp.com",
+            databaseURL: "https://orenapp-f2f1e-default-rtdb.firebaseio.com",
+            projectId: "orenapp-f2f1e",
+            storageBucket: "orenapp-f2f1e.firebasestorage.app",
+            messagingSenderId: "973368909449",
+            appId: "1:973368909449:web:ce364a309f622f575c3058"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
 
-    function login() {
-        const e = document.getElementById('email').value;
-        const p = document.getElementById('pass').value;
-        firebase.auth().signInWithEmailAndPassword(e, p).catch(err => alert(err.message));
-    }
-
-    firebase.auth().onAuthStateChanged(user => {
-        if (user) {
-            document.getElementById('login-screen').classList.add('hidden');
-            if(user.email === "admin@oren.com") {
-                document.getElementById('admin-screen').classList.remove('hidden');
-                loadAgents();
-            } else {
-                document.getElementById('agent-screen').classList.remove('hidden');
-                const n = user.email.split('@')[0];
-                document.getElementById('agent-name').innerText = n;
-                db.ref('active_agents/' + n).set({name: n});
-                loadAgentTasks(n);
-            }
-        } else {
-            document.getElementById('login-screen').classList.remove('hidden');
-            document.getElementById('admin-screen').classList.add('hidden');
-            document.getElementById('agent-screen').classList.add('hidden');
+        function login() {
+            const e = document.getElementById('email').value;
+            const p = document.getElementById('pass').value;
+            firebase.auth().signInWithEmailAndPassword(e, p).catch(err => alert("خطأ: " + err.message));
         }
-    });
 
-    function loadAgents() {
-        db.ref('active_agents').on('value', snap => {
-            const s = document.getElementById('agent-select');
-            s.innerHTML = '<option value="">-- اختر مندوب --</option>';
-            snap.forEach(c => s.innerHTML += `<option value="${c.val().name}">${c.val().name}</option>`);
-        });
-    }
+        firebase.auth().onAuthStateChanged(user => {
+            const loginF = document.getElementById('loginForm');
+            const adminF = document.getElementById('adminForm');
+            const agentF = document.getElementById('agentForm');
+            const uInfo = document.getElementById('userInfo');
 
-    function assign() {
-        const ag = document.getElementById('agent-select').value;
-        if(!ag) return alert("اختار مندوب!");
-        db.ref('tasks_final').push({
-            customer: document.getElementById('c-name').value,
-            phone: document.getElementById('c-phone').value,
-            addr: document.getElementById('c-addr').value,
-            issue: document.getElementById('c-issue').value,
-            to: ag
-        }).then(() => { alert("تم التكليف ✅"); document.getElementById('c-name').value = ""; });
-    }
+            if (user) {
+                loginF.classList.add('hidden');
+                uInfo.classList.remove('hidden');
+                document.getElementById('userEmailDisp').innerText = user.email;
 
-    function loadAgentTasks(name) {
-        db.ref('tasks_final').on('value', snap => {
-            const list = document.getElementById('my-tasks-list');
-            list.innerHTML = "<h3>مهامك الجديدة 👇</h3>";
-            snap.forEach(c => {
-                const t = c.val();
-                if(t.to === name) {
-                    list.innerHTML += `<div class="task-item">
-                        <b>👤 العميل: ${t.customer}</b><br>📞 ${t.phone}<br>📍 ${t.addr}<br>📝 ${t.issue}<br>
-                        <button class="btn-neon" style="padding:10px; font-size:14px; margin-top:10px;" onclick="done('${c.key}')">تم التنفيذ ✅</button>
-                    </div>`;
+                if (user.email === "admin@oren.com") {
+                    adminF.classList.remove('hidden');
+                    loadAgents();
+                } else {
+                    agentF.classList.remove('hidden');
+                    const agentName = user.email.split('@')[0];
+                    db.ref('active_agents/' + agentName).set({name: agentName});
+                    loadAgentTasks(agentName);
                 }
-            });
+            } else {
+                loginF.classList.remove('hidden');
+                adminF.classList.add('hidden');
+                agentF.classList.add('hidden');
+                uInfo.classList.add('hidden');
+            }
         });
-    }
 
-    function done(id) { db.ref('tasks_final/' + id).remove(); }
-    function logout() { firebase.auth().signOut(); }
-</script>
+        function loadAgents() {
+            db.ref('active_agents').on('value', snap => {
+                const s = document.getElementById('agentSelect');
+                s.innerHTML = '<option value="">-- اختر المندوب --</option>';
+                snap.forEach(c => s.innerHTML += `<option value="${c.val().name}">${c.val().name}</option>`);
+            });
+        }
+
+        function assignTask() {
+            const agent = document.getElementById('agentSelect').value;
+            if(!agent) return alert("برجاء اختيار مندوب");
+            db.ref('tasks_final_version').push({
+                customer: document.getElementById('custName').value,
+                phone: document.getElementById('custPhone').value,
+                addr: document.getElementById('custAddr').value,
+                issue: document.getElementById('custIssue').value,
+                to: agent
+            }).then(() => {
+                alert("تم إرسال المهمة");
+                document.getElementById('custName').value = "";
+            });
+        }
+
+        function loadAgentTasks(name) {
+            db.ref('tasks_final_version').on('value', snap => {
+                const list = document.getElementById('tasksList');
+                list.innerHTML = "";
+                snap.forEach(c => {
+                    const t = c.val();
+                    if(t.to === name) {
+                        list.innerHTML += `
+                            <div class="task-card">
+                                <b>👤 العميل: ${t.customer}</b><br>
+                                📞 ${t.phone} | 📍 ${t.addr}<br>
+                                📝 ${t.issue}<br>
+                                <button class="main-btn" style="padding:8px; font-size:13px" onclick="finish('${c.key}')">تم الإنجاز ✅</button>
+                            </div>`;
+                    }
+                });
+            });
+        }
+
+        function finish(id) { db.ref('tasks_final_version/' + id).remove(); }
+        function logout() { firebase.auth().signOut(); }
+
+        // نظام اللغة (كما في كودك)
+        let currentLang = 'ar';
+        function toggleLanguage() {
+            const html = document.getElementById('mainHtml');
+            const btn = document.getElementById('langToggle');
+            if (currentLang === 'ar') {
+                html.dir = 'ltr'; currentLang = 'en'; btn.innerText = 'العربية'; updateText('en');
+            } else {
+                html.dir = 'rtl'; currentLang = 'ar'; btn.innerText = 'English'; updateText('ar');
+            }
+        }
+        function updateText(lang) {
+            const trans = {
+                ar: { loginTitle: "تسجيل الدخول للنظام", lblUser: "البريد الإلكتروني", lblPass: "كلمة المرور", btnLogin: "دخول", adminTitle: "لوحة توزيع المهام", agentTitle: "مهامي الحالية" },
+                en: { loginTitle: "System Login", lblUser: "Email Address", lblPass: "Password", btnLogin: "Login", adminTitle: "Task Distribution", agentTitle: "My Current Tasks" }
+            };
+            document.getElementById('loginTitle').innerText = trans[lang].loginTitle;
+            document.getElementById('lblUser').innerText = trans[lang].lblUser;
+            document.getElementById('lblPass').innerText = trans[lang].lblPass;
+            document.getElementById('btnLogin').innerText = trans[lang].btnLogin;
+            document.getElementById('adminTitle').innerText = trans[lang].adminTitle;
+            document.getElementById('agentTitle').innerText = trans[lang].agentTitle;
+        }
+    </script>
 </body>
 </html>
