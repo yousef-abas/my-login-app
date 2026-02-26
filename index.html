@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OREN - Glass Elite</title>
+    <title>OREN - Light Era</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -13,101 +13,153 @@
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
 
         :root {
-            /* ألوان زجاجية فاتحة */
-            --glass-bg: rgba(255, 255, 255, 0.5); 
-            --glass-border: rgba(255, 255, 255, 0.4);
-            --accent: #00d2ff;
-            --text-main: #1a1a1a;
-            --btn-grad: linear-gradient(45deg, #00d2ff, #3a7bd5);
+            --bg-body: #f0f2f5; 
+            --card-bg: #ffffff; 
+            --accent: #007bff; 
+            --text-main: #2d3436; 
+            --text-sub: #636e72;
+            --btn-grad: linear-gradient(45deg, #007bff, #00d2ff);
+            --border: rgba(0,0,0,0.05);
         }
 
         * { box-sizing: border-box; transition: 0.3s ease; font-family: 'Cairo', sans-serif; }
         
-        body { 
-            margin: 0; 
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); /* خلفية متدرجة عشان الزجاج يظهر */
-            min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; 
+        body {
+            margin: 0; background: var(--bg-body); min-height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+            color: var(--text-main); padding: 20px;
         }
 
-        /* --- تأثير الزجاج والبروز --- */
+        /* --- Splash --- */
+        #splash {
+            position: fixed; inset: 0; background: #fff;
+            display: flex; flex-direction: column; justify-content: center;
+            align-items: center; z-index: 10000;
+        }
+        .loader-text {
+            font-size: 80px; font-weight: 900; letter-spacing: 15px;
+            color: var(--accent);
+            animation: orenScale 2s infinite alternate;
+        }
+        @keyframes orenScale { 
+            0% { transform: scale(1); opacity: 0.8; } 
+            100% { transform: scale(1.1); opacity: 1; filter: drop-shadow(0 0 20px rgba(0, 123, 255, 0.3)); } 
+        }
+
+        /* --- Glass Cards --- */
         .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px); /* أهم سطر للتأثير الزجاجي */
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 40px; 
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 25px 45px rgba(0,0,0,0.1), /* ظل ناعم */
-                        inset 0 0 15px rgba(255,255,255,0.5); /* لمعة داخلية للبروز */
-            padding: 40px; width: 95%; max-width: 500px;
-            position: relative;
+            background: var(--card-bg);
+            border-radius: 35px; border: 1px solid var(--border);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+            padding: 40px; width: 95%; max-width: 480px;
         }
 
-        .logo-box h1 { font-size: 40px; margin: 0; font-weight: 900; color: var(--accent); text-align: center; }
+        .logo-box { margin-bottom: 25px; text-align: center; }
+        .logo-box h1 { font-size: 40px; margin: 0; font-weight: 900; color: var(--accent); }
 
         .input-wrapper { margin-bottom: 20px; text-align: right; }
+        label { display: block; font-size: 13px; color: var(--text-sub); margin-bottom: 8px; margin-right: 5px; }
         
         input, select, textarea {
-            width: 100%; padding: 15px 20px; 
-            background: rgba(255, 255, 255, 0.4); /* خلفية إنبوت شفافة */
-            border: 1px solid var(--glass-border); 
-            border-radius: 20px; color: var(--text-main);
+            width: 100%; padding: 15px 20px; background: #f8f9fa;
+            border: 2px solid #edf2f7; border-radius: 18px; color: var(--text-main);
             font-size: 16px; outline: none;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
         }
+        input:focus, select:focus { border-color: var(--accent); background: #fff; }
 
         .btn-modern {
             width: 100%; padding: 18px; background: var(--btn-grad);
-            border: none; border-radius: 20px; color: #fff; font-weight: 900;
-            cursor: pointer; box-shadow: 0 10px 25px rgba(0, 210, 255, 0.3);
+            border: none; border-radius: 18px; color: #fff; font-weight: 900;
+            font-size: 18px; cursor: pointer; box-shadow: 0 10px 25px rgba(0, 123, 255, 0.25);
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+        .btn-modern:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0, 123, 255, 0.4); }
+
+        /* --- واجهة المندوب الاحترافية --- */
+        .agent-welcome-header {
+            background: #f8faff; border-radius: 25px; padding: 20px;
+            margin-bottom: 25px; text-align: center; border: 1px dashed var(--accent);
         }
 
-        /* كروت المندوب البارزة */
         .task-item {
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 25px; padding: 20px; margin-bottom: 20px;
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05); /* بروز للكرت الصغير */
-            position: relative;
-            border-right: 6px solid var(--accent);
+            background: #ffffff; border-radius: 30px;
+            padding: 25px; margin-bottom: 25px; border: 1px solid #eee;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            position: relative; overflow: hidden;
+            border-right: 8px solid var(--accent);
         }
 
-        .task-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-        .task-row i { color: var(--accent); width: 20px; }
-        .task-row b { font-size: 14px; }
+        .task-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .task-row i { color: var(--accent); font-size: 18px; width: 25px; text-align: center; }
+        .task-row .label-info { font-size: 12px; color: var(--text-sub); display: block; }
+        .task-row .value-info { font-size: 16px; font-weight: 700; color: var(--text-main); }
 
+        .issue-box {
+            background: #fdfdfd; padding: 15px; border-radius: 20px;
+            margin: 15px 0; border: 1px solid #f0f0f0;
+            font-size: 14px; line-height: 1.6; color: #444;
+        }
+
+        .finish-btn {
+            width: 100%; padding: 15px; background: #2ed573;
+            border: none; border-radius: 15px; color: white;
+            font-weight: 800; font-size: 15px; cursor: pointer;
+            box-shadow: 0 8px 15px rgba(46, 213, 115, 0.2);
+            margin-top: 10px;
+        }
+
+        .badge { background: rgba(0, 123, 255, 0.1); color: var(--accent); padding: 5px 15px; border-radius: 12px; font-size: 12px; font-weight: bold; }
         .hidden { display: none !important; }
-        .badge { background: rgba(0, 210, 255, 0.1); color: var(--accent); padding: 5px 15px; border-radius: 10px; font-size: 12px; font-weight: bold; }
+        
+        ::placeholder { color: #b2bec3; }
     </style>
 </head>
 <body>
 
+    <div id="splash">
+        <div class="loader-text">OREN</div>
+        <div style="width: 120px; height: 4px; background: var(--accent); border-radius: 10px; margin-top: 15px; animation: lineGrow 2s forwards;"></div>
+    </div>
+
     <div class="glass-card" id="loginUI">
-        <div class="logo-box"><h1>OREN</h1><p style="color: #666; text-align:center;">دخول النظام</p></div>
-        <input type="email" placeholder="البريد الإلكتروني" id="email">
-        <input type="password" placeholder="كلمة المرور" id="pass" style="margin-top:10px;">
-        <button class="btn-modern" onclick="login()" style="margin-top:20px;">دخول آمن</button>
+        <div class="logo-box">
+            <h1>OREN</h1>
+            <p style="color: var(--text-sub); margin-top: 5px;">دخول بوابة الموظفين</p>
+        </div>
+        <div class="input-wrapper"><input type="email" placeholder="البريد الإلكتروني" id="email"></div>
+        <div class="input-wrapper"><input type="password" placeholder="كلمة المرور" id="pass"></div>
+        <button class="btn-modern" onclick="login()">دخول آمن <i class="fas fa-shield-alt"></i></button>
     </div>
 
     <div class="glass-card hidden" id="adminUI">
-        <div class="logo-box"><span class="badge">لوحة الإدارة 👑</span></div>
-        <div class="input-wrapper"><input type="text" id="cName" placeholder="اسم العميل"></div>
-        <div class="input-wrapper"><input type="tel" id="cPhone" placeholder="رقم الهاتف"></div>
-        <div class="input-wrapper"><input type="text" id="cAddr" placeholder="العنوان"></div>
-        <div class="input-wrapper">
-            <select id="agentSelect"><option value="">جاري تحميل المناديب...</option></select>
+        <div class="logo-box">
+            <span class="badge">نظام التحكم الإداري 👑</span>
+            <h1 style="font-size: 26px; margin-top: 10px;">تكليف جديد</h1>
         </div>
-        <div class="input-wrapper"><textarea id="cIssue" placeholder="المشكلة" rows="2"></textarea></div>
-        <button class="btn-modern" onclick="assign()">توزيع المهمة</button>
-        <p onclick="logout()" style="text-align:center; color:red; cursor:pointer; margin-top:15px; font-weight:bold;">خروج</p>
+        <div class="input-wrapper"><label>اسم العميل</label><input type="text" id="cName" placeholder="الاسم الكامل"></div>
+        <div class="input-wrapper"><label>رقم الهاتف</label><input type="tel" id="cPhone" placeholder="01xxxxxxxxx"></div>
+        <div class="input-wrapper"><label>العنوان</label><input type="text" id="cAddr" placeholder="العنوان بالتفصيل"></div>
+        <div class="input-wrapper"><label>توجيه المهمة إلى</label>
+            <select id="agentSelect"><option value="">جاري التحميل...</option></select>
+        </div>
+        <div class="input-wrapper"><label>التفاصيل الفنية</label><textarea id="cIssue" rows="2" placeholder="وصف العطل أو الطلب"></textarea></div>
+        <button class="btn-modern" onclick="assign()">إرسال التكليف <i class="fas fa-paper-plane"></i></button>
+        <p onclick="logout()" style="cursor:pointer; color:#ff4757; text-align:center; margin-top:20px; font-weight:700;">تسجيل الخروج</p>
     </div>
 
     <div class="glass-card hidden" id="agentUI">
         <div class="logo-box">
-            <span class="badge" id="agentBadge">فني أورين</span>
-            <h2 id="agWelcome" style="margin:10px 0; font-size:24px;">أهلاً بك</h2>
+            <div class="agent-welcome-header">
+                <span class="badge" id="agentNameBadge">مندوب أورين</span>
+                <h1 style="font-size: 24px; margin-top: 5px;" id="welcomeMsg">أهلاً بك</h1>
+            </div>
+            <p style="color: var(--text-sub); font-size: 14px;">لديك المهام التالية قيد التنفيذ:</p>
         </div>
-        <div id="tasksContainer"></div>
-        <button class="btn-modern" style="background:#666; margin-top:20px;" onclick="logout()">خروج</button>
+
+        <div id="tasksContainer">
+            </div>
+
+        <button class="btn-modern" style="background:#636e72; margin-top:20px; font-size: 15px;" onclick="logout()">خروج من النظام</button>
     </div>
 
     <script>
@@ -123,9 +175,15 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
+        setTimeout(() => {
+            const s = document.getElementById('splash');
+            s.style.opacity = '0';
+            setTimeout(() => s.style.display = 'none', 800);
+        }, 2000);
+
         function login() {
             const e = document.getElementById('email').value, p = document.getElementById('pass').value;
-            firebase.auth().signInWithEmailAndPassword(e, p).catch(err => alert("خطأ في البيانات"));
+            firebase.auth().signInWithEmailAndPassword(e, p).catch(err => alert("خطأ في تسجيل الدخول"));
         }
 
         firebase.auth().onAuthStateChanged(user => {
@@ -138,9 +196,8 @@
                 } else {
                     a.classList.remove('hidden');
                     const n = user.email.split('@')[0];
-                    document.getElementById('agWelcome').innerText = "أهلاً: " + n;
-                    // --- التعديل اللي لغيته ورجعته: تسجيل المندوب تلقائياً ---
-                    db.ref('active_list/' + n).set({name: n}); 
+                    document.getElementById('welcomeMsg').innerText = "أهلاً، " + n;
+                    db.ref('active_list/' + n).set({name: n});
                     loadTasks(n);
                 }
             } else { l.classList.remove('hidden'); }
@@ -156,36 +213,54 @@
 
         function assign() {
             const ag = document.getElementById('agentSelect').value;
-            if(!ag) return alert("اختار مندوب");
+            if(!ag) return alert("اختر مندوباً");
             db.ref('modern_tasks').push({
                 c: document.getElementById('cName').value,
                 p: document.getElementById('cPhone').value,
                 a: document.getElementById('cAddr').value,
                 i: document.getElementById('cIssue').value,
-                to: ag
-            }).then(() => { alert("تم التوزيع!"); document.getElementById('cName').value=""; });
+                to: ag,
+                status: 'active'
+            }).then(() => { alert("تم التكليف بنجاح ✅"); document.getElementById('cName').value = ""; });
         }
 
         function loadTasks(name) {
             db.ref('modern_tasks').on('value', snap => {
                 const container = document.getElementById('tasksContainer'); container.innerHTML = "";
+                let count = 0;
                 snap.forEach(c => {
                     const t = c.val();
                     if(t.to === name) {
+                        count++;
                         container.innerHTML += `
                             <div class="task-item">
-                                <div class="task-row"><i class="fas fa-user"></i><b>${t.c}</b></div>
-                                <div class="task-row"><i class="fas fa-phone"></i><span>${t.p}</span></div>
-                                <div class="task-row"><i class="fas fa-map-marker-alt"></i><span>${t.a}</span></div>
-                                <div style="background:rgba(0,0,0,0.05); padding:10px; border-radius:10px; margin:10px 0;">${t.i}</div>
-                                <button class="btn-modern" style="background:#2ed573; padding:10px;" onclick="finish('${c.key}')">تم التنفيذ ✅</button>
+                                <div class="task-row">
+                                    <i class="fas fa-user-circle"></i>
+                                    <div><span class="label-info">العميل</span><span class="value-info">${t.c}</span></div>
+                                </div>
+                                <div class="task-row">
+                                    <i class="fas fa-phone-alt"></i>
+                                    <div><span class="label-info">رقم التواصل</span><span class="value-info" style="color:var(--accent)">${t.p}</span></div>
+                                </div>
+                                <div class="task-row">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <div><span class="label-info">الموقع</span><span class="value-info">${t.a}</span></div>
+                                </div>
+                                <div class="issue-box">
+                                    <strong>الوصف الفني:</strong><br>${t.i}
+                                </div>
+                                <button class="finish-btn" onclick="finishTask('${c.key}')">تأكيد إتمام المهمة ✅</button>
                             </div>`;
                     }
                 });
+                if(count === 0) container.innerHTML = "<p style='text-align:center; color:#999; margin:40px 0;'>لا توجد مهام حالية</p>";
             });
         }
 
-        function finish(id) { if(confirm("تمت؟")) db.ref('modern_tasks/' + id).remove(); }
+        function finishTask(id) {
+            if(confirm("هل انتهيت من العمل؟")) db.ref('modern_tasks/' + id).remove();
+        }
+
         function logout() { firebase.auth().signOut(); }
     </script>
 </body>
