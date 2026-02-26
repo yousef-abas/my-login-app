@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OREN - Premium Era</title>
+    <title>OREN - Premium Era Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -75,7 +75,6 @@
         }
         .btn-modern:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0, 123, 255, 0.4); }
 
-        /* --- واجهة المندوب (الشغل العالي) --- */
         .agent-premium-header {
             background: var(--btn-grad); border-radius: 25px; padding: 30px 20px;
             text-align: center; margin-bottom: 30px; 
@@ -114,6 +113,11 @@
         .hidden { display: none !important; }
         .badge { background: rgba(255, 255, 255, 0.2); color: #fff; padding: 5px 15px; border-radius: 12px; font-size: 11px; font-weight: bold; margin-bottom: 10px; display: inline-block; }
         
+        /* Dashboard Specific Styles */
+        .stat-card { background: #f8f9fa; padding: 15px; border-radius: 20px; text-align: center; border: 1px solid var(--border); }
+        .stat-card b { color: var(--text-sub); font-size: 12px; display: block; }
+        .stat-card span { font-size: 22px; font-weight: 900; color: var(--accent); }
+
         ::placeholder { color: #b2bec3; }
     </style>
 </head>
@@ -144,13 +148,34 @@
         <div class="input-wrapper"><label>العنوان</label><input type="text" id="cAddr" placeholder="العنوان بالتفصيل"></div>
         <div class="input-wrapper">
             <label>توجيه المهمة إلى</label>
-            <select id="agentSelect">
-                <option value="">-- اختر المندوب --</option>
-            </select>
+            <select id="agentSelect"><option value="">-- اختر المندوب --</option></select>
         </div>
         <div class="input-wrapper"><label>التفاصيل الفنية</label><textarea id="cIssue" rows="2" placeholder="وصف العطل"></textarea></div>
         <button class="btn-modern" onclick="assign()">إرسال التكليف <i class="fas fa-paper-plane"></i></button>
-        <p onclick="logout()" style="cursor:pointer; color:#ff4757; text-align:center; margin-top:20px; font-weight:700;">تسجيل الخروج</p>
+        
+        <p onclick="showDashboard()" style="cursor:pointer; color:var(--accent); text-align:center; margin-top:20px; font-weight:700;">
+            <i class="fas fa-chart-line"></i> لوحة تحليل الأداء
+        </p>
+        <p onclick="logout()" style="cursor:pointer; color:#ff4757; text-align:center; margin-top:10px; font-weight:700;">تسجيل الخروج</p>
+    </div>
+
+    <div class="glass-card hidden" id="dashboardUI" style="max-width: 600px;">
+        <div class="logo-box">
+            <span class="badge" style="background: #e1f5fe; color: #0288d1;">التقارير الذكية 📊</span>
+            <h1 style="font-size: 24px; margin-top:10px;">تحليل أداء الفريق</h1>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px;">
+            <div class="stat-card"><b>إجمالي المنجز</b><span id="totalDone">0</span></div>
+            <div class="stat-card"><b>أفضل مندوب</b><span id="topAgent" style="font-size: 16px;">--</span></div>
+        </div>
+
+        <div id="performanceList" style="max-height: 300px; overflow-y: auto;">
+            </div>
+
+        <button class="btn-modern" style="background:#636e72; margin-top: 25px;" onclick="showAdmin()">
+            <i class="fas fa-arrow-right"></i> العودة للتكليفات
+        </button>
     </div>
 
     <div class="glass-card hidden" id="agentUI" style="max-width: 500px; padding: 20px;">
@@ -190,40 +215,33 @@
         }
 
         firebase.auth().onAuthStateChanged(user => {
-            const l = document.getElementById('loginUI'), d = document.getElementById('adminUI'), a = document.getElementById('agentUI');
-            [l, d, a].forEach(el => el.classList.add('hidden'));
+            const ui = ['loginUI', 'adminUI', 'agentUI', 'dashboardUI'];
+            ui.forEach(id => document.getElementById(id).classList.add('hidden'));
 
             if (user) {
                 if (user.email === "admin@oren.com") {
-                    d.classList.remove('hidden'); 
+                    document.getElementById('adminUI').classList.remove('hidden'); 
                     loadAgents();
                 } else {
-                    a.classList.remove('hidden');
+                    document.getElementById('agentUI').classList.remove('hidden');
                     const n = user.email.split('@')[0];
                     document.getElementById('welcomeMsg').innerText = "أهلاً، " + n;
                     db.ref('active_list/' + n).set({name: n});
                     loadTasks(n);
                 }
-            } else { l.classList.remove('hidden'); }
+            } else { document.getElementById('loginUI').classList.remove('hidden'); }
         });
 
-        // تم تعديل هذه الدالة لحل مشكلة ظهور اسم واحد فقط
         function loadAgents() {
             db.ref('active_list').on('value', snap => {
                 const s = document.getElementById('agentSelect');
-                s.innerHTML = '<option value="">-- اختر المندوب من القائمة --</option>'; // تصفير القائمة
-                
-                if (snap.exists()) {
-                    snap.forEach(child => {
-                        const agentName = child.val().name;
-                        if(agentName) {
-                            let opt = document.createElement('option');
-                            opt.value = agentName;
-                            opt.innerText = agentName;
-                            s.appendChild(opt); // إضافة كل مندوب كعنصر منفصل
-                        }
-                    });
-                }
+                s.innerHTML = '<option value="">-- اختر المندوب من القائمة --</option>';
+                snap.forEach(child => {
+                    const n = child.val().name;
+                    let opt = document.createElement('option');
+                    opt.value = n; opt.innerText = n;
+                    s.appendChild(opt);
+                });
             });
         }
 
@@ -235,7 +253,8 @@
                 p: document.getElementById('cPhone').value,
                 a: document.getElementById('cAddr').value,
                 i: document.getElementById('cIssue').value,
-                to: ag
+                to: ag,
+                timestamp: Date.now()
             }).then(() => { alert("تم الإرسال ✅"); document.getElementById('cName').value = ""; });
         }
 
@@ -257,10 +276,6 @@
                                     <div class="icon-box"><i class="fas fa-phone-alt"></i></div>
                                     <div class="info-content"><b>رقم الهاتف</b><span style="color:var(--accent)">${t.p}</span></div>
                                 </div>
-                                <div class="info-row">
-                                    <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
-                                    <div class="info-content"><b>العنوان</b><span>${t.a}</span></div>
-                                </div>
                                 <div class="details-box">
                                     <b style="font-size:11px; color:#888;">الوصف الفني:</b>
                                     <p style="margin:5px 0; font-weight:700; font-size:14px;">${t.i}</p>
@@ -275,7 +290,60 @@
             });
         }
 
-        function finishTask(id) { if(confirm("تأكيد إتمام المهمة؟")) db.ref('modern_tasks/' + id).remove(); }
+        // دالة إتمام المهمة المعدلة لحفظ البيانات للتحليل
+        function finishTask(id) {
+            if(confirm("تأكيد إتمام المهمة؟")) {
+                db.ref('modern_tasks/' + id).once('value', snap => {
+                    const data = snap.val();
+                    data.doneTime = Date.now(); // إضافة وقت الإتمام
+                    db.ref('completed_tasks').push(data).then(() => {
+                        db.ref('modern_tasks/' + id).remove();
+                    });
+                });
+            }
+        }
+
+        // دالة تحميل وتحليل البيانات
+        function loadAnalytics() {
+            db.ref('completed_tasks').on('value', snap => {
+                const stats = {};
+                let total = 0;
+                const list = document.getElementById('performanceList');
+                list.innerHTML = "";
+
+                snap.forEach(c => {
+                    const task = c.val();
+                    stats[task.to] = (stats[task.to] || 0) + 1;
+                    total++;
+                });
+
+                document.getElementById('totalDone').innerText = total;
+
+                let topAgent = "--"; let max = 0;
+                for (let agent in stats) {
+                    if(stats[agent] > max) { max = stats[agent]; topAgent = agent; }
+                    list.innerHTML += `
+                        <div style="display:flex; justify-content:space-between; align-items:center; padding:15px; border-bottom:1px solid #eee;">
+                            <span style="font-weight:700;">${agent}</span>
+                            <span class="badge" style="background:var(--accent)">${stats[agent]} مهمة</span>
+                        </div>
+                    `;
+                }
+                document.getElementById('topAgent').innerText = topAgent;
+            });
+        }
+
+        function showDashboard() {
+            document.getElementById('adminUI').classList.add('hidden');
+            document.getElementById('dashboardUI').classList.remove('hidden');
+            loadAnalytics();
+        }
+
+        function showAdmin() {
+            document.getElementById('dashboardUI').classList.add('hidden');
+            document.getElementById('adminUI').classList.remove('hidden');
+        }
+
         function logout() { firebase.auth().signOut(); }
     </script>
 </body>
