@@ -22,8 +22,25 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
+            overflow-x: hidden;
         }
 
+        /* --- الواجهة الافتتاحية السودة --- */
+        #splash {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 10000; transition: 1s ease-in-out;
+        }
+        .neon-logo {
+            font-size: 60px; font-weight: 800; color: #fff; letter-spacing: 5px;
+            animation: pulseGlow 1.5s ease-in-out infinite alternate;
+        }
+        @keyframes pulseGlow {
+            from { text-shadow: 0 0 10px #fff, 0 0 20px #00d2ff, 0 0 30px #00d2ff; opacity: 1; }
+            to { text-shadow: 0 0 5px #fff, 0 0 10px #00d2ff; opacity: 0.3; }
+        }
+
+        /* --- التصميم الليلي الفخم --- */
         .logo-text {
             font-size: 45px; font-weight: 800; letter-spacing: 3px;
             background: linear-gradient(to right, #00d2ff, #928dab);
@@ -34,127 +51,73 @@
         .container {
             background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(15px);
-            padding: 40px;
-            border-radius: 30px;
+            padding: 40px; border-radius: 30px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-            width: 100%;
-            max-width: 420px;
-            text-align: center;
-            color: white;
-        }
-
-        .lang-switch { position: absolute; top: 25px; left: 25px; }
-        .lang-btn {
-            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
-            color: white; padding: 6px 18px; border-radius: 12px; cursor: pointer; font-size: 13px;
+            width: 100%; max-width: 420px; text-align: center; color: white;
         }
 
         .input-group { margin-bottom: 18px; text-align: right; }
-        html[dir="ltr"] .input-group { text-align: left; }
-
         label { display: block; margin-bottom: 8px; font-size: 13px; color: #00d2ff; font-weight: 600; }
 
         input, select, textarea {
             width: 100%; padding: 14px 20px; border: 1px solid rgba(255,255,255,0.2);
             border-radius: 15px; font-size: 15px; background: rgba(255,255,255,0.05);
-            color: white; outline: none; font-family: inherit;
+            color: white; outline: none;
         }
-        input:focus, select:focus { border-color: #00d2ff; background: rgba(255,255,255,0.1); }
-        option { background: #302b63; color: white; }
 
         .main-btn {
             width: 100%; padding: 16px; background: linear-gradient(to right, #00d2ff, #3a7bd5);
             border: none; border-radius: 15px; color: white; font-size: 16px;
             font-weight: 600; cursor: pointer; margin-top: 10px;
-            box-shadow: 0 10px 20px rgba(0, 210, 255, 0.2);
         }
-        .main-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(0, 210, 255, 0.3); }
 
-        /* كروت المهام للمناديب */
         .task-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-left: 4px solid #00d2ff;
-            padding: 15px;
-            border-radius: 15px;
-            margin-bottom: 15px;
-            text-align: right;
+            background: rgba(255, 255, 255, 0.05); border-right: 4px solid #00d2ff;
+            padding: 15px; border-radius: 15px; margin-bottom: 15px; text-align: right;
         }
-        html[dir="ltr"] .task-card { text-align: left; border-left: none; border-right: 4px solid #00d2ff; }
 
         .hidden { display: none; }
-        ::placeholder { color: rgba(255,255,255,0.3); }
-
         .user-badge { font-size: 12px; background: rgba(0, 210, 255, 0.2); padding: 5px 12px; border-radius: 20px; margin-bottom: 20px; display: inline-block; }
     </style>
 </head>
 <body>
 
-    <div class="lang-switch">
-        <button class="lang-btn" onclick="toggleLanguage()" id="langToggle">English</button>
+    <div id="splash">
+        <div class="neon-logo">OREN</div>
+        <p style="color: #444; letter-spacing: 3px; font-size: 12px; margin-top: 15px;">LOADING SYSTEM...</p>
     </div>
 
     <div class="container" id="loginScreen">
         <div class="logo-text">OREN</div>
-        <h2 id="loginTitle" style="font-weight: 300; margin-bottom: 30px;">تسجيل الدخول للنظام</h2>
-        
-        <div class="input-group">
-            <input type="email" placeholder="البريد الإلكتروني" id="emailInput">
-        </div>
-        <div class="input-group">
-            <input type="password" placeholder="كلمة المرور" id="passInput">
-        </div>
-        
+        <h2 style="font-weight: 300; margin-bottom: 30px;">تسجيل الدخول</h2>
+        <div class="input-group"><input type="email" placeholder="البريد الإلكتروني" id="emailInput"></div>
+        <div class="input-group"><input type="password" placeholder="كلمة المرور" id="passInput"></div>
         <button class="main-btn" onclick="login()">دخول</button>
-
-        <div style="margin-top: 20px; font-size: 12px; color: #aaa;">
-            نظام أورين لإدارة التكليفات الذكية
-        </div>
     </div>
 
     <div class="container hidden" id="adminScreen">
-        <div class="logo-text" style="font-size: 30px;">ADMIN PANEL</div>
-        <div class="user-badge">المدير يوسف 👑</div>
-        
+        <div class="logo-text" style="font-size: 30px;">ADMIN</div>
+        <div class="user-badge">يوسف 👑</div>
+        <div class="input-group"><label>العميل</label><input type="text" id="cName"></div>
+        <div class="input-group"><label>الهاتف</label><input type="tel" id="cPhone"></div>
+        <div class="input-group"><label>العنوان</label><input type="text" id="cAddr"></div>
+        <div class="input-group"><label>المشكلة</label><textarea id="cIssue" rows="2"></textarea></div>
         <div class="input-group">
-            <label>اسم العميل</label>
-            <input type="text" id="cName">
+            <label>المندوب</label>
+            <select id="agentSelect"><option value="">جاري التحميل...</option></select>
         </div>
-        <div class="input-group">
-            <label>رقم الهاتف</label>
-            <input type="tel" id="cPhone">
-        </div>
-        <div class="input-group">
-            <label>العنوان بالتفصيل</label>
-            <input type="text" id="cAddr">
-        </div>
-        <div class="input-group">
-            <label>وصف المشكلة</label>
-            <textarea id="cIssue" rows="2" style="width: 100%; border-radius: 15px; background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 10px; outline: none;"></textarea>
-        </div>
-        <div class="input-group">
-            <label>اختيار المندوب</label>
-            <select id="agentSelect">
-                <option value="">جاري جلب المناديب...</option>
-            </select>
-        </div>
-        
-        <button class="main-btn" onclick="assignTask()">توزيع المهمة الآن</button>
-        <button onclick="logout()" style="background:none; border:none; color:#ff4757; cursor:pointer; margin-top:15px; font-weight:bold;">تسجيل الخروج</button>
+        <button class="main-btn" onclick="assignTask()">إرسال المهمة</button>
+        <button onclick="logout()" style="background:none; border:none; color:#ff4757; cursor:pointer; margin-top:10px;">خروج</button>
     </div>
 
     <div class="container hidden" id="agentScreen">
-        <div class="logo-text" style="font-size: 30px;">OREN TASKS</div>
-        <div class="user-badge">أهلاً: <span id="agentDisplayName"></span> 👋</div>
-        
-        <div id="tasksList" style="margin-top: 20px;">
-            </div>
-
-        <button class="main-btn" style="background: #57606f;" onclick="logout()">خروج</button>
+        <div class="logo-text" style="font-size: 30px;">TASKS</div>
+        <div id="tasksList"></div>
+        <button class="main-btn" style="background:#555" onclick="logout()">خروج</button>
     </div>
 
     <script>
-        // إعدادات Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyALgV2v3lmxvEoP0HosqGSqm727vZrYUq4",
             authDomain: "orenapp-f2f1e.firebaseapp.com",
@@ -167,7 +130,13 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // نظام تسجيل الدخول
+        // مؤقت الشاشة الافتتاحية (3 ثواني)
+        setTimeout(() => {
+            const sp = document.getElementById('splash');
+            sp.style.opacity = '0';
+            setTimeout(() => sp.style.display = 'none', 1000);
+        }, 3000);
+
         function login() {
             const e = document.getElementById('emailInput').value;
             const p = document.getElementById('passInput').value;
@@ -175,94 +144,56 @@
         }
 
         firebase.auth().onAuthStateChanged(user => {
-            const loginS = document.getElementById('loginScreen');
-            const adminS = document.getElementById('adminScreen');
-            const agentS = document.getElementById('agentScreen');
-
+            const loginS = document.getElementById('loginScreen'), adminS = document.getElementById('adminScreen'), agentS = document.getElementById('agentScreen');
             if (user) {
                 loginS.classList.add('hidden');
                 if (user.email === "admin@oren.com") {
-                    adminS.classList.remove('hidden');
-                    loadAgentsList();
+                    adminS.classList.remove('hidden'); loadAgents();
                 } else {
                     agentS.classList.remove('hidden');
-                    const name = user.email.split('@')[0];
-                    document.getElementById('agentDisplayName').innerText = name;
-                    db.ref('active_agents/' + name).set({name: name});
-                    loadAgentTasks(name);
+                    const n = user.email.split('@')[0];
+                    db.ref('active_agents/' + n).set({name: n});
+                    loadTasks(n);
                 }
             } else {
-                loginS.classList.remove('hidden');
-                adminS.classList.add('hidden');
-                agentS.classList.add('hidden');
+                loginS.classList.remove('hidden'); adminS.classList.add('hidden'); agentS.classList.add('hidden');
             }
         });
 
-        // لوظائف المدير
-        function loadAgentsList() {
+        function loadAgents() {
             db.ref('active_agents').on('value', snap => {
-                const select = document.getElementById('agentSelect');
-                select.innerHTML = '<option value="">-- اختر المندوب --</option>';
-                snap.forEach(child => {
-                    select.innerHTML += `<option value="${child.val().name}">${child.val().name}</option>`;
-                });
+                const s = document.getElementById('agentSelect');
+                s.innerHTML = '<option value="">-- اختر --</option>';
+                snap.forEach(c => s.innerHTML += `<option value="${c.val().name}">${c.val().name}</option>`);
             });
         }
 
         function assignTask() {
-            const agent = document.getElementById('agentSelect').value;
-            if(!agent) return alert("برجاء اختيار مندوب!");
-            
-            db.ref('tasks_v5').push({
+            const ag = document.getElementById('agentSelect').value;
+            if(!ag) return alert("اختار مندوب");
+            db.ref('orders_v9').push({
                 customer: document.getElementById('cName').value,
                 phone: document.getElementById('cPhone').value,
                 addr: document.getElementById('cAddr').value,
                 issue: document.getElementById('cIssue').value,
-                to: agent
-            }).then(() => {
-                alert("تم إرسال المهمة بنجاح ✅");
-                document.getElementById('cName').value = "";
-                document.getElementById('cPhone').value = "";
-                document.getElementById('cAddr').value = "";
-                document.getElementById('cIssue').value = "";
-            });
+                to: ag
+            }).then(() => { alert("تم!"); document.getElementById('cName').value = ""; });
         }
 
-        // لوظائف المندوب
-        function loadAgentTasks(name) {
-            db.ref('tasks_v5').on('value', snap => {
-                const list = document.getElementById('tasksList');
-                list.innerHTML = "";
-                snap.forEach(child => {
-                    const task = child.val();
-                    if(task.to === name) {
-                        list.innerHTML += `
-                            <div class="task-card">
-                                <div style="color:#00d2ff; font-weight:bold; margin-bottom:5px;">👤 ${task.customer}</div>
-                                <div style="font-size:14px;">📞 ${task.phone}</div>
-                                <div style="font-size:14px; opacity:0.8;">📍 ${task.addr}</div>
-                                <div style="font-size:14px; margin-top:8px; border-top:1px solid rgba(255,255,255,0.1); padding-top:5px;">📝 ${task.issue}</div>
-                                <button onclick="finishTask('${child.key}')" style="margin-top:10px; width:100%; padding:8px; border-radius:10px; border:none; background:#2ed573; color:white; cursor:pointer;">تم الإنجاز ✅</button>
-                            </div>
-                        `;
+        function loadTasks(name) {
+            db.ref('orders_v9').on('value', snap => {
+                const list = document.getElementById('tasksList'); list.innerHTML = "";
+                snap.forEach(c => {
+                    const t = c.val();
+                    if(t.to === name) {
+                        list.innerHTML += `<div class="task-card"><b>👤 ${t.customer}</b><br>📞 ${t.phone}<br>📍 ${t.addr}<br>📝 ${t.issue}<br><button onclick="done('${c.key}')" style="width:100%; margin-top:10px; background:#2ed573; color:white; border:none; padding:5px; border-radius:5px; cursor:pointer;">تم ✅</button></div>`;
                     }
                 });
             });
         }
 
-        function finishTask(id) { db.ref('tasks_v5/' + id).remove(); }
+        function done(id) { db.ref('orders_v9/' + id).remove(); }
         function logout() { firebase.auth().signOut(); }
-
-        // تبديل اللغة
-        let currentLang = 'ar';
-        function toggleLanguage() {
-            const html = document.getElementById('mainHtml');
-            const btn = document.getElementById('langToggle');
-            currentLang = currentLang === 'ar' ? 'en' : 'ar';
-            html.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
-            btn.innerText = currentLang === 'ar' ? 'English' : 'العربية';
-            // يمكنك إضافة ترجمات العناوين هنا إذا أردت
-        }
     </script>
 </body>
 </html>
