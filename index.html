@@ -88,7 +88,7 @@
         .task-premium-card {
             background: #ffffff; border-radius: 30px; padding: 25px;
             margin-bottom: 20px; border: 1px solid rgba(0, 123, 255, 0.1);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.05); /* بروز عالي */
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
             position: relative; transition: 0.3s ease;
         }
         .task-premium-card:hover { transform: translateY(-5px); }
@@ -142,8 +142,11 @@
         <div class="input-wrapper"><label>اسم العميل</label><input type="text" id="cName" placeholder="الاسم الكامل"></div>
         <div class="input-wrapper"><label>رقم الهاتف</label><input type="tel" id="cPhone" placeholder="01xxxxxxxxx"></div>
         <div class="input-wrapper"><label>العنوان</label><input type="text" id="cAddr" placeholder="العنوان بالتفصيل"></div>
-        <div class="input-wrapper"><label>توجيه المهمة إلى</label>
-            <select id="agentSelect"><option value="">جاري التحميل...</option></select>
+        <div class="input-wrapper">
+            <label>توجيه المهمة إلى</label>
+            <select id="agentSelect">
+                <option value="">-- اختر المندوب --</option>
+            </select>
         </div>
         <div class="input-wrapper"><label>التفاصيل الفنية</label><textarea id="cIssue" rows="2" placeholder="وصف العطل"></textarea></div>
         <button class="btn-modern" onclick="assign()">إرسال التكليف <i class="fas fa-paper-plane"></i></button>
@@ -156,10 +159,7 @@
             <h1 id="welcomeMsg">أهلاً بك</h1>
             <p>لديك مهام عمل جديدة بانتظارك</p>
         </div>
-
-        <div id="tasksContainer">
-            </div>
-
+        <div id="tasksContainer"></div>
         <button class="btn-modern" style="background:#f1f4f9; color:#636e72; box-shadow:none; margin-top:20px; font-size:14px;" onclick="logout()">
             <i class="fas fa-sign-out-alt"></i> تسجيل خروج
         </button>
@@ -195,7 +195,8 @@
 
             if (user) {
                 if (user.email === "admin@oren.com") {
-                    d.classList.remove('hidden'); loadAgents();
+                    d.classList.remove('hidden'); 
+                    loadAgents();
                 } else {
                     a.classList.remove('hidden');
                     const n = user.email.split('@')[0];
@@ -206,11 +207,23 @@
             } else { l.classList.remove('hidden'); }
         });
 
+        // تم تعديل هذه الدالة لحل مشكلة ظهور اسم واحد فقط
         function loadAgents() {
             db.ref('active_list').on('value', snap => {
                 const s = document.getElementById('agentSelect');
-                s.innerHTML = '<option value="">-- اختر المندوب --</option>';
-                snap.forEach(c => s.innerHTML += `<option value="${c.val().name}">${c.val().name}</option>`);
+                s.innerHTML = '<option value="">-- اختر المندوب من القائمة --</option>'; // تصفير القائمة
+                
+                if (snap.exists()) {
+                    snap.forEach(child => {
+                        const agentName = child.val().name;
+                        if(agentName) {
+                            let opt = document.createElement('option');
+                            opt.value = agentName;
+                            opt.innerText = agentName;
+                            s.appendChild(opt); // إضافة كل مندوب كعنصر منفصل
+                        }
+                    });
+                }
             });
         }
 
