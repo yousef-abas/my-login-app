@@ -56,6 +56,17 @@
 
         .logo-box { margin-bottom: 25px; text-align: center; }
         .logo-box h1 { font-size: 40px; margin: 0; font-weight: 900; color: var(--accent); }
+        
+        /* التنسيق الخاص بحقوق المطور */
+        .dev-tag {
+            font-size: 11px;
+            color: var(--text-sub);
+            letter-spacing: 1px;
+            margin-top: -5px;
+            display: block;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            opacity: 0.8;
+        }
 
         .input-wrapper { margin-bottom: 20px; text-align: right; }
         label { display: block; font-size: 13px; color: var(--text-sub); margin-bottom: 8px; margin-right: 5px; }
@@ -131,7 +142,8 @@
     <div class="glass-card" id="loginUI">
         <div class="logo-box">
             <h1>OREN</h1>
-            <p style="color: var(--text-sub); margin-top: 5px;">دخول بوابة الموظفين</p>
+            <span class="dev-tag">Developed by Youssef Abbas</span>
+            <p style="color: var(--text-sub); margin-top: 15px;">دخول بوابة الموظفين</p>
         </div>
         <div class="input-wrapper"><input type="email" placeholder="البريد الإلكتروني" id="email"></div>
         <div class="input-wrapper"><input type="password" placeholder="كلمة المرور" id="pass"></div>
@@ -170,8 +182,7 @@
             <div class="stat-card"><b>أفضل مندوب</b><span id="topAgent" style="font-size: 16px;">--</span></div>
         </div>
 
-        <div id="performanceList" style="max-height: 300px; overflow-y: auto;">
-            </div>
+        <div id="performanceList" style="max-height: 300px; overflow-y: auto;"></div>
 
         <button class="btn-modern" style="background:#636e72; margin-top: 25px;" onclick="showAdmin()">
             <i class="fas fa-arrow-right"></i> العودة للتكليفات
@@ -290,12 +301,11 @@
             });
         }
 
-        // دالة إتمام المهمة المعدلة لحفظ البيانات للتحليل
         function finishTask(id) {
             if(confirm("تأكيد إتمام المهمة؟")) {
                 db.ref('modern_tasks/' + id).once('value', snap => {
                     const data = snap.val();
-                    data.doneTime = Date.now(); // إضافة وقت الإتمام
+                    data.doneTime = Date.now();
                     db.ref('completed_tasks').push(data).then(() => {
                         db.ref('modern_tasks/' + id).remove();
                     });
@@ -303,7 +313,6 @@
             }
         }
 
-        // دالة تحميل وتحليل البيانات
         function loadAnalytics() {
             db.ref('completed_tasks').on('value', snap => {
                 const stats = {};
