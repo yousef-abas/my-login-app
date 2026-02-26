@@ -1,72 +1,139 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" id="mainHtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OREN - Elite Fix</title>
+    <title>OREN - Light Era</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
-        :root { --accent: #00d2ff; --bg: radial-gradient(circle at top right, #1e1e2f, #0d0d1a); }
-        * { box-sizing: border-box; font-family: 'Cairo', sans-serif; transition: 0.3s; }
-        body { margin: 0; background: var(--bg); min-height: 100vh; display: flex; justify-content: center; align-items: center; color: #fff; padding: 20px; }
+
+        :root {
+            --bg-body: #f0f2f5; /* خلفية فاتحة مريحة */
+            --card-bg: #ffffff; /* كروت بيضاء صريحة */
+            --accent: #007bff; /* أزرق رسمي */
+            --text-main: #2d3436; /* لون نص غامق واضح */
+            --text-sub: #636e72;
+            --btn-grad: linear-gradient(45deg, #007bff, #00d2ff);
+            --border: rgba(0,0,0,0.05);
+        }
+
+        * { box-sizing: border-box; transition: 0.3s ease; font-family: 'Cairo', sans-serif; }
         
+        body {
+            margin: 0; background: var(--bg-body); min-height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+            color: var(--text-main); padding: 20px;
+        }
+
+        /* --- Splash Light --- */
+        #splash {
+            position: fixed; inset: 0; background: #fff;
+            display: flex; flex-direction: column; justify-content: center;
+            align-items: center; z-index: 10000;
+        }
+        .loader-text {
+            font-size: 80px; font-weight: 900; letter-spacing: 15px;
+            color: var(--accent);
+            animation: orenScale 2s infinite alternate;
+        }
+        @keyframes orenScale { 
+            0% { transform: scale(1); opacity: 0.8; } 
+            100% { transform: scale(1.1); opacity: 1; filter: drop-shadow(0 0 20px rgba(0, 123, 255, 0.3)); } 
+        }
+
+        /* --- Glass Cards (Soft Mode) --- */
         .glass-card {
-            background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(25px);
-            border-radius: 35px; border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 30px; width: 100%; max-width: 500px; box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+            background: var(--card-bg);
+            border-radius: 35px; border: 1px solid var(--border);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+            padding: 40px; width: 95%; max-width: 450px;
         }
 
+        .logo-box h1 { font-size: 40px; margin: 0; font-weight: 900; color: var(--accent); }
+
+        .input-wrapper { margin-bottom: 20px; text-align: right; }
+        label { display: block; font-size: 13px; color: var(--text-sub); margin-bottom: 8px; margin-right: 5px; }
+        
         input, select, textarea {
-            width: 100%; padding: 15px; background: rgba(0,0,0,0.5) !important;
-            border: 1px solid rgba(255,255,255,0.2); border-radius: 18px; color: #fff !important;
-            font-size: 15px; outline: none; margin-bottom: 15px;
+            width: 100%; padding: 15px 20px; background: #f8f9fa;
+            border: 2px solid #edf2f7; border-radius: 18px; color: var(--text-main);
+            font-size: 16px; outline: none;
         }
+        input:focus, select:focus { border-color: var(--accent); background: #fff; }
 
-        /* حل نهائي لمشكلة لون الدروب ليست */
-        select option { background: #1e1e2f; color: #fff; }
+        /* تعديل الدروب ليست للمناديب في المود الفاتح */
+        select option { background: #fff; color: #333; }
 
         .btn-modern {
-            width: 100%; padding: 15px; background: linear-gradient(45deg, #00d2ff, #3a7bd5);
-            border: none; border-radius: 18px; color: #fff; font-weight: 700; cursor: pointer;
+            width: 100%; padding: 18px; background: var(--btn-grad);
+            border: none; border-radius: 18px; color: #fff; font-weight: 900;
+            font-size: 18px; cursor: pointer; box-shadow: 0 10px 25px rgba(0, 123, 255, 0.25);
+            display: flex; justify-content: center; align-items: center; gap: 10px;
         }
-        .hidden { display: none; }
-        .refresh-tag { font-size: 10px; color: var(--accent); cursor: pointer; text-align: center; display: block; margin-bottom: 5px; }
+        .btn-modern:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0, 123, 255, 0.4); }
+
+        /* كروت المهام الفاتحة */
+        .task-item {
+            background: #fdfdfd; border-radius: 25px;
+            padding: 20px; margin-bottom: 20px; border: 1px solid #eee;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.02);
+            position: relative; border-right: 6px solid var(--accent);
+        }
+
+        .badge { background: rgba(0, 123, 255, 0.1); color: var(--accent); padding: 5px 15px; border-radius: 12px; font-size: 12px; font-weight: bold; }
+        .hidden { display: none !important; }
+        
+        ::placeholder { color: #b2bec3; }
     </style>
 </head>
 <body>
 
+    <div id="splash">
+        <div class="loader-text">OREN</div>
+        <div style="width: 120px; height: 4px; background: var(--accent); border-radius: 10px; margin-top: 15px; animation: lineGrow 2s forwards;"></div>
+    </div>
+
     <div class="glass-card" id="loginUI">
-        <h1 style="text-align:center; color:var(--accent)">OREN</h1>
-        <input type="email" placeholder="البريد الإلكتروني" id="email">
-        <input type="password" placeholder="كلمة المرور" id="pass">
-        <button class="btn-modern" onclick="login()">دخول</button>
+        <div class="logo-box">
+            <h1>OREN</h1>
+            <p style="color: var(--text-sub); margin-top: 5px;">مرحباً بك في نظام الإدارة الذكي</p>
+        </div>
+        <div class="input-wrapper"><input type="email" placeholder="البريد الإلكتروني" id="email"></div>
+        <div class="input-wrapper"><input type="password" placeholder="كلمة المرور" id="pass"></div>
+        <button class="btn-modern" onclick="login()">دخول آمن <i class="fas fa-lock"></i></button>
     </div>
 
     <div class="glass-card hidden" id="adminUI">
-        <h2 style="color:var(--accent)">لوحة الإدارة 👑</h2>
-        <input type="text" id="cName" placeholder="اسم العميل">
-        
-        <span class="refresh-tag" onclick="loadAgents()">🔄 تحديث قائمة المناديب</span>
-        <select id="agentSelect">
-            <option value="">-- اختر المندوب --</option>
-        </select>
-
-        <textarea id="cIssue" placeholder="التفاصيل"></textarea>
-        <button class="btn-modern" onclick="assign()">توزيع المهمة</button>
-        <p onclick="logout()" style="text-align:center; color:red; cursor:pointer; margin-top:10px;">خروج</p>
+        <div class="logo-box">
+            <span class="badge">الإدارة المركزية 👑</span>
+            <h1 style="font-size: 26px; margin-top: 10px;">إضافة مهمة جديدة</h1>
+        </div>
+        <div class="input-wrapper"><label>اسم العميل</label><input type="text" id="cName" placeholder="مثال: محمد أحمد"></div>
+        <div class="input-wrapper"><label>رقم الهاتف</label><input type="tel" id="cPhone" placeholder="01xxxxxxxxx"></div>
+        <div class="input-wrapper"><label>العنوان</label><input type="text" id="cAddr" placeholder="المنطقة، الشارع، رقم الدور"></div>
+        <div class="input-wrapper"><label>المندوب</label>
+            <select id="agentSelect"><option value="">جاري جلب المناديب...</option></select>
+        </div>
+        <div class="input-wrapper"><label>وصف المهمة</label><textarea id="cIssue" rows="2" placeholder="اكتب تفاصيل العطل أو الطلب"></textarea></div>
+        <button class="btn-modern" onclick="assign()">توزيع المهمة <i class="fas fa-paper-plane"></i></button>
+        <p onclick="logout()" style="cursor:pointer; color:#ff4757; text-align:center; margin-top:20px; font-weight:700;">تسجيل الخروج</p>
     </div>
 
     <div class="glass-card hidden" id="agentUI">
-        <h1 id="agTitle">مهامي</h1>
+        <div class="logo-box">
+            <span class="badge" id="agentNameBadge">مندوب أورين</span>
+            <h1 style="font-size: 26px; margin-top: 10px;">قائمة المهام</h1>
+        </div>
         <div id="tasksContainer"></div>
-        <button class="btn-modern" style="background:#444" onclick="logout()">خروج</button>
+        <button class="btn-modern" style="background:#636e72; margin-top:20px;" onclick="logout()">خروج</button>
     </div>
 
     <script>
-        // تأكد إن البيانات دي هي اللي في الفايربيز عندك بالظبط
         const firebaseConfig = {
             apiKey: "AIzaSyALgV2v3lmxvEoP0HosqGSqm727vZrYUq4",
             authDomain: "orenapp-f2f1e.firebaseapp.com",
@@ -79,37 +146,42 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
+        // Splash Timer
+        setTimeout(() => {
+            const s = document.getElementById('splash');
+            s.style.opacity = '0';
+            setTimeout(() => s.style.display = 'none', 800);
+        }, 2000);
+
         function login() {
             const e = document.getElementById('email').value, p = document.getElementById('pass').value;
-            firebase.auth().signInWithEmailAndPassword(e, p).catch(err => alert("خطأ: " + err.message));
+            firebase.auth().signInWithEmailAndPassword(e, p).catch(err => alert("تأكد من البيانات"));
         }
 
         firebase.auth().onAuthStateChanged(user => {
             const l = document.getElementById('loginUI'), d = document.getElementById('adminUI'), a = document.getElementById('agentUI');
+            [l, d, a].forEach(el => el.classList.add('hidden'));
+
             if (user) {
-                l.classList.add('hidden');
                 if (user.email === "admin@oren.com") {
-                    d.classList.remove('hidden'); 
-                    loadAgents(); 
+                    d.classList.remove('hidden'); loadAgents();
                 } else {
                     a.classList.remove('hidden');
                     const n = user.email.split('@')[0];
-                    document.getElementById('agTitle').innerText = n;
-                    // تسجيل المندوب في قاعدة البيانات فوراً
-                    db.ref('active_agents/' + n).set({name: n});
+                    document.getElementById('agentNameBadge').innerText = "مرحباً: " + n;
+                    // لضمان ظهور المندوب في قائمة الأدمن
+                    db.ref('active_list/' + n).set({name: n});
                     loadTasks(n);
                 }
             } else {
-                l.classList.remove('hidden'); d.classList.add('hidden'); a.classList.add('hidden');
+                l.classList.remove('hidden');
             }
         });
 
         function loadAgents() {
-            console.log("جاري تحميل المناديب...");
-            db.ref('active_agents').on('value', snap => {
+            db.ref('active_list').on('value', snap => {
                 const s = document.getElementById('agentSelect');
                 s.innerHTML = '<option value="">-- اختر المندوب --</option>';
-                if(!snap.exists()) { console.log("لا يوجد مناديب في Database"); return; }
                 snap.forEach(c => {
                     const name = c.val().name;
                     s.innerHTML += `<option value="${name}">${name}</option>`;
@@ -119,13 +191,44 @@
 
         function assign() {
             const ag = document.getElementById('agentSelect').value;
-            if(!ag) return alert("اختار مندوب");
-            db.ref('tasks').push({
+            if(!ag) return alert("من فضلك اختر مندوب");
+            db.ref('modern_tasks').push({
                 c: document.getElementById('cName').value,
-                to: ag, status: 'pending'
-            }).then(() => alert("تم!"));
+                p: document.getElementById('cPhone').value,
+                a: document.getElementById('cAddr').value,
+                i: document.getElementById('cIssue').value,
+                to: ag
+            }).then(() => { 
+                alert("تم الإرسال بنجاح ✅"); 
+                document.getElementById('cName').value = ""; 
+            });
         }
 
+        function loadTasks(name) {
+            db.ref('modern_tasks').on('value', snap => {
+                const container = document.getElementById('tasksContainer'); container.innerHTML = "";
+                snap.forEach(c => {
+                    const t = c.val();
+                    if(t.to === name) {
+                        container.innerHTML += `
+                            <div class="task-item">
+                                <b style="color:var(--accent); font-size:18px;">${t.c}</b><br>
+                                <span style="font-size:13px; color:var(--text-sub);">📞 ${t.p}</span><br>
+                                <span style="font-size:13px; color:var(--text-sub);">📍 ${t.a}</span><br>
+                                <p style="margin:10px 0; font-size:14px; color:#444; border-top:1px solid #f0f0f0; padding-top:10px;">${t.i}</p>
+                                <button onclick="finishTask('${c.key}')" style="width:100%; padding:12px; border-radius:12px; border:none; background:#2ed573; color:#fff; cursor:pointer; font-weight:bold; font-size:14px;">تم الإنجاز بنجاح ✅</button>
+                            </div>`;
+                    }
+                });
+            });
+        }
+
+        function finishTask(id) { 
+            if(confirm("هل تم تنفيذ هذه المهمة بالفعل؟")) {
+                db.ref('modern_tasks/' + id).remove(); 
+            }
+        }
+        
         function logout() { firebase.auth().signOut(); }
     </script>
 </body>
