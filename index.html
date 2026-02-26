@@ -24,100 +24,38 @@
         }
 
         * { box-sizing: border-box; transition: 0.3s ease; font-family: 'Cairo', sans-serif; }
-        
-        body {
-            margin: 0; background: var(--bg-body); min-height: 100vh;
-            display: flex; justify-content: center; align-items: center;
-            color: var(--text-main); padding: 20px;
-        }
+        body { margin: 0; background: var(--bg-body); min-height: 100vh; display: flex; justify-content: center; align-items: center; color: var(--text-main); padding: 20px; }
 
-        #splash {
-            position: fixed; inset: 0; background: #fff;
-            display: flex; flex-direction: column; justify-content: center;
-            align-items: center; z-index: 10000;
-        }
-        .loader-text {
-            font-size: 80px; font-weight: 900; letter-spacing: 15px;
-            color: var(--accent);
-            animation: orenScale 2s infinite alternate;
-        }
-        @keyframes orenScale { 
-            0% { transform: scale(1); opacity: 0.8; } 
-            100% { transform: scale(1.1); opacity: 1; filter: drop-shadow(0 0 20px rgba(0, 123, 255, 0.3)); } 
-        }
+        #splash { position: fixed; inset: 0; background: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10000; }
+        .loader-text { font-size: 80px; font-weight: 900; letter-spacing: 15px; color: var(--accent); animation: orenScale 2s infinite alternate; }
+        @keyframes orenScale { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.1); opacity: 1; filter: drop-shadow(0 0 20px rgba(0, 123, 255, 0.3)); } }
 
-        .glass-card {
-            background: var(--card-bg);
-            border-radius: 35px; border: 1px solid var(--border);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
-            padding: 40px; width: 95%; max-width: 480px;
-        }
-
+        .glass-card { background: var(--card-bg); border-radius: 35px; border: 1px solid var(--border); box-shadow: 0 20px 60px rgba(0,0,0,0.08); padding: 40px; width: 95%; max-width: 480px; }
         .logo-box { margin-bottom: 25px; text-align: center; }
         .logo-box h1 { font-size: 40px; margin: 0; font-weight: 900; color: var(--accent); }
         .dev-tag { font-size: 11px; color: var(--text-sub); letter-spacing: 1px; margin-top: -5px; display: block; opacity: 0.8; }
 
         .input-wrapper { margin-bottom: 20px; text-align: right; }
         label { display: block; font-size: 13px; color: var(--text-sub); margin-bottom: 8px; margin-right: 5px; }
+        input, select, textarea { width: 100%; padding: 15px 20px; background: #f8f9fa; border: 2px solid #edf2f7; border-radius: 18px; color: var(--text-main); font-size: 16px; outline: none; }
+        input:focus, textarea:focus { border-color: var(--accent); background: #fff; }
+
+        .btn-modern { width: 100%; padding: 18px; background: var(--btn-grad); border: none; border-radius: 18px; color: #fff; font-weight: 900; font-size: 18px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; }
+
+        /* Task Cards Styles */
+        .task-premium-card { background: #ffffff; border-radius: 30px; padding: 25px; margin-bottom: 25px; border: 1px solid rgba(0, 123, 255, 0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.05); }
+        .customer-info { border-bottom: 1px dashed #eee; padding-bottom: 15px; margin-bottom: 15px; }
+        .customer-name { font-size: 20px; font-weight: 900; color: var(--accent); display: block; margin-bottom: 10px; }
+        .phone-row { display: flex; align-items: center; justify-content: space-between; background: #f0f7ff; padding: 10px 15px; border-radius: 15px; }
+        .phone-number { font-weight: 700; font-size: 16px; color: var(--text-main); }
         
-        input, select, textarea {
-            width: 100%; padding: 15px 20px; background: #f8f9fa;
-            border: 2px solid #edf2f7; border-radius: 18px; color: var(--text-main);
-            font-size: 16px; outline: none;
-        }
-        input:focus { border-color: var(--accent); background: #fff; }
+        .call-btn { width: 40px; height: 40px; background: var(--accent); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 5px 10px rgba(0, 123, 255, 0.3); }
+        
+        .details-box { background: #f8f9fa; border-radius: 15px; padding: 15px; margin: 15px 0; border-right: 4px solid #e67e22; }
+        .agent-note-area { margin-top: 15px; }
+        .agent-note-area label { font-weight: 700; color: var(--text-main); }
 
-        .btn-modern {
-            width: 100%; padding: 18px; background: var(--btn-grad);
-            border: none; border-radius: 18px; color: #fff; font-weight: 900;
-            font-size: 18px; cursor: pointer; box-shadow: 0 10px 25px rgba(0, 123, 255, 0.25);
-            display: flex; justify-content: center; align-items: center; gap: 10px;
-        }
-
-        .agent-premium-header {
-            background: var(--btn-grad); border-radius: 25px; padding: 30px 20px;
-            text-align: center; margin-bottom: 30px; 
-            box-shadow: 0 15px 30px rgba(0, 123, 255, 0.25);
-        }
-
-        .task-premium-card {
-            background: #ffffff; border-radius: 30px; padding: 25px;
-            margin-bottom: 20px; border: 1px solid rgba(0, 123, 255, 0.1);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
-        }
-
-        .info-row {
-            display: flex; align-items: center; justify-content: space-between;
-            margin-bottom: 15px; padding-bottom: 12px;
-            border-bottom: 1px solid #f8f9fa;
-        }
-        .info-meta { display: flex; align-items: center; gap: 15px; }
-        .icon-box {
-            width: 42px; height: 42px; background: #f0f7ff;
-            color: var(--accent); border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-        }
-
-        .call-btn {
-            width: 45px; height: 45px; background: #e3f2fd; color: #007bff;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            text-decoration: none; font-size: 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-
-        .details-box {
-            background: #f8f9fa; border-radius: 20px; padding: 15px;
-            margin: 15px 0; border-right: 4px solid var(--accent);
-        }
-
-        /* WhatsApp Floating Button */
-        .whatsapp-float {
-            position: fixed; width: 60px; height: 60px; bottom: 40px; left: 40px;
-            background-color: var(--whatsapp); color: #FFF; border-radius: 50px;
-            text-align: center; font-size: 30px; box-shadow: 2px 2px 15px rgba(0,0,0,0.2);
-            z-index: 1000; display: flex; align-items: center; justify-content: center;
-            text-decoration: none;
-        }
-
+        .whatsapp-float { position: fixed; width: 60px; height: 60px; bottom: 40px; left: 40px; background-color: var(--whatsapp); color: #FFF; border-radius: 50px; text-align: center; font-size: 30px; box-shadow: 2px 2px 15px rgba(0,0,0,0.2); z-index: 1000; display: flex; align-items: center; justify-content: center; text-decoration: none; }
         .hidden { display: none !important; }
         .badge { background: rgba(255, 255, 255, 0.2); color: #fff; padding: 5px 15px; border-radius: 12px; font-size: 11px; font-weight: bold; }
         .stat-card { background: #f8f9fa; padding: 15px; border-radius: 20px; text-align: center; border: 1px solid var(--border); }
@@ -156,43 +94,30 @@
         </div>
         <div class="input-wrapper"><label>التفاصيل الفنية</label><textarea id="cIssue" rows="2" placeholder="وصف العطل"></textarea></div>
         <button class="btn-modern" onclick="assign()">إرسال التكليف <i class="fas fa-paper-plane"></i></button>
-        
-        <p onclick="showDashboard()" style="cursor:pointer; color:var(--accent); text-align:center; margin-top:20px; font-weight:700;">
-            <i class="fas fa-chart-line"></i> لوحة تحليل الأداء
-        </p>
+        <p onclick="showDashboard()" style="cursor:pointer; color:var(--accent); text-align:center; margin-top:20px; font-weight:700;"><i class="fas fa-chart-line"></i> لوحة تحليل الأداء</p>
         <p onclick="logout()" style="cursor:pointer; color:#ff4757; text-align:center; margin-top:10px; font-weight:700;">تسجيل الخروج</p>
     </div>
 
     <div class="glass-card hidden" id="dashboardUI" style="max-width: 600px;">
-        <div class="logo-box">
-            <span class="badge" style="background: #e1f5fe; color: #0288d1;">التقارير الذكية 📊</span>
-            <h1 style="font-size: 24px; margin-top:10px;">تحليل أداء الفريق</h1>
-        </div>
+        <div class="logo-box"><h1 style="font-size: 24px;">تحليل الأداء</h1></div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px;">
             <div class="stat-card"><b>إجمالي المنجز</b><br><span id="totalDone">0</span></div>
             <div class="stat-card"><b>أفضل مندوب</b><br><span id="topAgent" style="font-size: 16px;">--</span></div>
         </div>
-        <div id="performanceList" style="max-height: 300px; overflow-y: auto;"></div>
-        <button class="btn-modern" style="background:#636e72; margin-top: 25px;" onclick="showAdmin()">
-            <i class="fas fa-arrow-right"></i> العودة للتكليفات
-        </button>
+        <div id="performanceList"></div>
+        <button class="btn-modern" style="background:#636e72; margin-top: 25px;" onclick="showAdmin()">العودة</button>
     </div>
 
     <div class="glass-card hidden" id="agentUI" style="max-width: 500px; padding: 20px;">
-        <div class="agent-premium-header">
-            <span class="badge">بوابة الفنيين</span>
-            <h1 id="welcomeMsg">أهلاً بك</h1>
-            <p>لديك مهام عمل جديدة بانتظارك</p>
+        <div class="logo-box">
+            <h2 id="welcomeMsg" style="color:var(--accent)">أهلاً بك</h2>
+            <p>قائمة المهام المسندة إليك</p>
         </div>
         <div id="tasksContainer"></div>
-        <button class="btn-modern" style="background:#f1f4f9; color:#636e72; box-shadow:none; margin-top:20px; font-size:14px;" onclick="logout()">
-            <i class="fas fa-sign-out-alt"></i> تسجيل خروج
-        </button>
+        <button class="btn-modern" style="background:#f1f4f9; color:#636e72; margin-top:20px;" onclick="logout()">تسجيل خروج</button>
     </div>
 
-    <a href="https://wa.me/201019564616" class="whatsapp-float hidden" id="waBtn" target="_blank">
-        <i class="fab fa-whatsapp"></i>
-    </a>
+    <a href="https://wa.me/201019564616" class="whatsapp-float hidden" id="waBtn" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
     <script>
         const firebaseConfig = {
@@ -207,21 +132,16 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        setTimeout(() => {
-            const s = document.getElementById('splash');
-            s.style.opacity = '0';
-            setTimeout(() => s.style.display = 'none', 800);
-        }, 2000);
+        setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 2000);
 
         function login() {
             const e = document.getElementById('email').value, p = document.getElementById('pass').value;
-            firebase.auth().signInWithEmailAndPassword(e, p).catch(err => alert("خطأ في تسجيل الدخول"));
+            firebase.auth().signInWithEmailAndPassword(e, p).catch(err => alert("خطأ في الدخول"));
         }
 
         firebase.auth().onAuthStateChanged(user => {
             const ui = ['loginUI', 'adminUI', 'agentUI', 'dashboardUI', 'waBtn'];
             ui.forEach(id => document.getElementById(id).classList.add('hidden'));
-
             if (user) {
                 if (user.email === "admin@oren.com") {
                     document.getElementById('adminUI').classList.remove('hidden'); 
@@ -240,7 +160,7 @@
         function loadAgents() {
             db.ref('active_list').on('value', snap => {
                 const s = document.getElementById('agentSelect');
-                s.innerHTML = '<option value="">-- اختر المندوب من القائمة --</option>';
+                s.innerHTML = '<option value="">-- اختر المندوب --</option>';
                 snap.forEach(child => {
                     const n = child.val().name;
                     let opt = document.createElement('option');
@@ -253,8 +173,7 @@
         function assign() {
             const ag = document.getElementById('agentSelect').value;
             const date = document.getElementById('cDate').value;
-            if(!ag || !date) return alert("برجاء اختيار المندوب والتاريخ");
-            
+            if(!ag || !date) return alert("اكمل البيانات");
             db.ref('modern_tasks').push({
                 c: document.getElementById('cName').value,
                 p: document.getElementById('cPhone').value,
@@ -263,57 +182,54 @@
                 i: document.getElementById('cIssue').value,
                 to: ag,
                 timestamp: Date.now()
-            }).then(() => { 
-                alert("تم الإرسال ✅"); 
-                document.getElementById('cName').value = "";
-                document.getElementById('cPhone').value = "";
-                document.getElementById('cIssue').value = "";
-            });
+            }).then(() => { alert("تم الإرسال ✅"); document.getElementById('cName').value = ""; });
         }
 
         function loadTasks(name) {
             db.ref('modern_tasks').on('value', snap => {
                 const container = document.getElementById('tasksContainer'); container.innerHTML = "";
-                let found = false;
                 snap.forEach(c => {
                     const t = c.val();
                     if(t.to === name) {
-                        found = true;
                         container.innerHTML += `
                             <div class="task-premium-card">
-                                <div class="info-row">
-                                    <div class="info-meta">
-                                        <div class="icon-box"><i class="fas fa-user"></i></div>
-                                        <div class="info-content"><b>اسم العميل</b><span>${t.c}</span></div>
+                                <div class="customer-info">
+                                    <span class="customer-name">${t.c}</span>
+                                    <div class="phone-row">
+                                        <span class="phone-number"><i class="fas fa-phone-alt"></i> ${t.p}</span>
+                                        <a href="tel:${t.p}" class="call-btn"><i class="fas fa-phone"></i></a>
                                     </div>
-                                    <a href="tel:${t.p}" class="call-btn"><i class="fas fa-phone"></i></a>
                                 </div>
-                                <div class="info-row">
-                                    <div class="info-meta">
-                                        <div class="icon-box"><i class="fas fa-calendar-alt"></i></div>
-                                        <div class="info-content"><b>تاريخ الموعد</b><span style="color:#e67e22">${t.d}</span></div>
-                                    </div>
+                                <div style="font-size:13px; margin-bottom:10px;">
+                                    <i class="fas fa-calendar-alt"></i> الموعد: <b>${t.d}</b><br>
+                                    <i class="fas fa-map-marker-alt"></i> العنوان: <b>${t.a}</b>
                                 </div>
                                 <div class="details-box">
-                                    <b style="font-size:11px; color:#888;">التفاصيل الفنية:</b>
-                                    <p style="margin:5px 0; font-weight:700; font-size:14px;">${t.i}</p>
-                                    <small style="color:#7f8c8d"><i class="fas fa-map-marker-alt"></i> ${t.a}</small>
+                                    <small>المشكلة:</small>
+                                    <p style="margin:5px 0;">${t.i}</p>
                                 </div>
-                                <button class="btn-modern" style="background:#2ed573; padding:12px; font-size:15px;" onclick="finishTask('${c.key}')">
-                                    تم التنفيذ بنجاح ✅
+                                <div class="agent-note-area">
+                                    <label>تقرير الفني / ملاحظات:</label>
+                                    <textarea id="note_${c.key}" rows="2" placeholder="اكتب ما تم في الزيارة هنا..."></textarea>
+                                </div>
+                                <button class="btn-modern" style="background:#2ed573; margin-top:15px; padding:12px;" onclick="finishTask('${c.key}')">
+                                    تم التنفيذ <i class="fas fa-check-circle"></i>
                                 </button>
                             </div>`;
                     }
                 });
-                if(!found) container.innerHTML = "<p style='text-align:center; color:#999; margin:40px 0;'>لا يوجد مهام حالية</p>";
             });
         }
 
         function finishTask(id) {
+            const note = document.getElementById('note_' + id).value;
+            if(!note) return alert("برجاء كتابة ملاحظات الزيارة قبل الإنهاء");
+            
             if(confirm("تأكيد إتمام المهمة؟")) {
                 db.ref('modern_tasks/' + id).once('value', snap => {
                     const data = snap.val();
                     data.doneTime = Date.now();
+                    data.agentNote = note; // حفظ ملاحظة الفني
                     db.ref('completed_tasks').push(data).then(() => {
                         db.ref('modern_tasks/' + id).remove();
                     });
@@ -331,16 +247,12 @@
                     total++;
                 });
                 document.getElementById('totalDone').innerText = total;
-                let topAgent = "--"; let max = 0;
                 for (let agent in stats) {
-                    if(stats[agent] > max) { max = stats[agent]; topAgent = agent; }
-                    list.innerHTML += `
-                        <div style="display:flex; justify-content:space-between; align-items:center; padding:15px; border-bottom:1px solid #eee;">
-                            <span style="font-weight:700;">${agent}</span>
-                            <span class="badge" style="background:var(--accent); color:white;">${stats[agent]} مهمة</span>
-                        </div>`;
+                    list.innerHTML += `<div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #eee;">
+                        <span>${agent}</span>
+                        <span class="badge" style="background:var(--accent)">${stats[agent]} مهمة</span>
+                    </div>`;
                 }
-                document.getElementById('topAgent').innerText = topAgent;
             });
         }
 
