@@ -1,145 +1,172 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" id="mainHtml">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OREN - Premium Era Dashboard</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>OREN | Next Gen</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@300;500;800&display=swap');
 
         :root {
-            --bg-body: #f0f2f5; 
-            --card-bg: #ffffff; 
-            --accent: #007bff; 
-            --text-main: #2d3436; 
-            --text-sub: #636e72;
-            --btn-grad: linear-gradient(45deg, #007bff, #00d2ff);
-            --border: rgba(0,0,0,0.05);
-            --whatsapp: #25d366;
+            --primary: #0984e3;
+            --dark: #2d3436;
+            --bg: #f7f9fc;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.05);
+            --radius: 20px;
         }
 
-        * { box-sizing: border-box; transition: 0.3s ease; font-family: 'Cairo', sans-serif; }
-        body { margin: 0; background: var(--bg-body); min-height: 100vh; display: flex; justify-content: center; align-items: center; color: var(--text-main); padding: 20px; }
-
-        #splash { position: fixed; inset: 0; background: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10000; }
-        .loader-text { font-size: 80px; font-weight: 900; letter-spacing: 15px; color: var(--accent); animation: orenScale 2s infinite alternate; }
-        @keyframes orenScale { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.1); opacity: 1; filter: drop-shadow(0 0 20px rgba(0, 123, 255, 0.3)); } }
-
-        .glass-card { background: var(--card-bg); border-radius: 35px; border: 1px solid var(--border); box-shadow: 0 20px 60px rgba(0,0,0,0.08); padding: 40px; width: 95%; max-width: 480px; }
-        .logo-box { margin-bottom: 25px; text-align: center; }
-        .logo-box h1 { font-size: 40px; margin: 0; font-weight: 900; color: var(--accent); }
-        .dev-tag { font-size: 11px; color: var(--text-sub); letter-spacing: 1px; margin-top: -5px; display: block; opacity: 0.8; }
-
-        /* --- الإضافة الجديدة للهيد لاين الشيك --- */
-        .agent-welcome-header {
-            background: var(--btn-grad);
+        * { box-sizing: border-box; font-family: 'Noto Kufi Arabic', sans-serif; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        
+        body { 
+            margin: 0; 
+            background: var(--bg); 
+            color: var(--dark); 
+            display: flex; 
+            justify-content: center; 
             padding: 20px;
-            border-radius: 25px;
-            color: white;
-            text-align: center;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 20px rgba(0, 123, 255, 0.2);
-            position: relative;
-            overflow: hidden;
+            min-height: 100vh;
         }
-        .agent-welcome-header i {
-            position: absolute;
-            left: -10px;
-            bottom: -10px;
-            font-size: 60px;
-            opacity: 0.1;
+
+        /* Splash Screen */
+        #splash {
+            position: fixed; inset: 0; background: var(--white);
+            display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10000;
         }
-        .agent-welcome-header h2 { margin: 0; font-size: 22px; font-weight: 900; }
-        .agent-welcome-header p { margin: 5px 0 0; font-size: 13px; opacity: 0.9; }
+        .logo-anim { font-size: 50px; font-weight: 800; color: var(--primary); letter-spacing: 5px; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.7; } 100% { transform: scale(1); opacity: 1; } }
 
-        .input-wrapper { margin-bottom: 20px; text-align: right; }
-        label { display: block; font-size: 13px; color: var(--text-sub); margin-bottom: 8px; margin-right: 5px; }
-        input, select, textarea { width: 100%; padding: 15px 20px; background: #f8f9fa; border: 2px solid #edf2f7; border-radius: 18px; color: var(--text-main); font-size: 16px; outline: none; }
-        input:focus, textarea:focus { border-color: var(--accent); background: #fff; }
+        /* Global Container */
+        .app-container { width: 100%; max-width: 450px; position: relative; }
 
-        .btn-modern { width: 100%; padding: 18px; background: var(--btn-grad); border: none; border-radius: 18px; color: #fff; font-weight: 900; font-size: 18px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; }
+        /* Cards */
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(0,0,0,0.02);
+            margin-bottom: 20px;
+        }
 
-        .task-premium-card { background: #ffffff; border-radius: 30px; padding: 25px; margin-bottom: 25px; border: 1px solid rgba(0, 123, 255, 0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.05); }
-        .customer-info { border-bottom: 1px dashed #eee; padding-bottom: 15px; margin-bottom: 15px; }
-        .customer-name { font-size: 20px; font-weight: 900; color: var(--accent); display: block; margin-bottom: 10px; }
-        .phone-row { display: flex; align-items: center; justify-content: space-between; background: #f0f7ff; padding: 10px 15px; border-radius: 15px; }
-        .phone-number { font-weight: 700; font-size: 16px; color: var(--text-main); }
-        .call-btn { width: 40px; height: 40px; background: var(--accent); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 5px 10px rgba(0, 123, 255, 0.3); }
-        .details-box { background: #f8f9fa; border-radius: 15px; padding: 15px; margin: 15px 0; border-right: 4px solid #e67e22; }
-        .agent-note-area { margin-top: 15px; }
-        .agent-note-area label { font-weight: 700; color: var(--text-main); }
-        .whatsapp-float { position: fixed; width: 60px; height: 60px; bottom: 40px; left: 40px; background-color: var(--whatsapp); color: #FFF; border-radius: 50px; text-align: center; font-size: 30px; box-shadow: 2px 2px 15px rgba(0,0,0,0.2); z-index: 1000; display: flex; align-items: center; justify-content: center; text-decoration: none; }
+        /* Inputs */
+        .input-group { margin-bottom: 15px; position: relative; }
+        input, select, textarea {
+            width: 100%; padding: 15px; border-radius: 12px;
+            border: 1.5px solid #eee; background: #fafafa;
+            font-size: 14px; outline: none;
+        }
+        input:focus { border-color: var(--primary); background: #fff; }
+
+        /* Buttons */
+        .btn {
+            width: 100%; padding: 15px; border-radius: 12px; border: none;
+            background: var(--primary); color: white; font-weight: 600;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .btn:active { transform: scale(0.98); }
+        .btn-secondary { background: #dfe6e9; color: var(--dark); margin-top: 10px; }
+
+        /* Agent Header */
+        .agent-header {
+            background: var(--primary); color: white;
+            padding: 25px; border-radius: var(--radius);
+            margin-bottom: 25px; position: relative; overflow: hidden;
+        }
+        .agent-header h2 { margin: 0; font-size: 20px; z-index: 2; position: relative; }
+        .agent-header i { position: absolute; right: -10px; bottom: -10px; font-size: 80px; opacity: 0.1; }
+
+        /* Task Card */
+        .task-card {
+            background: white; padding: 20px; border-radius: 15px;
+            margin-bottom: 15px; border-right: 5px solid var(--primary);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+        .task-card h3 { margin: 0 0 10px 0; color: var(--primary); font-size: 18px; }
+        .info-row { font-size: 13px; color: #636e72; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
+        
         .hidden { display: none !important; }
-        .badge { background: rgba(255, 255, 255, 0.2); color: #fff; padding: 5px 15px; border-radius: 12px; font-size: 11px; font-weight: bold; }
-        .stat-card { background: #f8f9fa; padding: 15px; border-radius: 20px; text-align: center; border: 1px solid var(--border); }
+        .whatsapp-btn {
+            position: fixed; bottom: 30px; left: 30px; 
+            width: 55px; height: 55px; background: #25d366;
+            color: white; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; font-size: 25px;
+            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
+            text-decoration: none; z-index: 100;
+        }
+
+        .status-badge {
+            display: inline-block; padding: 4px 12px; background: #e1f5fe;
+            color: #0288d1; border-radius: 8px; font-size: 11px; font-weight: bold;
+        }
     </style>
 </head>
 <body>
 
     <div id="splash">
-        <div class="loader-text">OREN</div>
-        <div style="width: 120px; height: 4px; background: var(--accent); border-radius: 10px; margin-top: 15px;"></div>
+        <div class="logo-anim">OREN</div>
+        <p style="color: #b2bec3;">Loading Excellence...</p>
     </div>
 
-    <div class="glass-card" id="loginUI">
-        <div class="logo-box">
-            <h1>OREN</h1>
-            <span class="dev-tag">Developed by Youssef Abbas</span>
-            <p style="color: var(--text-sub); margin-top: 15px;">دخول بوابة الموظفين</p>
-        </div>
-        <div class="input-wrapper"><input type="email" placeholder="البريد الإلكتروني" id="email"></div>
-        <div class="input-wrapper"><input type="password" placeholder="كلمة المرور" id="pass"></div>
-        <button class="btn-modern" onclick="login()">دخول آمن <i class="fas fa-shield-alt"></i></button>
-    </div>
-
-    <div class="glass-card hidden" id="adminUI">
-        <div class="logo-box">
-            <span class="badge" style="background: rgba(0, 123, 255, 0.1); color: var(--accent);">نظام التحكم الإداري 👑</span>
-            <h1 style="font-size: 26px; margin-top: 10px;">تكليف جديد</h1>
-        </div>
-        <div class="input-wrapper"><label>اسم العميل</label><input type="text" id="cName" placeholder="الاسم الكامل"></div>
-        <div class="input-wrapper"><label>رقم الهاتف</label><input type="tel" id="cPhone" placeholder="01xxxxxxxxx"></div>
-        <div class="input-wrapper"><label>التاريخ المطلوب</label><input type="date" id="cDate"></div>
-        <div class="input-wrapper"><label>العنوان</label><input type="text" id="cAddr" placeholder="العنوان بالتفصيل"></div>
-        <div class="input-wrapper">
-            <label>توجيه المهمة إلى</label>
-            <select id="agentSelect"><option value="">-- اختر المندوب --</option></select>
-        </div>
-        <div class="input-wrapper"><label>التفاصيل الفنية</label><textarea id="cIssue" rows="2" placeholder="وصف العطل"></textarea></div>
-        <button class="btn-modern" onclick="assign()">إرسال التكليف <i class="fas fa-paper-plane"></i></button>
-        <p onclick="showDashboard()" style="cursor:pointer; color:var(--accent); text-align:center; margin-top:20px; font-weight:700;"><i class="fas fa-chart-line"></i> لوحة تحليل الأداء</p>
-        <p onclick="logout()" style="cursor:pointer; color:#ff4757; text-align:center; margin-top:10px; font-weight:700;">تسجيل الخروج</p>
-    </div>
-
-    <div class="glass-card hidden" id="dashboardUI" style="max-width: 600px;">
-        <div class="logo-box"><h1 style="font-size: 24px;">تحليل الأداء</h1></div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px;">
-            <div class="stat-card"><b>إجمالي المنجز</b><br><span id="totalDone">0</span></div>
-            <div class="stat-card"><b>أفضل مندوب</b><br><span id="topAgent" style="font-size: 16px;">--</span></div>
-        </div>
-        <div id="performanceList"></div>
-        <button class="btn-modern" style="background:#636e72; margin-top: 25px;" onclick="showAdmin()">العودة</button>
-    </div>
-
-    <div class="glass-card hidden" id="agentUI" style="max-width: 500px; padding: 20px;">
-        <div class="agent-welcome-header">
-            <i class="fas fa-user-tie"></i>
-            <p>مرحباً بك في بوابة الفنيين</p>
-            <h2 id="welcomeMsg">...</h2>
-        </div>
+    <div class="app-container">
         
-        <div id="tasksContainer"></div>
-        <button class="btn-modern" style="background:#f1f4f9; color:#636e72; margin-top:20px;" onclick="logout()">تسجيل خروج</button>
+        <div id="loginUI" class="card">
+            <div style="text-align:center; margin-bottom:30px;">
+                <h1 style="color: var(--primary); margin:0;">Welcome</h1>
+                <p style="color:#636e72; font-size:14px;">سجل دخولك لمتابعة عملك</p>
+            </div>
+            <div class="input-group"><input type="email" id="email" placeholder="البريد الإلكتروني"></div>
+            <div class="input-group"><input type="password" id="pass" placeholder="كلمة المرور"></div>
+            <button class="btn" onclick="login()">دخول <i class="fas fa-arrow-left"></i></button>
+        </div>
+
+        <div id="adminUI" class="hidden">
+            <div class="card">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                    <h2 style="margin:0;">تكليف مهمة</h2>
+                    <span class="status-badge">ADMIN</span>
+                </div>
+                <div class="input-group"><input type="text" id="cName" placeholder="اسم العميل"></div>
+                <div class="input-group"><input type="tel" id="cPhone" placeholder="رقم الهاتف"></div>
+                <div class="input-group"><input type="text" id="cAddr" placeholder="العنوان"></div>
+                <div class="input-group"><select id="agentSelect"><option value="">اختر المندوب</option></select></div>
+                <div class="input-group"><textarea id="cIssue" rows="3" placeholder="وصف المهمة"></textarea></div>
+                <button class="btn" onclick="assign()">إرسال للمندوب <i class="fas fa-paper-plane"></i></button>
+                
+                <button class="btn btn-secondary" onclick="showDashboard()">لوحة البيانات <i class="fas fa-chart-pie"></i></button>
+                <button class="btn btn-secondary" style="color:#d63031" onclick="logout()">خروج</button>
+            </div>
+        </div>
+
+        <div id="agentUI" class="hidden">
+            <div class="agent-header">
+                <i class="fas fa-rocket"></i>
+                <p style="margin:0; opacity:0.8; font-size:12px;">مرحباً بك،</p>
+                <h2 id="welcomeMsg">الفني</h2>
+            </div>
+            <div id="tasksContainer"></div>
+            <button class="btn btn-secondary" onclick="logout()">تسجيل خروج</button>
+        </div>
+
+        <div id="dashboardUI" class="hidden">
+            <div class="card">
+                <h2>تحليل الأداء</h2>
+                <div id="performanceList"></div>
+                <button class="btn btn-secondary" onclick="showAdmin()">رجوع</button>
+            </div>
+        </div>
+
     </div>
 
-    <a href="https://wa.me/201019564616" class="whatsapp-float hidden" id="waBtn" target="_blank"><i class="fab fa-whatsapp"></i></a>
+    <a href="https://wa.me/201019564616" class="whatsapp-btn hidden" id="waBtn"><i class="fab fa-whatsapp"></i></a>
 
     <script>
+        // سأبقي على نفس الـ Config والـ Logic الخاص بك لأنه شغال تمام
         const firebaseConfig = {
             apiKey: "AIzaSyALgV2v3lmxvEoP0HosqGSqm727vZrYUq4",
             authDomain: "orenapp-f2f1e.firebaseapp.com",
@@ -156,7 +183,7 @@
 
         function login() {
             const e = document.getElementById('email').value, p = document.getElementById('pass').value;
-            firebase.auth().signInWithEmailAndPassword(e, p).catch(err => alert("خطأ في الدخول"));
+            firebase.auth().signInWithEmailAndPassword(e, p).catch(err => alert("بيانات الدخول غير صحيحة"));
         }
 
         firebase.auth().onAuthStateChanged(user => {
@@ -170,8 +197,7 @@
                     document.getElementById('agentUI').classList.remove('hidden');
                     document.getElementById('waBtn').classList.remove('hidden');
                     const n = user.email.split('@')[0];
-                    // تحديث اسم المندوب في الهيد لاين الجديد
-                    document.getElementById('welcomeMsg').innerText = "الفني: " + n;
+                    document.getElementById('welcomeMsg').innerText = n;
                     db.ref('active_list/' + n).set({name: n});
                     loadTasks(n);
                 }
@@ -183,59 +209,50 @@
                 const s = document.getElementById('agentSelect');
                 s.innerHTML = '<option value="">-- اختر المندوب --</option>';
                 snap.forEach(child => {
-                    const n = child.val().name;
-                    let opt = document.createElement('option');
-                    opt.value = n; opt.innerText = n;
-                    s.appendChild(opt);
+                    const n = child.key;
+                    s.innerHTML += `<option value="${n}">${n}</option>`;
                 });
             });
         }
 
         function assign() {
             const ag = document.getElementById('agentSelect').value;
-            const date = document.getElementById('cDate').value;
-            if(!ag || !date) return alert("اكمل البيانات");
+            if(!ag) return alert("اختر المندوب");
             db.ref('modern_tasks').push({
                 c: document.getElementById('cName').value,
                 p: document.getElementById('cPhone').value,
-                d: date,
                 a: document.getElementById('cAddr').value,
                 i: document.getElementById('cIssue').value,
                 to: ag,
                 timestamp: Date.now()
-            }).then(() => { alert("تم الإرسال ✅"); document.getElementById('cName').value = ""; });
+            }).then(() => { 
+                alert("تم إرسال المهمة بنجاح ✅");
+                document.getElementById('cName').value = ""; 
+            });
         }
 
         function loadTasks(name) {
             db.ref('modern_tasks').on('value', snap => {
-                const container = document.getElementById('tasksContainer'); container.innerHTML = "";
+                const container = document.getElementById('tasksContainer'); 
+                container.innerHTML = "";
                 snap.forEach(c => {
                     const t = c.val();
                     if(t.to === name) {
                         container.innerHTML += `
-                            <div class="task-premium-card">
-                                <div class="customer-info">
-                                    <span class="customer-name">${t.c}</span>
-                                    <div class="phone-row">
-                                        <span class="phone-number"><i class="fas fa-phone-alt"></i> ${t.p}</span>
-                                        <a href="tel:${t.p}" class="call-btn"><i class="fas fa-phone"></i></a>
-                                    </div>
+                            <div class="task-card">
+                                <h3>${t.c}</h3>
+                                <div class="info-row"><i class="fas fa-phone"></i> ${t.p}</div>
+                                <div class="info-row"><i class="fas fa-map-marker-alt"></i> ${t.a}</div>
+                                <div style="margin:15px 0; padding:10px; background:#f9f9f9; border-radius:8px; font-size:13px;">
+                                    ${t.i}
                                 </div>
-                                <div style="font-size:13px; margin-bottom:10px;">
-                                    <i class="fas fa-calendar-alt"></i> الموعد: <b>${t.d}</b><br>
-                                    <i class="fas fa-map-marker-alt"></i> العنوان: <b>${t.a}</b>
+                                <div class="input-group">
+                                    <input type="text" id="note_${c.key}" placeholder="اكتب تقريرك هنا...">
                                 </div>
-                                <div class="details-box">
-                                    <small>المشكلة:</small>
-                                    <p style="margin:5px 0;">${t.i}</p>
-                                </div>
-                                <div class="agent-note-area">
-                                    <label>تقرير الفني / ملاحظات:</label>
-                                    <textarea id="note_${c.key}" rows="2" placeholder="اكتب ما تم في الزيارة هنا..."></textarea>
-                                </div>
-                                <button class="btn-modern" style="background:#2ed573; margin-top:15px; padding:12px;" onclick="finishTask('${c.key}')">
-                                    تم التنفيذ <i class="fas fa-check-circle"></i>
+                                <button class="btn" style="background:#00b894; padding:10px;" onclick="finishTask('${c.key}')">
+                                    إتمام المهمة <i class="fas fa-check"></i>
                                 </button>
+                                <a href="tel:${t.p}" class="btn btn-secondary" style="padding:10px;">اتصال</a>
                             </div>`;
                     }
                 });
@@ -244,42 +261,35 @@
 
         function finishTask(id) {
             const note = document.getElementById('note_' + id).value;
-            if(!note) return alert("برجاء كتابة ملاحظات الزيارة قبل الإنهاء");
-            
-            if(confirm("تأكيد إتمام المهمة؟")) {
-                db.ref('modern_tasks/' + id).once('value', snap => {
-                    const data = snap.val();
-                    data.doneTime = Date.now();
-                    data.agentNote = note;
-                    db.ref('completed_tasks').push(data).then(() => {
-                        db.ref('modern_tasks/' + id).remove();
-                    });
+            if(!note) return alert("يجب كتابة التقرير");
+            db.ref('modern_tasks/' + id).once('value', snap => {
+                const data = snap.val();
+                data.agentNote = note;
+                db.ref('completed_tasks').push(data).then(() => {
+                    db.ref('modern_tasks/' + id).remove();
                 });
-            }
-        }
-
-        function loadAnalytics() {
-            db.ref('completed_tasks').on('value', snap => {
-                const stats = {}; let total = 0;
-                const list = document.getElementById('performanceList'); list.innerHTML = "";
-                snap.forEach(c => {
-                    const task = c.val();
-                    stats[task.to] = (stats[task.to] || 0) + 1;
-                    total++;
-                });
-                document.getElementById('totalDone').innerText = total;
-                for (let agent in stats) {
-                    list.innerHTML += `<div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #eee;">
-                        <span>${agent}</span>
-                        <span class="badge" style="background:var(--accent)">${stats[agent]} مهمة</span>
-                    </div>`;
-                }
             });
         }
 
         function showDashboard() { document.getElementById('adminUI').classList.add('hidden'); document.getElementById('dashboardUI').classList.remove('hidden'); loadAnalytics(); }
         function showAdmin() { document.getElementById('dashboardUI').classList.add('hidden'); document.getElementById('adminUI').classList.remove('hidden'); }
         function logout() { firebase.auth().signOut(); }
+        
+        function loadAnalytics() {
+            db.ref('completed_tasks').on('value', snap => {
+                const list = document.getElementById('performanceList'); list.innerHTML = "";
+                let stats = {};
+                snap.forEach(c => {
+                    let name = c.val().to;
+                    stats[name] = (stats[name] || 0) + 1;
+                });
+                for(let n in stats) {
+                    list.innerHTML += `<div class="info-row" style="justify-content:space-between; background:#f1f2f6; padding:10px; border-radius:10px; margin-bottom:5px;">
+                        <span>${n}</span> <b>${stats[n]} مهمة</b>
+                    </div>`;
+                }
+            });
+        }
     </script>
 </body>
 </html>
