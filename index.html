@@ -195,6 +195,69 @@ tbody td{padding:13px 20px;font-size:.8rem}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:2px}
 ::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.15)}
+
+/* ── ALERTS PANEL ── */
+#alertsPanel{
+  position:fixed;top:60px;right:10px;width:340px;
+  background:#1a1635;border:1px solid var(--border);
+  border-radius:14px;z-index:3000;
+  box-shadow:0 20px 50px rgba(0,0,0,.5);
+  overflow:hidden;
+  transition:opacity .25s ease,transform .25s ease,visibility .25s;
+  opacity:0;visibility:hidden;transform:translateY(-8px);
+}
+#alertsPanel.open{opacity:1;visibility:visible;transform:translateY(0)}
+.ap-hdr{padding:16px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.ap-title{font-size:.85rem;font-weight:700;display:flex;align-items:center;gap:8px}
+.ap-close{background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer;line-height:1;transition:color .2s}
+.ap-close:hover{color:var(--text)}
+.ap-body{max-height:400px;overflow-y:auto;padding:10px}
+.alert-item{display:flex;gap:12px;padding:12px;border-radius:10px;margin-bottom:6px;background:var(--surface);border:1px solid var(--border);transition:all .2s;cursor:default}
+.alert-item:hover{background:var(--surface2)}
+.alert-item:last-child{margin-bottom:0}
+.alert-ico{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.alert-text{flex:1;min-width:0}
+.alert-title{font-size:.78rem;font-weight:600;color:var(--text);margin-bottom:3px}
+.alert-sub{font-size:.68rem;color:var(--muted2);line-height:1.4}
+.alert-time{font-size:.6rem;color:var(--muted);margin-top:4px}
+.alert-empty{text-align:center;padding:30px 20px;color:var(--muted);font-size:.8rem}
+
+/* ── CHAT PANEL ── */
+#chatPanel{
+  position:fixed;bottom:20px;right:20px;width:380px;height:520px;
+  background:#1a1635;border:1px solid var(--border);
+  border-radius:16px;z-index:3000;
+  box-shadow:0 20px 60px rgba(0,0,0,.6);
+  display:flex;flex-direction:column;overflow:hidden;
+  transition:opacity .3s ease,transform .3s ease,visibility .3s;
+  opacity:0;visibility:hidden;transform:translateY(16px) scale(.97);
+}
+#chatPanel.open{opacity:1;visibility:visible;transform:translateY(0) scale(1)}
+.chat-hdr{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0}
+.chat-hdr-ico{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#6366f1,#a855f7);display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.chat-hdr-info{flex:1}
+.chat-hdr-title{font-size:.82rem;font-weight:700}
+.chat-hdr-sub{font-size:.6rem;color:var(--muted);margin-top:1px}
+.chat-close{background:none;border:none;color:var(--muted);font-size:1.3rem;cursor:pointer;transition:color .2s;line-height:1}
+.chat-close:hover{color:var(--text)}
+.chat-key-bar{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;gap:8px;flex-shrink:0}
+.chat-key-input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:7px 11px;color:var(--text);font-family:var(--font);font-size:.72rem;outline:none;transition:border-color .2s}
+.chat-key-input:focus{border-color:rgba(99,102,241,.5)}
+.chat-key-input::placeholder{color:var(--muted)}
+.chat-key-btn{background:#6366f1;border:none;border-radius:8px;padding:7px 12px;color:#fff;font-size:.7rem;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .2s;white-space:nowrap}
+.chat-key-btn:hover{background:#4f46e5}
+.chat-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.chat-bubble{max-width:85%;padding:10px 13px;border-radius:12px;font-size:.78rem;line-height:1.55;}
+.chat-bubble.user{align-self:flex-end;background:#6366f1;color:#fff;border-bottom-right-radius:4px}
+.chat-bubble.ai{align-self:flex-start;background:var(--surface2);color:var(--text);border-bottom-left-radius:4px;border:1px solid var(--border)}
+.chat-bubble.ai.typing{opacity:.6}
+.chat-bar{padding:12px 14px;border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0}
+.chat-input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:9px 13px;color:var(--text);font-family:var(--font);font-size:.8rem;outline:none;resize:none;height:38px;transition:border-color .2s}
+.chat-input:focus{border-color:rgba(99,102,241,.4)}
+.chat-input::placeholder{color:var(--muted)}
+.chat-send{width:38px;height:38px;background:#6366f1;border:none;border-radius:10px;color:#fff;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.chat-send:hover{background:#4f46e5;box-shadow:0 0 14px rgba(99,102,241,.4)}
+.chat-send:disabled{background:var(--surface);color:var(--muted);cursor:not-allowed}
 </style>
 </head>
 <body>
@@ -236,8 +299,11 @@ tbody td{padding:13px 20px;font-size:.8rem}
     <input id="topSearch" placeholder="Search order, ASIN, merchant…" oninput="renderTable()">
   </div>
   <div class="tright">
-    <div class="ibtn" title="Notifications">🔔</div>
-    <div class="ibtn" title="Messages">💬</div>
+    <div class="ibtn ibtn-alerts" title="Smart Alerts" onclick="toggleAlerts()" style="position:relative">
+      🔔
+      <span id="alertBadge" style="display:none;position:absolute;top:-4px;right:-4px;background:#f43f5e;color:#fff;font-size:.5rem;font-weight:800;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;border:2px solid var(--sidebar)">0</span>
+    </div>
+    <div class="ibtn" title="AI Analyst" onclick="toggleChat()">💬</div>
     <div class="ibtn" title="Sync" onclick="window.location.reload()">🔄</div>
     <div class="sep"></div>
     <div class="uchip">
@@ -540,6 +606,7 @@ async function fetchData() {
     });
     buildMerchantSelect();
     updateUI();
+    buildAlertBadge();
   } catch(e) { console.error('Fetch error:', e); }
 }
 
@@ -1021,6 +1088,314 @@ function exportCSV(){
   a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
   a.download='returns_master_pro.csv'; a.click();
 }
+
+// ══════════════════════════════════════
+// ── SMART ALERTS ──
+// ══════════════════════════════════════
+let alertsOpen = false;
+
+// ── Thresholds (user can edit from panel) ──
+let thresholds = {
+  merchantReturns: 5,      // تاجر تجاوز X return في الشهر
+  asinValue: 5000,         // ASIN قيمته تجاوزت X جنيه
+  monthlySpike: 30         // زيادة % مقارنة بالشهر اللي فات
+};
+
+function toggleAlerts(){
+  alertsOpen = !alertsOpen;
+  document.getElementById('alertsPanel').classList.toggle('open', alertsOpen);
+  if(alertsOpen) buildAlerts();
+}
+
+function buildAlerts(){
+  const data = allData; // دايماً من كل الداتا مش المفلترة
+  const now = new Date();
+  const thisYear = now.getFullYear();
+  const thisMonth = now.getMonth() + 1;
+  const lastMonth = thisMonth === 1 ? 12 : thisMonth - 1;
+  const lastMonthYear = thisMonth === 1 ? thisYear - 1 : thisYear;
+
+  const alerts = [];
+
+  // ── 1. تاجر تجاوز الحد في الشهر الحالي ──
+  const mThisMonth = {};
+  data.forEach(x => {
+    const p = x.date.split('-');
+    if (parseInt(p[0]) === thisYear && parseInt(p[1]) === thisMonth)
+      mThisMonth[x.merchantName] = (mThisMonth[x.merchantName]||0) + 1;
+  });
+  Object.entries(mThisMonth)
+    .filter(([,c]) => c >= thresholds.merchantReturns)
+    .sort((a,b) => b[1]-a[1])
+    .forEach(([name, count]) => {
+      alerts.push({
+        level:'danger', ico:'🚨',
+        title:`تاجر تجاوز الحد: ${name}`,
+        sub:`${count} returns هذا الشهر — الحد المضبوط: ${thresholds.merchantReturns}`,
+        tag:'HIGH',
+        color:'rgba(244,63,94,.12)', border:'rgba(244,63,94,.3)', icoColor:'rgba(244,63,94,.2)'
+      });
+    });
+
+  // ── 2. ASIN قيمته تجاوزت الحد ──
+  const aStats = {};
+  data.forEach(x => { if(!aStats[x.asin]) aStats[x.asin]={val:0,count:0}; aStats[x.asin].val+=x.price; aStats[x.asin].count++; });
+  Object.entries(aStats)
+    .filter(([,o]) => o.val >= thresholds.asinValue)
+    .sort((a,b) => b[1].val - a[1].val)
+    .slice(0, 3)
+    .forEach(([asin, obj]) => {
+      alerts.push({
+        level:'warning', ico:'📦',
+        title:`ASIN عالي القيمة: ${asin}`,
+        sub:`إجمالي ${obj.val.toLocaleString()} EGP — ${obj.count} orders — الحد: ${thresholds.asinValue.toLocaleString()} EGP`,
+        tag:'WARN',
+        color:'rgba(251,191,36,.1)', border:'rgba(251,191,36,.25)', icoColor:'rgba(251,191,36,.15)'
+      });
+    });
+
+  // ── 3. زيادة مفاجئة مقارنة بالشهر اللي فات ──
+  let thisMonthCount = 0, lastMonthCount = 0;
+  data.forEach(x => {
+    const p = x.date.split('-');
+    const y = parseInt(p[0]), m = parseInt(p[1]);
+    if (y === thisYear && m === thisMonth) thisMonthCount++;
+    if (y === lastMonthYear && m === lastMonth) lastMonthCount++;
+  });
+  if (lastMonthCount > 0) {
+    const changePct = Math.round(((thisMonthCount - lastMonthCount) / lastMonthCount) * 100);
+    if (changePct >= thresholds.monthlySpike) {
+      alerts.push({
+        level:'danger', ico:'📈',
+        title:`ارتفاع مفاجئ في المرتجعات`,
+        sub:`هذا الشهر: ${thisMonthCount} — الشهر اللي فات: ${lastMonthCount} — زيادة: +${changePct}% (الحد: ${thresholds.monthlySpike}%)`,
+        tag:'SPIKE',
+        color:'rgba(244,63,94,.12)', border:'rgba(244,63,94,.3)', icoColor:'rgba(244,63,94,.2)'
+      });
+    } else if (changePct <= -thresholds.monthlySpike) {
+      alerts.push({
+        level:'success', ico:'📉',
+        title:`انخفاض ممتاز في المرتجعات`,
+        sub:`هذا الشهر: ${thisMonthCount} — الشهر اللي فات: ${lastMonthCount} — انخفاض: ${changePct}%`,
+        tag:'GOOD',
+        color:'rgba(16,185,129,.08)', border:'rgba(16,185,129,.25)', icoColor:'rgba(16,185,129,.15)'
+      });
+    }
+  }
+
+  // ── 4. ملخص إجمالي الشهر الحالي ──
+  let thisMonthVal = 0;
+  data.forEach(x => {
+    const p = x.date.split('-');
+    if (parseInt(p[0]) === thisYear && parseInt(p[1]) === thisMonth) thisMonthVal += x.price;
+  });
+  if (thisMonthVal > 0) {
+    alerts.push({
+      level:'info', ico:'💰',
+      title:`إجمالي الشهر الحالي`,
+      sub:`${thisMonthVal.toLocaleString()} EGP من ${thisMonthCount} return في ${now.toLocaleString('ar-EG',{month:'long'})}`,
+      tag:'INFO',
+      color:'rgba(6,182,212,.08)', border:'rgba(6,182,212,.2)', icoColor:'rgba(6,182,212,.15)'
+    });
+  }
+
+  // ── Update badge ──
+  const dangerCount = alerts.filter(a => a.level==='danger' || a.level==='warning').length;
+  const badge = document.getElementById('alertBadge');
+  const cnt   = document.getElementById('alertCount');
+  if (badge) { badge.style.display = dangerCount>0 ? 'flex' : 'none'; badge.textContent = dangerCount; }
+  if (cnt)   cnt.textContent = alerts.length;
+
+  // ── Render ──
+  const body = document.getElementById('alertsBody');
+  if (!body) return;
+
+  // Settings row
+  const settingsHTML = `
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:10px;">
+      <div style="font-size:.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">⚙️ ضبط الحدود</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+        <div>
+          <div style="font-size:.6rem;color:var(--muted);margin-bottom:3px">Returns/شهر</div>
+          <input type="number" value="${thresholds.merchantReturns}" onchange="thresholds.merchantReturns=+this.value;buildAlerts()"
+            style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:5px 8px;color:var(--text);font-size:.72rem;outline:none;text-align:center">
+        </div>
+        <div>
+          <div style="font-size:.6rem;color:var(--muted);margin-bottom:3px">ASIN EGP</div>
+          <input type="number" value="${thresholds.asinValue}" onchange="thresholds.asinValue=+this.value;buildAlerts()"
+            style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:5px 8px;color:var(--text);font-size:.72rem;outline:none;text-align:center">
+        </div>
+        <div>
+          <div style="font-size:.6rem;color:var(--muted);margin-bottom:3px">Spike %</div>
+          <input type="number" value="${thresholds.monthlySpike}" onchange="thresholds.monthlySpike=+this.value;buildAlerts()"
+            style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:5px 8px;color:var(--text);font-size:.72rem;outline:none;text-align:center">
+        </div>
+      </div>
+    </div>`;
+
+  if (!alerts.length) {
+    body.innerHTML = settingsHTML + '<div class="alert-empty">✅ كل حاجة تمام — مفيش تنبيهات</div>';
+    return;
+  }
+
+  const tagColors = { HIGH:'#f43f5e', WARN:'#fbbf24', SPIKE:'#f43f5e', GOOD:'#10b981', INFO:'#06b6d4' };
+
+  body.innerHTML = settingsHTML + alerts.map(a => `
+    <div class="alert-item" style="background:${a.color};border-color:${a.border}">
+      <div class="alert-ico" style="background:${a.icoColor}">${a.ico}</div>
+      <div class="alert-text">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px">
+          <span class="alert-title" style="flex:1">${a.title}</span>
+          <span style="font-size:.55rem;font-weight:800;color:${tagColors[a.tag]};background:${a.icoColor};padding:2px 6px;border-radius:4px">${a.tag}</span>
+        </div>
+        <div class="alert-sub">${a.sub}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ── Badge on load ──
+function buildAlertBadge(){
+  const now = new Date();
+  const thisYear = now.getFullYear(), thisMonth = now.getMonth()+1;
+  const mC = {};
+  allData.forEach(x => {
+    const p = x.date.split('-');
+    if(parseInt(p[0])===thisYear && parseInt(p[1])===thisMonth)
+      mC[x.merchantName]=(mC[x.merchantName]||0)+1;
+  });
+  const dangerCount = Object.values(mC).filter(v=>v>=thresholds.merchantReturns).length;
+  const badge = document.getElementById('alertBadge');
+  if(badge && dangerCount>0){ badge.style.display='flex'; badge.textContent=dangerCount; }
+}
+
+// ══════════════════════════════════════
+// ── AI CHAT ──
+// ══════════════════════════════════════
+let chatOpen=false;
+let apiKey='AIzaSyDo2EJgmj9G0XLz1qCBchll-Mk_crUdb00';
+let chatHistory=[];
+
+function toggleChat(){
+  chatOpen=!chatOpen;
+  document.getElementById('chatPanel').classList.toggle('open',chatOpen);
+}
+
+function saveApiKey(){
+  const inp=document.getElementById('apiKeyInput');
+  const val=(inp.value||'').trim();
+  if(!val){ inp.style.borderColor='#f43f5e'; setTimeout(()=>inp.style.borderColor='',1500); return; }
+  apiKey=val;
+  document.getElementById('chatKeyBar').style.display='none';
+  addBubble('ai','✅ API Key تم حفظها! دلوقتي تقدر تسأل عن بياناتك.');
+}
+
+function addBubble(role, text){
+  const msgs=document.getElementById('chatMsgs');
+  const div=document.createElement('div');
+  div.className='chat-bubble '+role;
+  div.textContent=text;
+  msgs.appendChild(div);
+  msgs.scrollTop=msgs.scrollHeight;
+  return div;
+}
+
+function getDataContext(){
+  const data=filteredData.length?filteredData:allData;
+  const total=data.reduce((s,x)=>s+x.price,0);
+  const mC={},aC={},iC={};
+  data.forEach(x=>{
+    mC[x.merchantName]=(mC[x.merchantName]||0)+1;
+    if(!aC[x.asin])aC[x.asin]=0; aC[x.asin]+=x.price;
+    iC[x.issue]=(iC[x.issue]||0)+1;
+  });
+  const topM=Object.entries(mC).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([n,c])=>`${n}: ${c} returns`).join(', ');
+  const topA=Object.entries(aC).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([n,v])=>`${n}: ${v.toLocaleString()} EGP`).join(', ');
+  const topI=Object.entries(iC).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([n,c])=>`${n}: ${c}`).join(', ');
+  const recent=[...data].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,3).map(x=>`${x.orderId} (${x.merchantName}, ${x.price} EGP)`).join('; ');
+  return `You are a Returns & Refunds data analyst assistant for an Egyptian e-commerce returns dashboard. Answer in the same language the user uses (Arabic or English). Be concise and insightful.
+
+Current Data Summary (${data.length} records):
+- Total Value Recovered: ${total.toLocaleString()} EGP
+- Top Merchants by Returns: ${topM}
+- Top ASINs by Value: ${topA}
+- Top Issues: ${topI}
+- Most Recent Returns: ${recent}`;
+}
+
+async function sendChat(){
+  const inp=document.getElementById('chatInput');
+  const btn=document.getElementById('chatSendBtn');
+  const msg=(inp.value||'').trim();
+  if(!msg) return;
+  inp.value=''; btn.disabled=true;
+  addBubble('user', msg);
+  chatHistory.push({role:'user',parts:[{text:msg}]});
+
+  const typingDiv=addBubble('ai','...');
+  typingDiv.classList.add('typing');
+
+  try {
+    const systemCtx = getDataContext();
+    const fullHistory = [
+      {role:'user', parts:[{text: systemCtx + '\n\nابدأ المحادثة وكن جاهز للأسئلة.'}]},
+      {role:'model', parts:[{text:'أهلاً! أنا جاهز لتحليل بيانات المرتجعات. اسألني أي حاجة!'}]},
+      ...chatHistory
+    ];
+
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ contents: fullHistory })
+      }
+    );
+    const json = await res.json();
+    const reply = json?.candidates?.[0]?.content?.parts?.[0]?.text || 'حصل خطأ، حاول تاني.';
+    typingDiv.classList.remove('typing');
+    typingDiv.textContent = reply;
+    chatHistory.push({role:'model', parts:[{text:reply}]});
+  } catch(err){
+    typingDiv.classList.remove('typing');
+    typingDiv.textContent='❌ فشل الاتصال. تأكد من الـ API Key وحاول تاني.';
+  }
+  btn.disabled=false;
+  document.getElementById('chatMsgs').scrollTop=9999;
+}
 </script>
+<!-- ── ALERTS PANEL ── -->
+<div id="alertsPanel">
+  <div class="ap-hdr">
+    <div class="ap-title">🔔 Smart Alerts <span id="alertCount" style="background:rgba(244,63,94,.15);color:#f43f5e;border:1px solid rgba(244,63,94,.25);border-radius:5px;padding:1px 7px;font-size:.65rem;font-weight:700">0</span></div>
+    <button class="ap-close" onclick="toggleAlerts()">×</button>
+  </div>
+  <div class="ap-body" id="alertsBody">
+    <div class="alert-empty">Loading alerts…</div>
+  </div>
+</div>
+
+<!-- ── CHAT PANEL ── -->
+<div id="chatPanel">
+  <div class="chat-hdr">
+    <div class="chat-hdr-ico">🤖</div>
+    <div class="chat-hdr-info">
+      <div class="chat-hdr-title">AI Returns Analyst</div>
+      <div class="chat-hdr-sub">Powered by Gemini 2.0 Flash — اسأل بالعربي أو الإنجليزي</div>
+    </div>
+    <button class="chat-close" onclick="toggleChat()">×</button>
+  </div>
+  <div class="chat-key-bar" id="chatKeyBar" style="display:none">
+    <input class="chat-key-input" id="apiKeyInput" type="password" placeholder="أدخل API Key هنا">
+    <button class="chat-key-btn" onclick="saveApiKey()">حفظ</button>
+  </div>
+  <div class="chat-msgs" id="chatMsgs">
+    <div class="chat-bubble ai">مرحباً! 👋 أنا محلل الـ Returns بتاعك — مدعوم بـ Gemini AI.<br><br>اسألني أي حاجة عن بياناتك زي:<br>• "إيه أكتر تاجر مشكلة؟"<br>• "وضّح ليا تريند المرتجعات"<br>• "Which ASIN has the highest value?"</div>
+  </div>
+  <div class="chat-bar">
+    <input class="chat-input" id="chatInput" placeholder="اكتب سؤالك هنا…" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}">
+    <button class="chat-send" id="chatSendBtn" onclick="sendChat()">➤</button>
+  </div>
+</div>
+
 </body>
 </html>
