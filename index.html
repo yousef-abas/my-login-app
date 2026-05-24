@@ -1,295 +1,596 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OREN | Next Gen</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Returns Master | SmartNet Style</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0e2a;
+  --sidebar:#160f3a;
+  --main:#13123a;
+  --card1:linear-gradient(135deg,#4f46e5,#7c3aed);
+  --card2:linear-gradient(135deg,#0ea5e9,#06b6d4);
+  --card3:linear-gradient(135deg,#8b5cf6,#a855f7);
+  --card4:linear-gradient(135deg,#ec4899,#f43f5e);
+  --accent:#6366f1;
+  --text:#e2e8f0;
+  --muted:#94a3b8;
+  --border:rgba(255,255,255,0.07);
+  --surface:rgba(255,255,255,0.04);
+  --font:'Plus Jakarta Sans',sans-serif;
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex;flex-direction:column}
 
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@300;500;800&display=swap');
+/* === TOP BAR === */
+.topbar{
+  height:64px;background:var(--sidebar);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;flex-shrink:0;
+}
+.logo{display:flex;align-items:center;gap:4px;font-size:1.2rem;font-weight:800;letter-spacing:-0.5px;width:220px}
+.logo-s{font-size:1.6rem;font-weight:900;color:#6366f1;line-height:1}
+.logo-rest{color:var(--text)}
+.top-search{
+  flex:1;max-width:480px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid var(--border);
+  border-radius:10px;
+  display:flex;align-items:center;gap:10px;
+  padding:0 16px;height:40px;
+}
+.top-search input{
+  background:transparent;border:none;outline:none;color:var(--text);
+  font-family:var(--font);font-size:0.85rem;width:100%;
+}
+.top-search input::placeholder{color:var(--muted)}
+.top-search .icon{color:var(--muted);font-size:1rem}
+.topbar-right{display:flex;align-items:center;gap:16px}
+.icon-btn{
+  width:36px;height:36px;display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,0.06);border:1px solid var(--border);
+  border-radius:8px;color:var(--muted);font-size:1rem;cursor:pointer;
+  transition:all 0.2s;
+}
+.icon-btn:hover{background:rgba(255,255,255,0.1);color:var(--text)}
+.separator{width:1px;height:24px;background:var(--border)}
+.user-chip{
+  display:flex;align-items:center;gap:10px;
+  background:rgba(255,255,255,0.06);border:1px solid var(--border);
+  border-radius:10px;padding:6px 12px;cursor:pointer;
+}
+.user-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#a855f7);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700}
+.user-name{font-size:0.85rem;font-weight:600}
+.chevron{color:var(--muted);font-size:0.7rem;margin-left:4px}
 
-        :root {
-            --primary: #0984e3;
-            --dark: #2d3436;
-            --bg: #f7f9fc;
-            --white: #ffffff;
-            --shadow: 0 10px 30px rgba(0,0,0,0.05);
-            --radius: 20px;
-        }
+/* === BODY LAYOUT === */
+.layout{display:flex;flex:1;overflow:hidden}
 
-        * { box-sizing: border-box; font-family: 'Noto Kufi Arabic', sans-serif; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        
-        body { 
-            margin: 0; 
-            background: var(--bg); 
-            color: var(--dark); 
-            display: flex; 
-            justify-content: center; 
-            padding: 20px;
-            min-height: 100vh;
-        }
+/* === SIDEBAR === */
+.sidebar{
+  width:220px;background:var(--sidebar);
+  border-right:1px solid var(--border);
+  flex-shrink:0;overflow-y:auto;
+  padding:20px 12px;
+}
+.sidebar-section{
+  font-size:0.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);margin:20px 4px 8px;
+}
+.sidebar-section:first-of-type{margin-top:4px}
+.nav-item{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 12px;border-radius:10px;
+  font-size:0.85rem;font-weight:500;color:var(--muted);
+  cursor:pointer;transition:all 0.2s;margin-bottom:2px;
+}
+.nav-item:hover{background:rgba(255,255,255,0.06);color:var(--text)}
+.nav-item.active{background:var(--accent);color:#fff;font-weight:600}
+.nav-icon{font-size:1rem;width:20px;text-align:center;flex-shrink:0}
 
-        /* Splash Screen */
-        #splash {
-            position: fixed; inset: 0; background: var(--white);
-            display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10000;
-        }
-        .logo-anim { font-size: 50px; font-weight: 800; color: var(--primary); letter-spacing: 5px; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.7; } 100% { transform: scale(1); opacity: 1; } }
+/* === MAIN CONTENT === */
+.main{flex:1;overflow-y:auto;padding:28px 28px 40px;background:var(--main)}
 
-        /* Global Container */
-        .app-container { width: 100%; max-width: 450px; position: relative; }
+.page-header{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:24px;
+}
+.page-title{font-size:1.4rem;font-weight:800;letter-spacing:-0.5px}
+.add-btn{
+  display:flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,0.06);border:1px solid var(--border);
+  border-radius:10px;padding:8px 16px;font-size:0.8rem;font-weight:600;
+  cursor:pointer;transition:all 0.2s;color:var(--text);
+}
+.add-btn:hover{background:rgba(255,255,255,0.1)}
 
-        /* Cards */
-        .card {
-            background: var(--white);
-            border-radius: var(--radius);
-            padding: 30px;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(0,0,0,0.02);
-            margin-bottom: 20px;
-        }
+/* === STAT CARDS === */
+.stat-cards{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:16px;
+  margin-bottom:24px;
+}
+.stat-card{
+  border-radius:16px;padding:20px;position:relative;overflow:hidden;
+  min-height:120px;display:flex;flex-direction:column;justify-content:space-between;
+}
+.stat-card.c1{background:var(--card1)}
+.stat-card.c2{background:var(--card2)}
+.stat-card.c3{background:var(--card3)}
+.stat-card.c4{background:var(--card4)}
+.stat-card-top{display:flex;align-items:center;justify-content:space-between}
+.stat-card-label{font-size:0.75rem;font-weight:600;opacity:0.9;display:flex;align-items:center;gap:6px}
+.stat-lock{font-size:0.85rem}
+.stat-dots{
+  display:flex;flex-direction:column;gap:2px;opacity:0.7;cursor:pointer;padding:2px;
+}
+.stat-dots span{width:3px;height:3px;background:#fff;border-radius:50%;display:block}
+.stat-card-bottom{display:flex;align-items:flex-end;justify-content:space-between}
+.stat-num{font-size:2.2rem;font-weight:800;letter-spacing:-2px;line-height:1;color:#fff}
+.stat-sub{font-size:0.7rem;opacity:0.8;margin-top:4px}
+.stat-ring-wrap{width:56px;height:56px;position:relative;flex-shrink:0}
+.stat-ring-wrap canvas{position:absolute;top:0;left:0}
+.ring-label{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-size:0.6rem;font-weight:700;color:#fff;text-align:center;line-height:1.1;
+}
 
-        /* Inputs */
-        .input-group { margin-bottom: 15px; position: relative; }
-        input, select, textarea {
-            width: 100%; padding: 15px; border-radius: 12px;
-            border: 1.5px solid #eee; background: #fafafa;
-            font-size: 14px; outline: none;
-        }
-        input:focus { border-color: var(--primary); background: #fff; }
+/* === BOTTOM GRID === */
+.bottom-grid{display:grid;grid-template-columns:1fr 380px;gap:20px}
 
-        /* Buttons */
-        .btn {
-            width: 100%; padding: 15px; border-radius: 12px; border: none;
-            background: var(--primary); color: white; font-weight: 600;
-            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
-        }
-        .btn:active { transform: scale(0.98); }
-        .btn-secondary { background: #dfe6e9; color: var(--dark); margin-top: 10px; }
+/* === CHART CARD === */
+.chart-card{
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);border-radius:16px;
+  padding:24px;
+}
+.chart-card-header{
+  display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;
+}
+.chart-title{font-size:0.95rem;font-weight:700}
+.chart-legend{display:flex;gap:16px}
+.legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:0.72rem;color:var(--muted)}
+.chart-wrap{height:200px;position:relative}
 
-        /* Agent Header */
-        .agent-header {
-            background: var(--primary); color: white;
-            padding: 25px; border-radius: var(--radius);
-            margin-bottom: 25px; position: relative; overflow: hidden;
-        }
-        .agent-header h2 { margin: 0; font-size: 20px; z-index: 2; position: relative; }
-        .agent-header i { position: absolute; right: -10px; bottom: -10px; font-size: 80px; opacity: 0.1; }
+/* === RIGHT PANEL === */
+.right-panel{display:flex;flex-direction:column;gap:16px}
 
-        /* Task Card */
-        .task-card {
-            background: white; padding: 20px; border-radius: 15px;
-            margin-bottom: 15px; border-right: 5px solid var(--primary);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-        }
-        .task-card h3 { margin: 0 0 10px 0; color: var(--primary); font-size: 18px; }
-        .info-row { font-size: 13px; color: #636e72; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
-        
-        .hidden { display: none !important; }
-        .whatsapp-btn {
-            position: fixed; bottom: 30px; left: 30px; 
-            width: 55px; height: 55px; background: #25d366;
-            color: white; border-radius: 50%; display: flex;
-            align-items: center; justify-content: center; font-size: 25px;
-            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
-            text-decoration: none; z-index: 100;
-        }
+.env-card{
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);border-radius:16px;
+  padding:20px;flex:1;
+}
+.env-header{
+  display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;
+}
+.env-title{font-size:0.9rem;font-weight:700}
+.env-dots{display:flex;flex-direction:column;gap:2px;cursor:pointer}
+.env-dots span{width:3px;height:3px;background:var(--muted);border-radius:50%;display:block}
 
-        .status-badge {
-            display: inline-block; padding: 4px 12px; background: #e1f5fe;
-            color: #0288d1; border-radius: 8px; font-size: 11px; font-weight: bold;
-        }
-    </style>
+.notif-item{
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);border-radius:12px;
+  padding:14px 16px;margin-bottom:10px;cursor:pointer;
+  transition:all 0.2s;
+}
+.notif-item:last-child{margin-bottom:0}
+.notif-item:hover{background:rgba(255,255,255,0.07);border-color:rgba(99,102,241,0.3)}
+.notif-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.notif-title{display:flex;align-items:center;gap:8px;font-size:0.82rem;font-weight:600}
+.notif-icon{
+  width:28px;height:28px;border-radius:8px;
+  background:rgba(99,102,241,0.15);display:flex;align-items:center;
+  justify-content:center;font-size:0.85rem;flex-shrink:0;
+}
+.notif-arrow{color:var(--muted);font-size:0.8rem}
+.notif-sub{font-size:0.72rem;color:var(--muted);line-height:1.4;margin-bottom:8px}
+.read-more-btn{
+  background:rgba(255,255,255,0.06);border:1px solid var(--border);
+  border-radius:6px;padding:4px 12px;font-size:0.7rem;font-weight:600;
+  color:var(--text);cursor:pointer;transition:all 0.2s;
+}
+.read-more-btn:hover{background:rgba(255,255,255,0.1)}
+
+/* === MERCHANT FILTER STYLES === */
+.merchant-sel{
+  background:rgba(255,255,255,0.06);border:1px solid var(--border);
+  border-radius:8px;padding:6px 12px;color:var(--text);font-family:var(--font);
+  font-size:0.75rem;outline:none;cursor:pointer;
+}
+
+/* === LOADING OVERLAY === */
+#loader{
+  position:fixed;inset:0;background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  z-index:999;transition:opacity 0.8s ease,visibility 0.8s ease;
+}
+#loader.gone{opacity:0;visibility:hidden}
+.loader-logo{display:flex;align-items:center;gap:4px;font-size:2rem;font-weight:900;margin-bottom:28px;animation:fadeUp 0.6s ease 0.2s both}
+.loader-logo-s{color:#6366f1;font-size:2.8rem}
+.loader-bar{width:180px;height:2px;background:rgba(255,255,255,0.1);border-radius:1px;overflow:hidden}
+.loader-fill{height:100%;background:linear-gradient(90deg,#6366f1,#a855f7);animation:loadFill 1.8s ease 0.4s both}
+.loader-text{font-size:0.65rem;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-top:12px;animation:fadeUp 0.6s ease 0.6s both}
+@keyframes loadFill{from{width:0}to{width:100%}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* === TOP TABS === */
+.view-tabs{display:flex;gap:8px;margin-bottom:16px}
+.vtab{
+  padding:6px 16px;border-radius:8px;font-size:0.75rem;font-weight:600;
+  cursor:pointer;transition:all 0.2s;border:1px solid var(--border);
+  color:var(--muted);background:transparent;
+}
+.vtab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* scrollbar */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px}
+</style>
 </head>
 <body>
 
-    <div id="splash">
-        <div class="logo-anim">OREN</div>
-        <p style="color: #b2bec3;">Loading Excellence...</p>
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-logo"><span class="loader-logo-s">R</span><span>ETURNS MASTER</span></div>
+  <div class="loader-bar"><div class="loader-fill"></div></div>
+  <div class="loader-text">Loading live data...</div>
+</div>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="logo"><span class="logo-s">R</span><span class="logo-rest">ETURNS MASTER</span></div>
+  <div class="top-search">
+    <span class="icon">🔍</span>
+    <input type="text" placeholder="Type to search..." id="topSearch" oninput="syncSearch()">
+  </div>
+  <div class="topbar-right">
+    <div class="icon-btn">🔔</div>
+    <div class="icon-btn">💬</div>
+    <div class="icon-btn">🔄</div>
+    <div class="separator"></div>
+    <div class="user-chip">
+      <div class="user-avatar">YA</div>
+      <span class="user-name">Youssef</span>
+      <span class="chevron">▾</span>
+    </div>
+  </div>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-section">Menu</div>
+    <div class="nav-item active"><span class="nav-icon">🏠</span> Dashboard</div>
+    <div class="nav-item"><span class="nav-icon">🔒</span> Data Security</div>
+    <div class="nav-item"><span class="nav-icon">👤</span> User Behaviour</div>
+    <div class="nav-item"><span class="nav-icon">📊</span> Analytics</div>
+
+    <div class="sidebar-section">Manage</div>
+    <div class="nav-item"><span class="nav-icon">🏢</span> Merchants</div>
+    <div class="nav-item"><span class="nav-icon">📦</span> ASINs</div>
+    <div class="nav-item"><span class="nav-icon">🛡️</span> Protection</div>
+    <div class="nav-item"><span class="nav-icon">🗂️</span> Classification</div>
+    <div class="nav-item"><span class="nav-icon">📱</span> Devices</div>
+
+    <div class="sidebar-section">Filters</div>
+    <select id="merchantFilter" class="merchant-sel" onchange="updateUI()" style="width:100%;margin-bottom:8px"></select>
+    <div style="display:flex;gap:6px;flex-direction:column">
+      <input type="date" id="startDate" onchange="updateUI()" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:6px 10px;color:#94a3b8;font-size:0.7rem;outline:none;width:100%;color-scheme:dark">
+      <input type="date" id="endDate" onchange="updateUI()" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:6px 10px;color:#94a3b8;font-size:0.7rem;outline:none;width:100%;color-scheme:dark">
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="page-header">
+      <div class="page-title">Dashboard</div>
+      <div class="topbar-right">
+        <button onclick="exportCSV()" class="add-btn">📊 Export CSV</button>
+        <div class="add-btn" onclick="window.location.reload()">Add Policy ▾</div>
+      </div>
     </div>
 
-    <div class="app-container">
-        
-        <div id="loginUI" class="card">
-            <div style="text-align:center; margin-bottom:30px;">
-                <h1 style="color: var(--primary); margin:0;">Welcome</h1>
-                <p style="color:#636e72; font-size:14px;">سجل دخولك لمتابعة عملك</p>
-            </div>
-            <div class="input-group"><input type="email" id="email" placeholder="البريد الإلكتروني"></div>
-            <div class="input-group"><input type="password" id="pass" placeholder="كلمة المرور"></div>
-            <button class="btn" onclick="login()">دخول <i class="fas fa-arrow-left"></i></button>
+    <!-- STAT CARDS -->
+    <div class="stat-cards">
+      <div class="stat-card c1">
+        <div class="stat-card-top">
+          <div class="stat-card-label"><span class="stat-lock">🔒</span> Daily Savings</div>
+          <div class="stat-dots"><span></span><span></span><span></span></div>
         </div>
-
-        <div id="adminUI" class="hidden">
-            <div class="card">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-                    <h2 style="margin:0;">تكليف مهمة</h2>
-                    <span class="status-badge">ADMIN</span>
-                </div>
-                <div class="input-group"><input type="text" id="cName" placeholder="اسم العميل"></div>
-                <div class="input-group"><input type="tel" id="cPhone" placeholder="رقم الهاتف"></div>
-                <div class="input-group"><input type="text" id="cAddr" placeholder="العنوان"></div>
-                <div class="input-group"><select id="agentSelect"><option value="">اختر المندوب</option></select></div>
-                <div class="input-group"><textarea id="cIssue" rows="3" placeholder="وصف المهمة"></textarea></div>
-                <button class="btn" onclick="assign()">إرسال للمندوب <i class="fas fa-paper-plane"></i></button>
-                
-                <button class="btn btn-secondary" onclick="showDashboard()">لوحة البيانات <i class="fas fa-chart-pie"></i></button>
-                <button class="btn btn-secondary" style="color:#d63031" onclick="logout()">خروج</button>
-            </div>
+        <div class="stat-card-bottom">
+          <div><div class="stat-num" id="dailyTotal">0</div><div class="stat-sub" id="dailyCount">EGP today</div></div>
+          <div class="stat-ring-wrap"><canvas id="ring1" width="56" height="56"></canvas><div class="ring-label" id="ring1lbl">0%</div></div>
         </div>
-
-        <div id="agentUI" class="hidden">
-            <div class="agent-header">
-                <i class="fas fa-rocket"></i>
-                <p style="margin:0; opacity:0.8; font-size:12px;">مرحباً بك،</p>
-                <h2 id="welcomeMsg">الفني</h2>
-            </div>
-            <div id="tasksContainer"></div>
-            <button class="btn btn-secondary" onclick="logout()">تسجيل خروج</button>
+      </div>
+      <div class="stat-card c2">
+        <div class="stat-card-top">
+          <div class="stat-card-label"><span class="stat-lock">🔒</span> Monthly Recovery</div>
+          <div class="stat-dots"><span></span><span></span><span></span></div>
         </div>
-
-        <div id="dashboardUI" class="hidden">
-            <div class="card">
-                <h2>تحليل الأداء</h2>
-                <div id="performanceList"></div>
-                <button class="btn btn-secondary" onclick="showAdmin()">رجوع</button>
-            </div>
+        <div class="stat-card-bottom">
+          <div><div class="stat-num" id="monthlyTotal">0</div><div class="stat-sub" id="monthlyCount">EGP this month</div></div>
+          <div class="stat-ring-wrap"><canvas id="ring2" width="56" height="56"></canvas><div class="ring-label" id="ring2lbl">0%</div></div>
         </div>
-
+      </div>
+      <div class="stat-card c3">
+        <div class="stat-card-top">
+          <div class="stat-card-label"><span class="stat-lock">🔒</span> Annual Saved</div>
+          <div class="stat-dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="stat-card-bottom">
+          <div><div class="stat-num" id="yearlyTotal">0</div><div class="stat-sub" id="yearlyCount">EGP this year</div></div>
+          <div class="stat-ring-wrap"><canvas id="ring3" width="56" height="56"></canvas><div class="ring-label" id="ring3lbl">0%</div></div>
+        </div>
+      </div>
+      <div class="stat-card c4">
+        <div class="stat-card-top">
+          <div class="stat-card-label"><span class="stat-lock">🔒</span> Total Items</div>
+          <div class="stat-dots"><span></span><span></span><span></span></div>
+        </div>
+        <div class="stat-card-bottom">
+          <div><div class="stat-num" id="totalItems">0</div><div class="stat-sub">items in dataset</div></div>
+          <div class="stat-ring-wrap"><canvas id="ring4" width="56" height="56"></canvas><div class="ring-label" id="ring4lbl">0%</div></div>
+        </div>
+      </div>
     </div>
 
-    <a href="https://wa.me/201019564616" class="whatsapp-btn hidden" id="waBtn"><i class="fab fa-whatsapp"></i></a>
+    <!-- BOTTOM GRID -->
+    <div class="bottom-grid">
 
-    <script>
-        // سأبقي على نفس الـ Config والـ Logic الخاص بك لأنه شغال تمام
-        const firebaseConfig = {
-            apiKey: "AIzaSyALgV2v3lmxvEoP0HosqGSqm727vZrYUq4",
-            authDomain: "orenapp-f2f1e.firebaseapp.com",
-            databaseURL: "https://orenapp-f2f1e-default-rtdb.firebaseio.com",
-            projectId: "orenapp-f2f1e",
-            storageBucket: "orenapp-f2f1e.firebasestorage.app",
-            messagingSenderId: "973368909449",
-            appId: "1:973368909449:web:ce364a309f622f575c3058"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
+      <!-- CHART -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <div class="chart-title">Returns over time</div>
+          <div style="display:flex;align-items:center;gap:16px">
+            <div class="chart-legend">
+              <div class="legend-item"><div class="legend-dot" style="background:#6366f1"></div> Value (EGP)</div>
+              <div class="legend-item"><div class="legend-dot" style="background:#06b6d4"></div> Orders</div>
+            </div>
+            <div class="view-tabs">
+              <button class="vtab active" id="btn-monthly" onclick="switchView('monthly')">Monthly</button>
+              <button class="vtab" id="btn-quarterly" onclick="switchView('quarterly')">Quarterly</button>
+            </div>
+          </div>
+        </div>
+        <div class="chart-wrap"><canvas id="timeChart"></canvas></div>
+      </div>
 
-        setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 2000);
+      <!-- RIGHT PANEL -->
+      <div class="right-panel">
 
-        function login() {
-            const e = document.getElementById('email').value, p = document.getElementById('pass').value;
-            firebase.auth().signInWithEmailAndPassword(e, p).catch(err => alert("بيانات الدخول غير صحيحة"));
+        <!-- Top ASINs card -->
+        <div class="env-card">
+          <div class="env-header">
+            <div class="env-title">Top ASINs</div>
+            <div class="env-dots"><span></span><span></span><span></span></div>
+          </div>
+          <div id="topAsinMini"></div>
+        </div>
+
+        <!-- Notifications / Info -->
+        <div class="env-card">
+          <div class="env-header">
+            <div class="env-title">Environment settings</div>
+            <div class="env-dots"><span></span><span></span><span></span></div>
+          </div>
+          <div class="notif-item">
+            <div class="notif-top">
+              <div class="notif-title"><div class="notif-icon">📧</div> Email notifications</div>
+              <div class="notif-arrow">›</div>
+            </div>
+            <div class="notif-sub">Activate email notifications for risky events to be informed</div>
+            <button class="read-more-btn">Read more</button>
+          </div>
+          <div class="notif-item">
+            <div class="notif-top">
+              <div class="notif-title"><div class="notif-icon">🔔</div> Alert settings</div>
+              <div class="notif-arrow">›</div>
+            </div>
+            <div class="notif-sub">Configure thresholds for high-value return alerts</div>
+            <button class="read-more-btn" onclick="exportCSV()">Export now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyFAht24zvBJ4o0DddZyqFtaBrl3K06_R7bnagwxFM5VhuC70jIZKbxCQuk9UF5-qOU/exec";
+let entries = [];
+let charts = {};
+let currentView = 'monthly';
+
+window.onload = () => {
+  fetchData();
+  setTimeout(() => document.getElementById('loader').classList.add('gone'), 3000);
+};
+
+async function fetchData() {
+  try {
+    const res = await fetch(SCRIPT_URL);
+    const raw = await res.json();
+    entries = raw.map(item => {
+      let d = (item.date||item.Date||"").toString();
+      d = d.includes('T') ? d.split('T')[0] : d.split(' ')[0];
+      let action = item.action||item.Action||"Done";
+      if (action.toLowerCase()==="pending") action="Done";
+      return {
+        date:d,
+        orderId:String(item.orderId||item["Order ID"]||""),
+        asin:String(item.asin||item.ASIN||"").toUpperCase(),
+        price:parseFloat(item.price||item.Price||0),
+        merchantId:String(item.merchantId||item["Merchant ID"]||"N/A"),
+        merchantName:String(item.merchantName||item["Merchant Name"]||"N/A"),
+        issue:item.issue||item.Issue||"Unknown",
+        road:item.road||item.Road||"N/A",
+        action
+      };
+    });
+    buildFilter();
+    updateUI();
+  } catch(e){ console.error(e); }
+}
+
+function buildFilter() {
+  const sel = document.getElementById('merchantFilter');
+  const names = [...new Set(entries.map(e=>e.merchantName))].sort();
+  sel.innerHTML = '<option value="all">All Merchants</option>';
+  names.forEach(n => sel.innerHTML += `<option value="${n}">${n}</option>`);
+}
+
+function syncSearch() {
+  document.getElementById('topSearch').value;
+  updateUI();
+}
+
+function updateUI() {
+  const merchant = document.getElementById('merchantFilter').value;
+  const s = document.getElementById('startDate').value;
+  const e = document.getElementById('endDate').value;
+  let data = entries;
+  if (merchant!=='all') data = data.filter(x=>x.merchantName===merchant);
+  if (s) data = data.filter(x=>x.date>=s);
+  if (e) data = data.filter(x=>x.date<=e);
+
+  const now = new Date();
+  const today = now.toLocaleDateString('en-CA');
+  const yr = now.getFullYear(); const mo = now.getMonth()+1;
+  let dv=0,dc=0,mv=0,mc=0,yv=0,yc=0,tv=0;
+  data.forEach(x=>{
+    tv += x.price;
+    const p=x.date.split('-');
+    if(x.date===today){dv+=x.price;dc++;}
+    if(parseInt(p[0])===yr){yv+=x.price;yc++;if(parseInt(p[1])===mo){mv+=x.price;mc++;}}
+  });
+
+  const maxV = Math.max(dv,mv,yv,tv) || 1;
+
+  document.getElementById('dailyTotal').textContent = fmt(dv);
+  document.getElementById('monthlyTotal').textContent = fmt(mv);
+  document.getElementById('yearlyTotal').textContent = fmt(yv);
+  document.getElementById('totalItems').textContent = data.length;
+  document.getElementById('dailyCount').textContent = dc + ' orders · EGP';
+  document.getElementById('monthlyCount').textContent = mc + ' orders · EGP';
+  document.getElementById('yearlyCount').textContent = yc + ' orders · EGP';
+
+  drawRing('ring1','ring1lbl',Math.round((dv/maxV)*100),'#818cf8');
+  drawRing('ring2','ring2lbl',Math.round((mv/maxV)*100),'#22d3ee');
+  drawRing('ring3','ring3lbl',Math.round((yv/maxV)*100),'#c084fc');
+  drawRing('ring4','ring4lbl',Math.min(100,Math.round((data.length/(entries.length||1))*100)),'#fb7185');
+
+  renderTrend(data);
+  renderTopAsins(data);
+}
+
+function fmt(n){ return n>=1000 ? (n/1000).toFixed(1)+'K' : n.toLocaleString(); }
+
+function drawRing(id, lblId, pct, color) {
+  const canvas = document.getElementById(id);
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0,0,56,56);
+  const cx=28,cy=28,r=22,lw=5;
+  // BG arc
+  ctx.beginPath();ctx.arc(cx,cy,r,-Math.PI/2,Math.PI*1.5);
+  ctx.strokeStyle='rgba(255,255,255,0.1)';ctx.lineWidth=lw;ctx.lineCap='round';ctx.stroke();
+  // Fill arc
+  const end = -Math.PI/2 + (pct/100)*Math.PI*2;
+  ctx.beginPath();ctx.arc(cx,cy,r,-Math.PI/2,end);
+  ctx.strokeStyle=color;ctx.lineWidth=lw;ctx.lineCap='round';ctx.stroke();
+  document.getElementById(lblId).textContent = pct+'%';
+}
+
+function renderTrend(data) {
+  const labels = currentView==='monthly'
+    ? ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+    : ['Q1','Q2','Q3','Q4'];
+  const vals=Array(labels.length).fill(0);
+  const cnts=Array(labels.length).fill(0);
+  data.forEach(x=>{
+    const p=x.date.split('-');
+    if(parseInt(p[0])===2026){
+      const mi=parseInt(p[1])-1;
+      const idx=currentView==='monthly'?mi:Math.floor(mi/3);
+      if(idx>=0&&idx<vals.length){vals[idx]+=x.price;cnts[idx]++;}
+    }
+  });
+  if(charts.time) charts.time.destroy();
+  const ctx=document.getElementById('timeChart').getContext('2d');
+  const g1=ctx.createLinearGradient(0,0,0,200);
+  g1.addColorStop(0,'rgba(99,102,241,0.3)');g1.addColorStop(1,'rgba(99,102,241,0)');
+  const g2=ctx.createLinearGradient(0,0,0,200);
+  g2.addColorStop(0,'rgba(6,182,212,0.3)');g2.addColorStop(1,'rgba(6,182,212,0)');
+
+  charts.time = new Chart(ctx,{
+    type:'line',
+    data:{labels,datasets:[
+      {label:'Value EGP',data:vals,borderColor:'#6366f1',backgroundColor:g1,fill:true,tension:0.4,pointRadius:3,pointBackgroundColor:'#6366f1',borderWidth:2},
+      {label:'Orders',data:cnts,borderColor:'#06b6d4',backgroundColor:g2,fill:true,tension:0.4,pointRadius:3,pointBackgroundColor:'#06b6d4',borderWidth:2}
+    ]},
+    options:{
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:'rgba(15,14,42,0.95)',
+          borderColor:'rgba(255,255,255,0.08)',borderWidth:1,
+          titleFont:{family:'Plus Jakarta Sans',size:11},
+          bodyFont:{family:'Plus Jakarta Sans',size:11},
         }
+      },
+      scales:{
+        x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#64748b',font:{family:'Plus Jakarta Sans',size:10}}},
+        y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#64748b',font:{family:'Plus Jakarta Sans',size:10}}}
+      }
+    }
+  });
+}
 
-        firebase.auth().onAuthStateChanged(user => {
-            const ui = ['loginUI', 'adminUI', 'agentUI', 'dashboardUI', 'waBtn'];
-            ui.forEach(id => document.getElementById(id).classList.add('hidden'));
-            if (user) {
-                if (user.email === "admin@oren.com") {
-                    document.getElementById('adminUI').classList.remove('hidden'); 
-                    loadAgents();
-                } else {
-                    document.getElementById('agentUI').classList.remove('hidden');
-                    document.getElementById('waBtn').classList.remove('hidden');
-                    const n = user.email.split('@')[0];
-                    document.getElementById('welcomeMsg').innerText = n;
-                    db.ref('active_list/' + n).set({name: n});
-                    loadTasks(n);
-                }
-            } else { document.getElementById('loginUI').classList.remove('hidden'); }
-        });
+function renderTopAsins(data) {
+  const stats={};
+  data.forEach(x=>{
+    if(!stats[x.asin]) stats[x.asin]=0;
+    stats[x.asin]+=x.price;
+  });
+  const sorted=Object.entries(stats).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const max=sorted[0]?.[1]||1;
+  const colors=['#6366f1','#06b6d4','#a855f7','#ec4899','#f59e0b'];
+  document.getElementById('topAsinMini').innerHTML = sorted.map(([asin,val],i)=>`
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+      <div style="width:6px;height:6px;border-radius:50%;background:${colors[i]};flex-shrink:0"></div>
+      <div style="flex:1;font-size:0.75rem;font-weight:600;color:#e2e8f0;font-family:'Courier New',monospace">${asin}</div>
+      <div style="flex:2;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden">
+        <div style="height:100%;width:${(val/max*100).toFixed(0)}%;background:${colors[i]};border-radius:2px"></div>
+      </div>
+      <div style="font-size:0.7rem;color:${colors[i]};font-weight:700;min-width:50px;text-align:right">${fmt(val)}</div>
+    </div>
+  `).join('');
+}
 
-        function loadAgents() {
-            db.ref('active_list').on('value', snap => {
-                const s = document.getElementById('agentSelect');
-                s.innerHTML = '<option value="">-- اختر المندوب --</option>';
-                snap.forEach(child => {
-                    const n = child.key;
-                    s.innerHTML += `<option value="${n}">${n}</option>`;
-                });
-            });
-        }
+function switchView(v){
+  currentView=v;
+  document.getElementById('btn-monthly').className='vtab'+(v==='monthly'?' active':'');
+  document.getElementById('btn-quarterly').className='vtab'+(v==='quarterly'?' active':'');
+  updateUI();
+}
 
-        function assign() {
-            const ag = document.getElementById('agentSelect').value;
-            if(!ag) return alert("اختر المندوب");
-            db.ref('modern_tasks').push({
-                c: document.getElementById('cName').value,
-                p: document.getElementById('cPhone').value,
-                a: document.getElementById('cAddr').value,
-                i: document.getElementById('cIssue').value,
-                to: ag,
-                timestamp: Date.now()
-            }).then(() => { 
-                alert("تم إرسال المهمة بنجاح ✅");
-                document.getElementById('cName').value = ""; 
-            });
-        }
-
-        function loadTasks(name) {
-            db.ref('modern_tasks').on('value', snap => {
-                const container = document.getElementById('tasksContainer'); 
-                container.innerHTML = "";
-                snap.forEach(c => {
-                    const t = c.val();
-                    if(t.to === name) {
-                        container.innerHTML += `
-                            <div class="task-card">
-                                <h3>${t.c}</h3>
-                                <div class="info-row"><i class="fas fa-phone"></i> ${t.p}</div>
-                                <div class="info-row"><i class="fas fa-map-marker-alt"></i> ${t.a}</div>
-                                <div style="margin:15px 0; padding:10px; background:#f9f9f9; border-radius:8px; font-size:13px;">
-                                    ${t.i}
-                                </div>
-                                <div class="input-group">
-                                    <input type="text" id="note_${c.key}" placeholder="اكتب تقريرك هنا...">
-                                </div>
-                                <button class="btn" style="background:#00b894; padding:10px;" onclick="finishTask('${c.key}')">
-                                    إتمام المهمة <i class="fas fa-check"></i>
-                                </button>
-                                <a href="tel:${t.p}" class="btn btn-secondary" style="padding:10px;">اتصال</a>
-                            </div>`;
-                    }
-                });
-            });
-        }
-
-        function finishTask(id) {
-            const note = document.getElementById('note_' + id).value;
-            if(!note) return alert("يجب كتابة التقرير");
-            db.ref('modern_tasks/' + id).once('value', snap => {
-                const data = snap.val();
-                data.agentNote = note;
-                db.ref('completed_tasks').push(data).then(() => {
-                    db.ref('modern_tasks/' + id).remove();
-                });
-            });
-        }
-
-        function showDashboard() { document.getElementById('adminUI').classList.add('hidden'); document.getElementById('dashboardUI').classList.remove('hidden'); loadAnalytics(); }
-        function showAdmin() { document.getElementById('dashboardUI').classList.add('hidden'); document.getElementById('adminUI').classList.remove('hidden'); }
-        function logout() { firebase.auth().signOut(); }
-        
-        function loadAnalytics() {
-            db.ref('completed_tasks').on('value', snap => {
-                const list = document.getElementById('performanceList'); list.innerHTML = "";
-                let stats = {};
-                snap.forEach(c => {
-                    let name = c.val().to;
-                    stats[name] = (stats[name] || 0) + 1;
-                });
-                for(let n in stats) {
-                    list.innerHTML += `<div class="info-row" style="justify-content:space-between; background:#f1f2f6; padding:10px; border-radius:10px; margin-bottom:5px;">
-                        <span>${n}</span> <b>${stats[n]} مهمة</b>
-                    </div>`;
-                }
-            });
-        }
-    </script>
+function exportCSV(){
+  let csv="Date,Order ID,ASIN,Price (EGP),Merchant ID,Merchant Name,Issue,Road,Action\n";
+  entries.forEach(e=>csv+=`${e.date},${e.orderId},${e.asin},${e.price},${e.merchantId},${e.merchantName},${e.issue},${e.road},${e.action}\n`);
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download='returns_report.csv';a.click();
+}
+</script>
 </body>
 </html>
