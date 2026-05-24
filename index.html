@@ -115,7 +115,7 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--b
 .tab.active{background:#6366f1;color:#fff}
 
 /* chart */
-.cw{height:190px;position:relative}
+.cw{height:240px;position:relative;width:100%}
 .clegend{display:flex;gap:14px;margin-bottom:12px}
 .cli{display:flex;align-items:center;gap:5px;font-size:.7rem;color:var(--muted2)}
 .cld{width:8px;height:8px;border-radius:50%}
@@ -148,7 +148,7 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--b
 .cgrid2{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px}
 
 /* pie / doughnut */
-.piew{height:180px;position:relative}
+.piew{height:220px;position:relative}
 
 /* serial returners list */
 .sr-item{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:var(--surface);border:1px solid var(--border);border-radius:9px;margin-bottom:7px;cursor:pointer;transition:all .2s}
@@ -595,7 +595,12 @@ function updateStats(data) {
 }
 
 function pct(a,b){ return Math.round((a/Math.max(b,1))*100); }
-function fmtNum(n){ return n >= 1000 ? (n/1000).toFixed(1)+'K' : n.toLocaleString(); }
+function fmtNum(n){
+  if(n>=1000000000) return (n/1000000000).toFixed(2)+'B';
+  if(n>=1000000)    return (n/1000000).toFixed(2)+'M';
+  if(n>=1000)       return (n/1000).toFixed(1)+'K';
+  return n.toLocaleString();
+}
 function set(id,v){ const el=document.getElementById(id); if(el) el.textContent=v; }
 
 // ── RING DRAW ──
@@ -673,12 +678,12 @@ function mkDoughnut(id, key, data, colors) {
   if(charts[id]) charts[id].destroy();
   const el=document.getElementById(id); if(!el)return;
   charts[id]=new Chart(el,{
-    type:'doughnut',
-    data:{ labels:Object.keys(counts), datasets:[{data:Object.values(counts),backgroundColor:colors,borderColor:'#13123a',borderWidth:3}]},
+    type:'pie',
+    data:{ labels:Object.keys(counts), datasets:[{data:Object.values(counts),backgroundColor:colors,borderColor:'#13123a',borderWidth:2}]},
     options:{
-      maintainAspectRatio:false,cutout:'65%',
+      maintainAspectRatio:false,
       plugins:{
-        legend:{position:'bottom',labels:{color:'#64748b',font:{family:'Plus Jakarta Sans',size:9},usePointStyle:true,padding:10}},
+        legend:{position:'bottom',labels:{color:'#94a3b8',font:{family:'Plus Jakarta Sans',size:9},usePointStyle:true,pointStyle:'circle',padding:10}},
         tooltip:{ backgroundColor:'rgba(22,15,58,.97)', borderColor:'rgba(255,255,255,.08)', borderWidth:1,
           callbacks:{ label: c=>`  ${c.label}: ${c.raw} (${((c.raw/total)*100).toFixed(1)}%)` }}
       }
@@ -718,10 +723,13 @@ function renderSerialMini(data) {
 
 // ── TABLE (dashboard preview) ──
 function renderTable() {
-  const q = (document.getElementById('tableSearch')?.value||'').toLowerCase();
+  const q = (document.getElementById('tableSearch')?.value || document.getElementById('topSearch')?.value || '').toLowerCase();
   const body = document.getElementById('tableBody'); if(!body)return;
   const rows = filteredData.slice().reverse().filter(x =>
-    x.orderId.toLowerCase().includes(q)||x.asin.toLowerCase().includes(q)||x.merchantName.toLowerCase().includes(q)
+    x.orderId.toLowerCase().includes(q) ||
+    x.asin.toLowerCase().includes(q) ||
+    x.merchantName.toLowerCase().includes(q) ||
+    x.merchantId.toLowerCase().includes(q)
   ).slice(0,25);
   body.innerHTML=rows.map(x=>rowHTML(x)).join('');
 }
@@ -740,11 +748,14 @@ function esc(s){ return String(s).replace(/'/g,"\\'"); }
 
 // ── FULL TABLE (logs section) ──
 function renderFullTable() {
-  const q = (document.getElementById('fullSearch')?.value||'').toLowerCase();
+  const q = (document.getElementById('fullSearch')?.value || document.getElementById('topSearch')?.value || '').toLowerCase();
   const body = document.getElementById('fullTableBody'); if(!body)return;
   const rows = filteredData.slice().reverse().filter(x =>
-    x.orderId.toLowerCase().includes(q)||x.asin.toLowerCase().includes(q)||
-    x.merchantName.toLowerCase().includes(q)||x.issue.toLowerCase().includes(q)
+    x.orderId.toLowerCase().includes(q) ||
+    x.asin.toLowerCase().includes(q) ||
+    x.merchantName.toLowerCase().includes(q) ||
+    x.merchantId.toLowerCase().includes(q) ||
+    x.issue.toLowerCase().includes(q)
   );
   body.innerHTML=rows.map(x=>`
     <tr onclick="openPeek('${esc(x.orderId)}','${x.date}','${x.asin}','${esc(x.merchantName)}','${esc(x.merchantId)}',${x.price},'${esc(x.action)}','${esc(x.issue)}','${esc(x.road)}')">
@@ -873,11 +884,17 @@ function closePeek(){ document.getElementById('peek').classList.remove('open'); 
 // ── SEARCH SYNC ──
 document.addEventListener('input', e => {
   if(e.target.id==='topSearch'){
+    const q = e.target.value;
     const tbl=document.getElementById('tableSearch');
     const ftbl=document.getElementById('fullSearch');
-    if(tbl) tbl.value=e.target.value;
-    if(ftbl) ftbl.value=e.target.value;
-    renderTable(); renderFullTable();
+    if(tbl) tbl.value=q;
+    if(ftbl) ftbl.value=q;
+    renderTable();
+    if(currentSection==='logs') renderFullTable();
+  }
+  if(e.target.id==='tableSearch' || e.target.id==='fullSearch'){
+    renderTable();
+    renderFullTable();
   }
 });
 
