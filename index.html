@@ -25,7 +25,7 @@
     position: fixed;
     inset: 0;
     pointer-events: none;
-    z-index: 9999; /* يخليه ينزل فوق كل العناصر بما فيها الأسماء والإطار */
+    z-index: 9999;
     overflow: hidden;
   }
 
@@ -34,7 +34,7 @@
     background: #e8a5b2;
     border-radius: 150% 0 150% 0;
     animation: fall linear infinite;
-    opacity: 0.75;
+    opacity: 0.8;
   }
 
   @keyframes fall {
@@ -43,7 +43,7 @@
       opacity: 0;
     }
     10% {
-      opacity: 0.8;
+      opacity: 0.9;
     }
     100% {
       transform: translateY(110vh) translateX(150px) rotate(360deg);
@@ -339,17 +339,17 @@
 </head>
 <body>
 
-  <!-- أغنية حلم حياتي لوائل جسار -->
-  <audio id="bgMusic" loop>
-    <source src="https://archive.org/download/Wael_Jassar_Helm_Hayati/Wael%20Jassar%20-%20Helm%20Hayati.mp3" type="audio/mp3">
+  <!-- رابط صوتي جديد ومستقر ومباشر -->
+  <audio id="bgMusic" loop preload="auto">
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
   </audio>
 
-  <!-- زر التحكم الواضح للموسيقى (تشغيل / إيقاف) -->
+  <!-- زر التحكم الواضح للموسيقى -->
   <div class="music-control" id="musicControl" onclick="toggleMusic()">
     <span id="musicIcon">🔊</span> <b id="musicText">Pause Song</b>
   </div>
 
-  <!-- حاوية الورود الكثيفة التي تنزل فوق كل شيء -->
+  <!-- حاوية الورود الكثيفة فوق كل العناصر -->
   <div class="petals-container" id="petalsContainer"></div>
 
   <!-- شاشة الظرف الفاخر -->
@@ -416,20 +416,20 @@
   </div>
 
 <script>
-  // زيادة عدد الورود لتكون كثيفة جداً وتنزل فوق كل العناصر
+  // إنشاء ورود كثيفة جداً تغطي الشاشة بالكامل وتمر فوق العناصر
   function createPetals() {
     const container = document.getElementById('petalsContainer');
-    const petalsCount = 80; // عدد كبير جداً لملء الشاشة
+    const petalsCount = 90;
 
     for (let i = 0; i < petalsCount; i++) {
       const petal = document.createElement('div');
       petal.classList.add('petal');
       
-      const size = Math.random() * 12 + 6 + 'px';
+      const size = Math.random() * 14 + 6 + 'px';
       petal.style.width = size;
       petal.style.height = size;
       petal.style.left = Math.random() * 100 + 'vw';
-      petal.style.animationDuration = Math.random() * 4 + 3 + 's'; // سرعة انسيابية
+      petal.style.animationDuration = Math.random() * 4 + 3 + 's';
       petal.style.animationDelay = Math.random() * 5 + 's';
       
       const colors = ['#e8a5b2', '#f2c6d0', '#dfb1be', '#f7d1dc', '#ffccd5'];
@@ -454,13 +454,13 @@
 
     if (envelope.classList.contains('open')) return;
 
-    // تشغيل الأغنية بالتفاعل المباشر للضغطة
+    // تشغيل الصوت فوراً مع ضغطة فتح الظرف
     bgMusic.play().then(() => {
       isPlaying = true;
       musicIcon.innerText = "🔊";
       musicText.innerText = "Pause Song";
     }).catch(error => {
-      console.log("Audio play error", error);
+      console.log("Audio play blocked or failed", error);
     });
 
     envelope.classList.add('open');
@@ -472,7 +472,7 @@
     }, 600);
   }
 
-  // التحكم اليدوي في زر الأغنية
+  // التحكم اليدوي بزر الموسيقى
   function toggleMusic() {
     if (isPlaying) {
       bgMusic.pause();
@@ -480,14 +480,15 @@
       musicText.innerText = "Play Song";
       isPlaying = false;
     } else {
-      bgMusic.play();
-      musicIcon.innerText = "🔊";
-      musicText.innerText = "Pause Song";
-      isPlaying = true;
+      bgMusic.play().then(() => {
+        musicIcon.innerText = "🔊";
+        musicText.innerText = "Pause Song";
+        isPlaying = true;
+      }).catch(e => console.log(e));
     }
   }
 
-  // العد التنازلي لحد يوم 31 يوليو 2026
+  // العد التنازلي ليوم 31 يوليو 2026
   const weddingDate = new Date('July 31, 2026 00:00:00').getTime();
 
   function updateCountdown() {
