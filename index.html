@@ -411,7 +411,7 @@
     direction: rtl;
   }
 
-  /* SECTION 3: WHEN & WHERE (MATCHING REFERENCE IMAGE) */
+  /* SECTION 3: WHEN & WHERE */
   .section-when-where {
     min-height: 100vh;
     width: 100%;
@@ -503,25 +503,88 @@
     box-shadow: 0 10px 30px rgba(74, 59, 50, 0.05);
   }
 
-  .ww-venue-icon {
-    font-size: 1.8rem;
-    margin-bottom: 8px;
+  .ww-venue-icon { font-size: 1.8rem; margin-bottom: 8px; }
+  .ww-venue-label { font-size: 0.7rem; letter-spacing: 4px; color: #8c786d; text-transform: uppercase; margin-bottom: 10px; }
+  .ww-venue-name { font-family: 'Cinzel', serif; font-size: 1.15rem; color: #4a3b32; font-weight: 600; line-height: 1.6; }
+
+  /* SECTION 4: LOCATION (MATCHING REFERENCE IMAGE) */
+  .section-location {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 20px;
+    background: linear-gradient(to top, #fcf9f5, #f4ebe1);
   }
 
-  .ww-venue-label {
-    font-size: 0.7rem;
-    letter-spacing: 4px;
+  .loc-header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .loc-title {
+    font-family: 'Great Vibes', cursive;
+    font-size: 3.5rem;
     color: #8c786d;
-    text-transform: uppercase;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
   }
 
-  .ww-venue-name {
+  .loc-address-top {
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    color: #735e53;
+    margin-bottom: 30px;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  .map-card-frame {
+    background: #fdfbf7;
+    border: 1px solid #e0d1c3;
+    border-radius: 18px;
+    padding: 20px;
+    max-width: 700px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(74, 59, 50, 0.08);
+  }
+
+  .map-embed-container {
+    width: 100%;
+    height: 340px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #d4c5b9;
+    margin-bottom: 25px;
+  }
+
+  .map-embed-container iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .view-maps-btn {
+    display: inline-block;
+    padding: 12px 35px;
+    border: 1px solid #b89237;
+    border-radius: 30px;
     font-family: 'Cinzel', serif;
-    font-size: 1.15rem;
-    color: #4a3b32;
-    font-weight: 600;
-    line-height: 1.6;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    color: #523b0e;
+    text-decoration: none;
+    background: transparent;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(184, 146, 55, 0.1);
+  }
+
+  .view-maps-btn:hover {
+    background: #b89237;
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(184, 146, 55, 0.3);
   }
 </style>
 </head>
@@ -634,6 +697,23 @@
         <div class="ww-venue-icon">🏛️</div>
         <div class="ww-venue-label">Venue</div>
         <div class="ww-venue-name">Dalida Hall (قاعة داليدا) - Lamour Wedding Planning</div>
+      </div>
+    </section>
+
+    <!-- القسم الرابع: الموقع والخريطة التفاعلية (Location) -->
+    <section class="section-location">
+      <div class="loc-header">
+        <div class="loc-title">Location</div>
+        <div class="loc-address-top">Gala Club Gate – Sheraton Al Matar, El Nozha</div>
+      </div>
+
+      <div class="map-card-frame">
+        <div class="map-embed-container">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3452.791535787627!2d31.55586577644342!3d30.171147174864197!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14581d160c87bb37%3A0x35afc03727d372c1!2sDalida%20Hall%20(%D9%82%D8%A7%D8%B9%D8%A9%20%D8%AF%D8%A7%D9%84%D9%8A%D8%AF%D8%A7)%20-%20Lamour%20Wedding%20Planning!5e0!3m2!1sen!2seg!4v1710000000000!5m2!1sen!2seg" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+        <a href="https://www.google.com/maps/place/Dalida+Hall+(%D9%82%D8%A7%D8%B9%D8%A9+%D8%AF%D8%A7%D9%84%D9%8A%D8%AF%D8%A7)+-+Lamour+Wedding+Planning%E2%80%AD/@30.1711472,31.5580544,17z/data=!3m1!4b1!4m6!3m5!1s0x14581d160c87bb37:0x35afc03727d372c1!8m2!3d30.1711472!4d31.5580544!16s%2Fg%2F11wr0g37cb!18m1!1e1?entry=ttu&g_ep=EgoyMDI2MDcyMi4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="view-maps-btn">
+          📍 View on Maps
+        </a>
       </div>
     </section>
 
