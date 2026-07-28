@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ahmed & Yara's Wedding Invitation</title>
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cinzel:wght@400;500;600&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cinzel:wght@400;500;600&family=Amiri:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   
@@ -13,13 +13,10 @@
     font-family: 'Cinzel', serif;
     color: #4a3b32;
     overflow-x: hidden;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     position: relative;
   }
 
+  /* ── FALLING PETALS ── */
   .petals-container {
     position: fixed;
     inset: 0;
@@ -42,6 +39,7 @@
     100% { transform: translateY(110vh) translateX(150px) rotate(360deg); opacity: 0; }
   }
 
+  /* ── ENVELOPE OVERLAY ── */
   #envelope-screen {
     position: fixed;
     inset: 0;
@@ -50,7 +48,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
+    z-index: 10000;
     cursor: pointer;
     transition: opacity 0.8s ease, visibility 0.8s ease;
   }
@@ -145,6 +143,7 @@
     50% { opacity: 0.4; }
   }
 
+  /* ── MUSIC CONTROL BUTTON ── */
   .music-control {
     position: fixed;
     bottom: 25px;
@@ -172,22 +171,27 @@
   }
   .music-control span { font-size: 1.2rem; }
 
-  .main-content {
+  /* ── MAIN WEBSITE SECTIONS (SCROLLABLE) ── */
+  .page-container {
     opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 1.2s ease 0.3s, transform 1.2s ease 0.3s;
+    transition: opacity 1.2s ease 0.3s;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .page-container.visible {
+    opacity: 1;
+  }
+
+  /* SECTION 1: HERO (THE INVITATION) */
+  .section-hero {
     min-height: 100vh;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 30px;
-    z-index: 2;
-  }
-  
-  .main-content.visible {
-    opacity: 1;
-    transform: translateY(0);
+    padding: 40px 20px;
   }
 
   .invite-frame {
@@ -297,21 +301,138 @@
   .welcome-box { max-width: 500px; margin: 0 auto; }
   .welcome-title { font-size: 1.5rem; color: #3d2f28; margin-bottom: 12px; letter-spacing: 1px; }
   .welcome-desc { font-size: 0.95rem; line-height: 1.8; color: #6b5b52; font-family: 'Montserrat', sans-serif; font-weight: 300; }
+
+  /* SECTION 2: THE HAPPY COUPLE & QURANIC VERSE (IMAGE DESIGN MATCH) */
+  .section-couple {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 20px;
+    background: linear-gradient(to bottom, #fcf9f5, #f4ebe1);
+  }
+
+  .couple-header {
+    text-align: center;
+    margin-bottom: 45px;
+  }
+
+  .couple-title-main {
+    font-family: 'Great Vibes', cursive;
+    font-size: 3.5rem;
+    color: #6b5230;
+    margin-bottom: 8px;
+  }
+
+  .couple-subtitle-sub {
+    font-size: 0.75rem;
+    letter-spacing: 4px;
+    color: #8c786d;
+    text-transform: uppercase;
+  }
+
+  /* Circles Layout matching image */
+  .circles-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+
+  .name-circle {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    border: 2px solid #b89237;
+    background: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 10px 25px rgba(184, 146, 55, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: transform 0.4s ease;
+  }
+  .name-circle:hover {
+    transform: scale(1.05);
+  }
+
+  .circle-name-text {
+    font-family: 'Great Vibes', cursive;
+    font-size: 3rem;
+    color: #4a3b32;
+  }
+
+  .heart-icon-middle {
+    font-size: 2.2rem;
+    color: #b89237;
+    animation: pulse 2s infinite;
+  }
+
+  .couple-divider-line {
+    width: 120px;
+    height: 1px;
+    background: #c8b5a6;
+    margin: 10px auto 40px auto;
+  }
+
+  /* Quranic Verse Box */
+  .verse-card {
+    background: #fdfbf7;
+    border: 1px solid #e0d1c3;
+    border-radius: 16px;
+    padding: 40px 30px;
+    max-width: 750px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 15px 35px rgba(74, 59, 50, 0.05);
+    position: relative;
+  }
+
+  .bismillah-img {
+    font-family: 'Amiri', serif;
+    font-size: 1.3rem;
+    color: #6b5230;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .verse-text {
+    font-family: 'Amiri', serif;
+    font-size: 1.5rem;
+    color: #3d2f28;
+    line-height: 2.2;
+    direction: rtl;
+    margin-bottom: 20px;
+  }
+
+  .verse-reference {
+    font-family: 'Amiri', serif;
+    font-size: 1rem;
+    color: #8c786d;
+    direction: rtl;
+  }
 </style>
 </head>
 <body>
 
-  <!-- الرابط الجديد المباشر -->
+  <!-- الأغنية المطلوبة -->
   <audio id="bgMusic" loop preload="auto">
     <source src="https://i.top4top.io/m_3861tglih0.mp3" type="audio/mp3">
   </audio>
 
+  <!-- زر التحكم في الموسيقى -->
   <div class="music-control" id="musicControl" onclick="toggleMusic()">
     <span id="musicIcon">🔊</span> <b id="musicText">Pause Song</b>
   </div>
 
+  <!-- حاوية الورود المتساقطة -->
   <div class="petals-container" id="petalsContainer"></div>
 
+  <!-- شاشة الظرف الفاخر -->
   <div id="envelope-screen" onclick="openEnvelope()">
     <div class="envelope-wrapper" id="envelope">
       <div class="envelope-flap"></div>
@@ -325,31 +446,67 @@
     <div class="open-instruction">Tap anywhere to open & play music ✨</div>
   </div>
 
-  <div class="main-content" id="mainContent">
-    <div class="invite-frame">
-      <div class="top-invite-text">You are invited to the wedding party of</div>
-      <div class="names-container">
-        <div class="name">Ahmed</div>
-        <div class="ampersand">&</div>
-        <div class="name">Yara</div>
+  <!-- محتوى الصفحة الكامل (يظهر بعد فتح الظرف) -->
+  <div class="page-container" id="pageContainer">
+    
+    <!-- القسم الأول: بطاقة الدعوة والعد التنازلي -->
+    <section class="section-hero">
+      <div class="invite-frame">
+        <div class="top-invite-text">You are invited to the wedding party of</div>
+        <div class="names-container">
+          <div class="name">Ahmed</div>
+          <div class="ampersand">&</div>
+          <div class="name">Yara</div>
+        </div>
+        <div class="divider"></div>
+        <div class="date-display">31 . 07 . 2026</div>
+        <div class="until-text">until the big day</div>
+        <div class="countdown-container">
+          <div class="time-box"><div class="time-num" id="days">00</div><div class="time-lbl">Days</div></div>
+          <div class="time-colon">:</div>
+          <div class="time-box"><div class="time-num" id="hours">00</div><div class="time-lbl">Hrs</div></div>
+          <div class="time-colon">:</div>
+          <div class="time-box"><div class="time-num" id="minutes">00</div><div class="time-lbl">Min</div></div>
+          <div class="time-colon">:</div>
+          <div class="time-box"><div class="time-num" id="seconds">00</div><div class="time-lbl">Sec</div></div>
+        </div>
+        <div class="welcome-box">
+          <div class="welcome-title">Welcome!</div>
+          <div class="welcome-desc">We joyfully invite you to celebrate the beginning of our forever. Here you'll find everything you need for our special day.</div>
+        </div>
       </div>
-      <div class="divider"></div>
-      <div class="date-display">31 . 07 . 2026</div>
-      <div class="until-text">until the big day</div>
-      <div class="countdown-container">
-        <div class="time-box"><div class="time-num" id="days">00</div><div class="time-lbl">Days</div></div>
-        <div class="time-colon">:</div>
-        <div class="time-box"><div class="time-num" id="hours">00</div><div class="time-lbl">Hrs</div></div>
-        <div class="time-colon">:</div>
-        <div class="time-box"><div class="time-num" id="minutes">00</div><div class="time-lbl">Min</div></div>
-        <div class="time-colon">:</div>
-        <div class="time-box"><div class="time-num" id="seconds">00</div><div class="time-lbl">Sec</div></div>
+    </section>
+
+    <!-- القسم الثاني: تصميم الأسماء والآية (نفس الصورة المطورة) -->
+    <section class="section-couple">
+      <div class="couple-header">
+        <div class="couple-title-main">The Happy Couple</div>
+        <div class="couple-subtitle-sub">FOREVER & ALWAYS</div>
       </div>
-      <div class="welcome-box">
-        <div class="welcome-title">Welcome!</div>
-        <div class="welcome-desc">We joyfully invite you to celebrate the beginning of our forever. Here you'll find everything you need for our special day.</div>
+
+      <div class="circles-wrapper">
+        <div class="name-circle">
+          <div class="circle-name-text">Ahmed</div>
+        </div>
+        <div class="heart-icon-middle">🤎</div>
+        <div class="name-circle">
+          <div class="circle-name-text">Yara</div>
+        </div>
       </div>
-    </div>
+
+      <div class="couple-divider-line"></div>
+
+      <div class="verse-card">
+        <span class="bismillah-img">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</span>
+        <div class="verse-text">
+          وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً ۚ إِنَّ فِي ذَٰلِكَ لَآيَاتٍ لِّقَوْمٍ يَتَفَكَّرُونَ
+        </div>
+        <div class="verse-reference">
+          — سورة الروم - الآية 21
+        </div>
+      </div>
+    </section>
+
   </div>
 
 <script>
@@ -380,7 +537,7 @@
   function openEnvelope() {
     const envelope = document.getElementById('envelope');
     const screen = document.getElementById('envelope-screen');
-    const main = document.getElementById('mainContent');
+    const container = document.getElementById('pageContainer');
 
     if (envelope.classList.contains('open')) return;
 
@@ -396,7 +553,7 @@
     envelope.classList.add('open');
     setTimeout(() => {
       screen.classList.add('hidden');
-      main.classList.add('visible');
+      container.classList.add('visible');
       musicControl.classList.add('visible');
     }, 600);
   }
