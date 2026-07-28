@@ -307,9 +307,9 @@
 </head>
 <body>
 
-  <!-- عنصر الصوت (ملف الأغنيه في الخلفية) -->
+  <!-- عنصر الصوت (تم ربطه بأغنية حلم حياتي لوائل جسار عبر يوتيوب/أرشيف مباشر) -->
   <audio id="bgMusic" loop>
-    <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mp3">
+    <source src="https://archive.org/download/Wael_Jassar_Helm_Hayati/Wael%20Jassar%20-%20Helm%20Hayati.mp3" type="audio/mp3">
   </audio>
 
   <!-- حاوية الورود المتساقطة في الخلفية -->
@@ -412,7 +412,7 @@
 
     if (envelope.classList.contains('open')) return;
 
-    // تشغيل الأغنية فور الضغط على الظرف
+    // تشغيل أغنية حلم حياتي فور الضغط على الظرف
     bgMusic.play().catch(error => {
       console.log("Audio play blocked or needs interaction", error);
     });
