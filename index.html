@@ -171,7 +171,7 @@
   }
   .music-control span { font-size: 1.2rem; }
 
-  /* ── MAIN WEBSITE SECTIONS (SCROLLABLE) ── */
+  /* ── MAIN WEBSITE SECTIONS ── */
   .page-container {
     opacity: 0;
     transition: opacity 1.2s ease 0.3s;
@@ -184,7 +184,7 @@
     opacity: 1;
   }
 
-  /* SECTION 1: HERO (THE INVITATION) */
+  /* SECTION 1: HERO */
   .section-hero {
     min-height: 100vh;
     width: 100%;
@@ -302,7 +302,7 @@
   .welcome-title { font-size: 1.5rem; color: #3d2f28; margin-bottom: 12px; letter-spacing: 1px; }
   .welcome-desc { font-size: 0.95rem; line-height: 1.8; color: #6b5b52; font-family: 'Montserrat', sans-serif; font-weight: 300; }
 
-  /* SECTION 2: THE HAPPY COUPLE & QURANIC VERSE (IMAGE DESIGN MATCH) */
+  /* SECTION 2: THE HAPPY COUPLE & QURANIC VERSE */
   .section-couple {
     min-height: 100vh;
     width: 100%;
@@ -333,7 +333,6 @@
     text-transform: uppercase;
   }
 
-  /* Circles Layout matching image */
   .circles-wrapper {
     display: flex;
     justify-content: center;
@@ -356,9 +355,7 @@
     text-align: center;
     transition: transform 0.4s ease;
   }
-  .name-circle:hover {
-    transform: scale(1.05);
-  }
+  .name-circle:hover { transform: scale(1.05); }
 
   .circle-name-text {
     font-family: 'Great Vibes', cursive;
@@ -379,7 +376,6 @@
     margin: 10px auto 40px auto;
   }
 
-  /* Quranic Verse Box */
   .verse-card {
     background: #fdfbf7;
     border: 1px solid #e0d1c3;
@@ -389,7 +385,6 @@
     width: 100%;
     text-align: center;
     box-shadow: 0 15px 35px rgba(74, 59, 50, 0.05);
-    position: relative;
   }
 
   .bismillah-img {
@@ -414,6 +409,119 @@
     font-size: 1rem;
     color: #8c786d;
     direction: rtl;
+  }
+
+  /* SECTION 3: WHEN & WHERE (MATCHING REFERENCE IMAGE) */
+  .section-when-where {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 20px;
+    background: #fcf9f5;
+  }
+
+  .ww-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .ww-title {
+    font-family: 'Great Vibes', cursive;
+    font-size: 3.5rem;
+    color: #8c786d;
+    margin-bottom: 5px;
+  }
+
+  .ww-subtitle {
+    font-size: 0.75rem;
+    letter-spacing: 4px;
+    color: #9c8253;
+    text-transform: uppercase;
+  }
+
+  .ww-card-main {
+    background: linear-gradient(135deg, #a68a4b 0%, #7d632c 100%);
+    border-radius: 18px;
+    padding: 45px 30px;
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(125, 99, 44, 0.25);
+    margin-bottom: 30px;
+    color: #fff;
+  }
+
+  .ww-party-label {
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #f4ecdf;
+    margin-bottom: 15px;
+  }
+
+  .ww-date-big {
+    font-family: 'Cinzel', serif;
+    font-size: 2.2rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: #ffffff;
+    margin-bottom: 15px;
+  }
+
+  .ww-sparkle {
+    font-size: 1.2rem;
+    color: #f7e6b0;
+    margin: 15px 0;
+  }
+
+  .ww-day-text {
+    font-family: 'Great Vibes', cursive;
+    font-size: 2.5rem;
+    color: #fff3d1;
+    margin-bottom: 10px;
+  }
+
+  .ww-time-range {
+    font-family: 'Cinzel', serif;
+    font-size: 1.6rem;
+    letter-spacing: 1px;
+    color: #ffffff;
+    font-weight: 500;
+  }
+
+  .ww-venue-box {
+    background: #fdfbf7;
+    border: 1px solid #e0d1c3;
+    border-radius: 16px;
+    padding: 30px;
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(74, 59, 50, 0.05);
+  }
+
+  .ww-venue-icon {
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+  }
+
+  .ww-venue-label {
+    font-size: 0.7rem;
+    letter-spacing: 4px;
+    color: #8c786d;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .ww-venue-name {
+    font-family: 'Cinzel', serif;
+    font-size: 1.15rem;
+    color: #4a3b32;
+    font-weight: 600;
+    line-height: 1.6;
   }
 </style>
 </head>
@@ -446,7 +554,7 @@
     <div class="open-instruction">Tap anywhere to open & play music ✨</div>
   </div>
 
-  <!-- محتوى الصفحة الكامل (يظهر بعد فتح الظرف) -->
+  <!-- محتوى الصفحة الكامل -->
   <div class="page-container" id="pageContainer">
     
     <!-- القسم الأول: بطاقة الدعوة والعد التنازلي -->
@@ -477,7 +585,7 @@
       </div>
     </section>
 
-    <!-- القسم الثاني: تصميم الأسماء والآية (نفس الصورة المطورة) -->
+    <!-- القسم الثاني: الأسماء والآية القرآنية -->
     <section class="section-couple">
       <div class="couple-header">
         <div class="couple-title-main">The Happy Couple</div>
@@ -499,11 +607,33 @@
       <div class="verse-card">
         <span class="bismillah-img">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</span>
         <div class="verse-text">
-          وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً ۚ إِنَّ فِي ذَٰلِكَ لَآيَاتٍ لِّقَوْمٍ يَتَفَكَّرُونَ
+          وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنْفُسِكُمْ أَزْوَاجًا لِتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُمْ مَوَدَّةً وَرَحْمَةً ۚ إِنَّ فِي ذَلِكَ لَآيَاتٍ لِقَوْمٍ يَتَفَكَّرُونَ
         </div>
         <div class="verse-reference">
           — سورة الروم - الآية 21
         </div>
+      </div>
+    </section>
+
+    <!-- القسم الثالث: موعد ومكان الحفل (When & Where) -->
+    <section class="section-when-where">
+      <div class="ww-header">
+        <div class="ww-title">When & Where</div>
+        <div class="ww-subtitle">JOIN US TO CELEBRATE</div>
+      </div>
+
+      <div class="ww-card-main">
+        <div class="ww-party-label">Our Wedding Party</div>
+        <div class="ww-date-big">31 . 07 . 2026</div>
+        <div class="ww-sparkle">✦</div>
+        <div class="ww-day-text">Friday</div>
+        <div class="ww-time-range">4:00 PM : 7:00 PM</div>
+      </div>
+
+      <div class="ww-venue-box">
+        <div class="ww-venue-icon">🏛️</div>
+        <div class="ww-venue-label">Venue</div>
+        <div class="ww-venue-name">Dalida Hall (قاعة داليدا) - Lamour Wedding Planning</div>
       </div>
     </section>
 
