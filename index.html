@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ahmed & Yara's Wedding Invitation</title>
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cinzel:wght@400;500;600&family=Amiri:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cinzel:wght@400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   
@@ -39,11 +39,11 @@
     100% { transform: translateY(110vh) translateX(150px) rotate(360deg); opacity: 0; }
   }
 
-  /* ── ENVELOPE OVERLAY ── */
+  /* ── ROYAL ELEGANT ENVELOPE OVERLAY ── */
   #envelope-screen {
     position: fixed;
     inset: 0;
-    background: radial-gradient(circle, #f4ebe1 0%, #dcd1c5 100%);
+    background: radial-gradient(circle, #231b15 0%, #0f0b08 100%);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -60,15 +60,27 @@
   
   .envelope-wrapper {
     position: relative;
-    width: 360px;
-    height: 240px;
-    background: #fdfbf7;
-    box-shadow: 0 25px 50px rgba(74, 59, 50, 0.2);
-    border-radius: 6px;
+    width: 380px;
+    height: 260px;
+    background: linear-gradient(135deg, #fbf7ee 0%, #f0e6d2 100%);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 0 30px rgba(184, 146, 55, 0.15);
+    border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid #d4c5b9;
+    border: 2px solid #b89237;
+  }
+
+  /* إطار ملكي زخرفي داخلي للظرف */
+  .envelope-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border: 1px dashed #b89237;
+    pointer-events: none;
+    border-radius: 2px;
+    opacity: 0.6;
+    z-index: 5;
   }
 
   .envelope-flap {
@@ -77,13 +89,13 @@
     left: 0;
     width: 0;
     height: 0;
-    border-left: 180px solid transparent;
-    border-right: 180px solid transparent;
-    border-top: 130px solid #f2ece4;
+    border-left: 190px solid transparent;
+    border-right: 190px solid transparent;
+    border-top: 140px solid #e4d3b8;
     transform-origin: top;
-    transition: transform 0.8s ease;
-    z-index: 3;
-    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.05));
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 4;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
   }
   .envelope-wrapper.open .envelope-flap {
     transform: rotateX(180deg);
@@ -94,33 +106,33 @@
     position: absolute;
     inset: 0;
     border: solid transparent;
-    border-width: 120px 180px;
+    border-width: 130px 190px;
     border-top-color: transparent;
-    border-left-color: #f7f2eb;
-    border-right-color: #f7f2eb;
-    border-bottom-color: #faf5ed;
-    border-radius: 0 0 6px 6px;
+    border-left-color: #f7f1e5;
+    border-right-color: #f7f1e5;
+    border-bottom-color: #ede2cd;
+    border-radius: 0 0 4px 4px;
     z-index: 2;
     pointer-events: none;
   }
 
   .wax-seal {
     position: absolute;
-    top: 60px;
-    width: 80px;
-    height: 80px;
-    background: radial-gradient(circle, #dfbc6d 0%, #b89237 70%, #82621b 100%);
+    top: 65px;
+    width: 86px;
+    height: 86px;
+    background: radial-gradient(circle, #f3d482 0%, #c59b3a 65%, #8c6718 100%);
     border-radius: 50%;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.5);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4), inset 0 3px 6px rgba(255,255,255,0.6), inset 0 -3px 6px rgba(0,0,0,0.3);
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 4;
+    z-index: 6;
     transition: transform 0.5s ease, opacity 0.5s ease;
-    border: 3px double #614811;
+    border: 4px double #523b0e;
   }
   
-  .wax-seal svg { width: 48px; height: 48px; fill: #523b0e; }
+  .wax-seal svg { width: 50px; height: 50px; fill: #4a340b; filter: drop-shadow(0 1px 1px rgba(255,255,255,0.3)); }
 
   .envelope-wrapper.open .wax-seal {
     transform: scale(1.6) rotate(45deg);
@@ -129,14 +141,15 @@
 
   .open-instruction {
     margin-top: 35px;
-    font-size: 1rem;
-    color: #5c4a3f;
+    font-size: 0.9rem;
+    color: #d4af37;
     font-weight: 500;
-    letter-spacing: 3px;
+    letter-spacing: 4px;
     text-transform: uppercase;
     animation: pulse 1.5s infinite;
     text-align: center;
     padding: 0 20px;
+    font-family: 'Cinzel', serif;
   }
   @keyframes pulse {
     0%, 100% { opacity: 1; }
@@ -507,7 +520,7 @@
   .ww-venue-label { font-size: 0.7rem; letter-spacing: 4px; color: #8c786d; text-transform: uppercase; margin-bottom: 10px; }
   .ww-venue-name { font-family: 'Cinzel', serif; font-size: 1.15rem; color: #4a3b32; font-weight: 600; line-height: 1.6; }
 
-  /* SECTION 4: LOCATION (MATCHING REFERENCE IMAGE) */
+  /* SECTION 4: LOCATION */
   .section-location {
     min-height: 100vh;
     width: 100%;
@@ -603,7 +616,7 @@
   <!-- حاوية الورود المتساقطة -->
   <div class="petals-container" id="petalsContainer"></div>
 
-  <!-- شاشة الظرف الفاخر -->
+  <!-- شاشة الظرف الملكي الفاخر -->
   <div id="envelope-screen" onclick="openEnvelope()">
     <div class="envelope-wrapper" id="envelope">
       <div class="envelope-flap"></div>
@@ -614,7 +627,7 @@
         </svg>
       </div>
     </div>
-    <div class="open-instruction">Tap anywhere to open & play music ✨</div>
+    <div class="open-instruction">Tap anywhere to open royal invitation ✨</div>
   </div>
 
   <!-- محتوى الصفحة الكامل -->
@@ -704,7 +717,7 @@
     <section class="section-location">
       <div class="loc-header">
         <div class="loc-title">Location</div>
-        <div class="loc-address-top">Gala Club Gate – Sheraton Al Matar, El Nozha</div>
+        <div class="loc-address-top">Dalida Hall (قاعة داليدا) - Lamour Wedding Planning</div>
       </div>
 
       <div class="map-card-frame">
