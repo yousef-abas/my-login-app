@@ -339,12 +339,12 @@
 </head>
 <body>
 
-  <!-- رابط صوتي جديد ومستقر ومباشر -->
+  <!-- الأغنية الخاصة بك -->
   <audio id="bgMusic" loop preload="auto">
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
+    <source src="https://www.image2url.com/r2/default/audio/1785242752095-40492098-6fa1-4cdb-ba23-39a52d3ea300.mp3" type="audio/mp3">
   </audio>
 
-  <!-- زر التحكم الواضح للموسيقى -->
+  <!-- زر التحكم في الموسيقى -->
   <div class="music-control" id="musicControl" onclick="toggleMusic()">
     <span id="musicIcon">🔊</span> <b id="musicText">Pause Song</b>
   </div>
@@ -416,7 +416,6 @@
   </div>
 
 <script>
-  // إنشاء ورود كثيفة جداً تغطي الشاشة بالكامل وتمر فوق العناصر
   function createPetals() {
     const container = document.getElementById('petalsContainer');
     const petalsCount = 90;
@@ -454,7 +453,6 @@
 
     if (envelope.classList.contains('open')) return;
 
-    // تشغيل الصوت فوراً مع ضغطة فتح الظرف
     bgMusic.play().then(() => {
       isPlaying = true;
       musicIcon.innerText = "🔊";
@@ -472,7 +470,6 @@
     }, 600);
   }
 
-  // التحكم اليدوي بزر الموسيقى
   function toggleMusic() {
     if (isPlaying) {
       bgMusic.pause();
@@ -488,7 +485,6 @@
     }
   }
 
-  // العد التنازلي ليوم 31 يوليو 2026
   const weddingDate = new Date('July 31, 2026 00:00:00').getTime();
 
   function updateCountdown() {
