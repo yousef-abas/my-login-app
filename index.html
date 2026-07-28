@@ -20,7 +20,6 @@
     position: relative;
   }
 
-  /* ── FALLING PETALS (ABUNDANT & OVER EVERYTHING) ── */
   .petals-container {
     position: fixed;
     inset: 0;
@@ -38,20 +37,11 @@
   }
 
   @keyframes fall {
-    0% {
-      transform: translateY(-10vh) translateX(0) rotate(0deg);
-      opacity: 0;
-    }
-    10% {
-      opacity: 0.9;
-    }
-    100% {
-      transform: translateY(110vh) translateX(150px) rotate(360deg);
-      opacity: 0;
-    }
+    0% { transform: translateY(-10vh) translateX(0) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.9; }
+    100% { transform: translateY(110vh) translateX(150px) rotate(360deg); opacity: 0; }
   }
 
-  /* ── LUXURY WAX SEAL ENVELOPE OVERLAY ── */
   #envelope-screen {
     position: fixed;
     inset: 0;
@@ -132,11 +122,7 @@
     border: 3px double #614811;
   }
   
-  .wax-seal svg {
-    width: 48px;
-    height: 48px;
-    fill: #523b0e;
-  }
+  .wax-seal svg { width: 48px; height: 48px; fill: #523b0e; }
 
   .envelope-wrapper.open .wax-seal {
     transform: scale(1.6) rotate(45deg);
@@ -159,7 +145,6 @@
     50% { opacity: 0.4; }
   }
 
-  /* ── MUSIC CONTROL BUTTON ── */
   .music-control {
     position: fixed;
     bottom: 25px;
@@ -185,11 +170,8 @@
     opacity: 1;
     visibility: visible;
   }
-  .music-control span {
-    font-size: 1.2rem;
-  }
+  .music-control span { font-size: 1.2rem; }
 
-  /* ── MAIN INVITATION FRAME ── */
   .main-content {
     opacity: 0;
     transform: translateY(20px);
@@ -310,49 +292,25 @@
     margin-top: 4px;
   }
 
-  .time-colon {
-    font-size: 1.2rem;
-    color: #b5a293;
-    font-weight: 300;
-  }
+  .time-colon { font-size: 1.2rem; color: #b5a293; font-weight: 300; }
 
-  .welcome-box {
-    max-width: 500px;
-    margin: 0 auto;
-  }
-
-  .welcome-title {
-    font-size: 1.5rem;
-    color: #3d2f28;
-    margin-bottom: 12px;
-    letter-spacing: 1px;
-  }
-
-  .welcome-desc {
-    font-size: 0.95rem;
-    line-height: 1.8;
-    color: #6b5b52;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 300;
-  }
+  .welcome-box { max-width: 500px; margin: 0 auto; }
+  .welcome-title { font-size: 1.5rem; color: #3d2f28; margin-bottom: 12px; letter-spacing: 1px; }
+  .welcome-desc { font-size: 0.95rem; line-height: 1.8; color: #6b5b52; font-family: 'Montserrat', sans-serif; font-weight: 300; }
 </style>
 </head>
 <body>
 
-  <!-- رابط الأغنية الجديد من Top4top -->
-  <audio id="bgMusic" loop preload="auto" crossorigin="anonymous">
+  <audio id="bgMusic" loop preload="auto">
     <source src="https://l.top4top.io/m_3861wagb20.mp3" type="audio/mp3">
   </audio>
 
-  <!-- زر التحكم في الموسيقى -->
   <div class="music-control" id="musicControl" onclick="toggleMusic()">
     <span id="musicIcon">🔊</span> <b id="musicText">Pause Song</b>
   </div>
 
-  <!-- حاوية الورود الكثيفة فوق كل العناصر -->
   <div class="petals-container" id="petalsContainer"></div>
 
-  <!-- شاشة الظرف الفاخر -->
   <div id="envelope-screen" onclick="openEnvelope()">
     <div class="envelope-wrapper" id="envelope">
       <div class="envelope-flap"></div>
@@ -366,78 +324,50 @@
     <div class="open-instruction">Tap anywhere to open & play music ✨</div>
   </div>
 
-  <!-- محتوى الدعوة -->
   <div class="main-content" id="mainContent">
     <div class="invite-frame">
-      
       <div class="top-invite-text">You are invited to the wedding party of</div>
-      
       <div class="names-container">
         <div class="name">Ahmed</div>
         <div class="ampersand">&</div>
         <div class="name">Yara</div>
       </div>
-
       <div class="divider"></div>
-
       <div class="date-display">31 . 07 . 2026</div>
       <div class="until-text">until the big day</div>
-
       <div class="countdown-container">
-        <div class="time-box">
-          <div class="time-num" id="days">00</div>
-          <div class="time-lbl">Days</div>
-        </div>
+        <div class="time-box"><div class="time-num" id="days">00</div><div class="time-lbl">Days</div></div>
         <div class="time-colon">:</div>
-        <div class="time-box">
-          <div class="time-num" id="hours">00</div>
-          <div class="time-lbl">Hrs</div>
-        </div>
+        <div class="time-box"><div class="time-num" id="hours">00</div><div class="time-lbl">Hrs</div></div>
         <div class="time-colon">:</div>
-        <div class="time-box">
-          <div class="time-num" id="minutes">00</div>
-          <div class="time-lbl">Min</div>
-        </div>
+        <div class="time-box"><div class="time-num" id="minutes">00</div><div class="time-lbl">Min</div></div>
         <div class="time-colon">:</div>
-        <div class="time-box">
-          <div class="time-num" id="seconds">00</div>
-          <div class="time-lbl">Sec</div>
-        </div>
+        <div class="time-box"><div class="time-num" id="seconds">00</div><div class="time-lbl">Sec</div></div>
       </div>
-
       <div class="welcome-box">
         <div class="welcome-title">Welcome!</div>
-        <div class="welcome-desc">
-          We joyfully invite you to celebrate the beginning of our forever. Here you'll find everything you need for our special day.
-        </div>
+        <div class="welcome-desc">We joyfully invite you to celebrate the beginning of our forever. Here you'll find everything you need for our special day.</div>
       </div>
-
     </div>
   </div>
 
 <script>
   function createPetals() {
     const container = document.getElementById('petalsContainer');
-    const petalsCount = 90;
-
-    for (let i = 0; i < petalsCount; i++) {
+    for (let i = 0; i < 90; i++) {
       const petal = document.createElement('div');
       petal.classList.add('petal');
-      
       const size = Math.random() * 14 + 6 + 'px';
       petal.style.width = size;
       petal.style.height = size;
       petal.style.left = Math.random() * 100 + 'vw';
       petal.style.animationDuration = Math.random() * 4 + 3 + 's';
       petal.style.animationDelay = Math.random() * 5 + 's';
-      
       const colors = ['#e8a5b2', '#f2c6d0', '#dfb1be', '#f7d1dc', '#ffccd5'];
       petal.style.background = colors[Math.floor(Math.random() * colors.length)];
-
       container.appendChild(petal);
     }
   }
-
   createPetals();
 
   const bgMusic = document.getElementById('bgMusic');
@@ -453,16 +383,16 @@
 
     if (envelope.classList.contains('open')) return;
 
+    bgMusic.currentTime = 0;
     bgMusic.play().then(() => {
       isPlaying = true;
       musicIcon.innerText = "🔊";
       musicText.innerText = "Pause Song";
     }).catch(error => {
-      console.log("Audio play blocked or failed", error);
+      console.log("Autoplay blocked:", error);
     });
 
     envelope.classList.add('open');
-    
     setTimeout(() => {
       screen.classList.add('hidden');
       main.classList.add('visible');
@@ -486,24 +416,17 @@
   }
 
   const weddingDate = new Date('July 31, 2026 00:00:00').getTime();
-
   function updateCountdown() {
     const now = new Date().getTime();
     const gap = weddingDate - now;
-
     if (gap > 0) {
-      const second = 1000;
-      const minute = second * 60;
-      const hour = minute * 60;
-      const day = hour * 24;
-
+      const second = 1000, minute = second * 60, hour = minute * 60, day = hour * 24;
       document.getElementById('days').innerText = String(Math.floor(gap / day)).padStart(2, '0');
       document.getElementById('hours').innerText = String(Math.floor((gap % day) / hour)).padStart(2, '0');
       document.getElementById('minutes').innerText = String(Math.floor((gap % hour) / minute)).padStart(2, '0');
       document.getElementById('seconds').innerText = String(Math.floor((gap % minute) / second)).padStart(2, '0');
     }
   }
-
   setInterval(updateCountdown, 1000);
   updateCountdown();
 </script>
