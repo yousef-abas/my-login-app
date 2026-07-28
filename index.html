@@ -1,333 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ahmed & Yara's Wedding Invitation</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background-color: #f7f2ee;
-            font-family: 'Poppins', sans-serif;
-            color: #4a3b32;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        /* ── ENVELOPE OVERLAY ── */
-        #envelope-container {
-            position: fixed;
-            inset: 0;
-            background: #e8ded5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            transition: opacity 0.8s ease, visibility 0.8s ease;
-        }
-
-        #envelope-container.hide {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-
-        .envelope {
-            position: relative;
-            width: 320px;
-            height: 220px;
-            background: #d4c5b9;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-            cursor: pointer;
-            border-radius: 0 0 10px 10px;
-        }
-
-        .envelope-flap {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 0;
-            height: 0;
-            border-left: 160px solid transparent;
-            border-right: 160px solid transparent;
-            border-top: 120px solid #c2b0a2;
-            transform-origin: top;
-            transition: transform 0.6s ease;
-            z-index: 3;
-        }
-
-        .envelope.open .envelope-flap {
-            transform: rotateX(180deg);
-            z-index: 1;
-        }
-
-        .envelope-pocket {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #d4c5b9;
-            clip-path: polygon(0 40%, 50% 70%, 100% 40%, 100% 100%, 0 100%);
-            border-radius: 0 0 10px 10px;
-            z-index: 2;
-        }
-
-        .envelope-text {
-            position: absolute;
-            bottom: 30px;
-            width: 100%;
-            text-align: center;
-            font-family: 'Playfair Display', serif;
-            font-size: 14px;
-            letter-spacing: 2px;
-            color: #6b5b52;
-            z-index: 4;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
-        }
-
-        /* ── MAIN INVITATION CONTENT ── */
-        .main-content {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 1s ease 0.5s, transform 1s ease 0.5s;
-            max-width: 600px;
-            width: 90%;
-            text-align: center;
-            padding: 40px 20px;
-            margin: auto;
-        }
-
-        .main-content.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .card {
-            background: #ffffff;
-            border: 1px solid #ebdcd0;
-            border-radius: 16px;
-            padding: 40px 30px;
-            box-shadow: 0 10px 30px rgba(74, 59, 50, 0.05);
-            margin-bottom: 30px;
-        }
-
-        .invite-title {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            color: #8c786d;
-            margin-bottom: 15px;
-        }
-
-        .names {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.8rem;
-            font-weight: 700;
-            color: #362922;
-            margin: 20px 0;
-            line-height: 1.2;
-            animation: floatNames 3s ease-in-out infinite;
-        }
-
-        .names span {
-            display: block;
-            font-size: 1.8rem;
-            font-weight: 400;
-            color: #b09b8e;
-            margin: 5px 0;
-        }
-
-        @keyframes floatNames {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
-        }
-
-        /* ── COUNTDOWN ── */
-        .countdown-section {
-            margin: 30px 0;
-        }
-
-        .wedding-date {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.1rem;
-            color: #6b5b52;
-            margin-bottom: 15px;
-            letter-spacing: 1px;
-        }
-
-        .countdown-grid {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        .time-box {
-            background: #fcf9f6;
-            border: 1px solid #ebdcd0;
-            border-radius: 10px;
-            padding: 12px 15px;
-            min-width: 70px;
-        }
-
-        .time-num {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #4a3b32;
-        }
-
-        .time-label {
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #8c786d;
-            margin-top: 4px;
-        }
-
-        /* ── WELCOME MESSAGE ── */
-        .welcome-card {
-            background: #ffffff;
-            border: 1px solid #ebdcd0;
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(74, 59, 50, 0.05);
-        }
-
-        .welcome-heading {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            color: #362922;
-            margin-bottom: 12px;
-        }
-
-        .welcome-text {
-            font-size: 0.95rem;
-            line-height: 1.7;
-            color: #6b5b52;
-        }
-    </style>
-</head>
-<body>
-
-    <!-- الظرف الواجهة -->
-    <div id="envelope-container" onclick="openEnvelope()">
-        <div class="envelope" id="envelope">
-            <div class="envelope-flap"></div>
-            <div class="envelope-pocket"></div>
-            <div class="envelope-text">Click to Open Invitation</div>
-        </div>
-    </div>
-
-    <!-- محتوى الدعوة الأساسي -->
-    <div class="main-content" id="mainContent">
-        
-        <!-- كارت الأسماء والدعوة -->
-        <div class="card">
-            <div class="invite-title">You are invited to the wedding party of</div>
-            <div class="names">
-                Ahmed
-                <span>&</span>
-                Yara
-            </div>
-        </div>
-
-        <!-- تاريخ وزفاف والعداد -->
-        <div class="card">
-            <div class="wedding-date">📅 31 - 07 - 2026</div>
-            <div class="countdown-grid">
-                <div class="time-box">
-                    <div class="time-num" id="days">00</div>
-                    <div class="time-label">Days</div>
-                </div>
-                <div class="time-box">
-                    <div class="time-num" id="hours">00</div>
-                    <div class="time-label">Hours</div>
-                </div>
-                <div class="time-box">
-                    <div class="time-num" id="minutes">00</div>
-                    <div class="time-label">Mins</div>
-                </div>
-                <div class="time-box">
-                    <div class="time-num" id="seconds">00</div>
-                    <div class="time-label">Secs</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- رسالة الترحيب -->
-        <div class="welcome-card">
-            <div class="welcome-heading">Welcome!</div>
-            <div class="welcome-text">
-                We joyfully invite you to celebrate the beginning of our forever. Here you'll find everything you need for our special day.
-            </div>
-        </div>
-
-    </div>
-
-    <script>
-        function openEnvelope() {
-            const envelope = document.getElementById('envelope');
-            const container = document.getElementById('envelope-container');
-            const mainContent = document.getElementById('mainContent');
-
-            envelope.classList.add('open');
-            
-            setTimeout(() => {
-                container.classList.add('hide');
-                mainContent.classList.add('show');
-            }, 600);
-        }
-
-        // عداد الوقت التنازلي لحد تاريخ 31-7-2026
-        const weddingDate = new Date('July 31, 2026 00:00:00').getTime();
-
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const distance = weddingDate - now;
-
-            if (distance < 0) {
-                document.getElementById('days').innerText = '0';
-                document.getElementById('hours').innerText = '0';
-                document.getElementById('minutes').innerText = '0';
-                document.getElementById('seconds').innerText = '0';
-                return;
-            }
-
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * فكرة ممتازة جداً ورومانسية جداً! هنقسم الصفحة لثلاثة أقسام رئيسية بالتصميم الحركي المطلوب:
-
-1. **واجهة الظرف (The Envelope):** ظرف أنيق في أول الصفحة، وأول ما المستخدم يضغط على مكان الفتح، الظرف بيفتح بتأثير حركي سلس (Animation).
-2. **كارت الدعوة والأسماء:** بعد فتح الظرف، يظهر كارت في منتصف الشاشة مكتوب عليه عبارة الدعوة والأسماء (Ahmed & Yara) بخط فخم، مع حركة اهتزاز أو ظهور جذابة (Floating/Shaking effect).
-3. **التفاصيل والعد التنازلي:** لما ننزل بالسكرول، نلاقي تاريخ الفتح (31-7-2026) وجنبه عداد تنازلي دقيق بيحسب الأيام والساعات والدقائق الباقية، وتحتهم رسالة الترحيب الدافئة (Welcome! We joyfully invite you...).
-
-جهزت لك كود الـ HTML والـ CSS والـ JavaScript المتكامل للصفحة دي بالظبط، وبأعلى جودة وتصميم متجاوب مع الموبايل:
-
-```html
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ahmed & Yara's Wedding</title>
-<link href="[https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Cairo:wght@400;600&display=swap](https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Cairo:wght@400;600&display=swap)" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Cairo:wght@400;600&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -347,6 +24,7 @@
     align-items: center;
     justify-content: center;
     z-index: 1000;
+    cursor: pointer;
     transition: opacity 0.8s ease, visibility 0.8s ease;
   }
   #envelope-screen.hidden {
@@ -360,11 +38,7 @@
     height: 220px;
     background: #c89598;
     border-radius: 0 0 10px 10px;
-    cursor: pointer;
     box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
   .envelope-flap {
     position: absolute;
@@ -412,7 +86,7 @@
   .main-content {
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 1s ease 0.5s, transform 1s ease 0.5s;
+    transition: opacity 1s ease 0.3s, transform 1s ease 0.3s;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -527,12 +201,12 @@
 <body>
 
   <!-- شاشة الظرف الأولية -->
-  <div id="envelope-screen">
-    <div class="envelope-container" id="envelope" onclick="openEnvelope()">
+  <div id="envelope-screen" onclick="openEnvelope()">
+    <div class="envelope-container" id="envelope">
       <div class="envelope-flap"></div>
       <div class="envelope-pocket"></div>
     </div>
-    <div class="open-instruction">اضغط لفتح الظرف ✨</div>
+    <div class="open-instruction">اضغط في أي مكان لفتح الظرف ✨</div>
   </div>
 
   <!-- محتوى الدعوة الأساسي -->
@@ -585,12 +259,14 @@
     const screen = document.getElementById('envelope-screen');
     const main = document.getElementById('mainContent');
 
+    if (envelope.classList.contains('open')) return;
+
     envelope.classList.add('open');
     
     setTimeout(() => {
       screen.classList.add('hidden');
       main.classList.add('visible');
-    }, 600);
+    }, 500);
   }
 
   // عداد تنازلي لحد يوم 31 يوليو 2026
