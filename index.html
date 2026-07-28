@@ -3,22 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ahmed & Yara's Wedding</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Cairo:wght@400;600&display=swap" rel="stylesheet">
+<title>Ahmed & Yara's Wedding Invitation</title>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cinzel:wght@400;500;600&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  
   body {
-    background-color: #fcf6f5;
-    font-family: 'Playfair Display', serif;
-    color: #2c2c2c;
+    background-color: #fcf9f5;
+    font-family: 'Cinzel', serif;
+    color: #4a3b32;
     overflow-x: hidden;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
-  /* ── ENVELOPE OVERLAY ── */
+  /* ── WAX SEAL ENVELOPE OVERLAY ── */
   #envelope-screen {
     position: fixed;
     inset: 0;
-    background: linear-gradient(135deg, #f3e7e8 0%, #d8c2c4 100%);
+    background: #eae3db;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -32,225 +37,288 @@
     visibility: hidden;
     pointer-events: none;
   }
-  .envelope-container {
+  
+  .envelope {
     position: relative;
-    width: 320px;
-    height: 220px;
-    background: #c89598;
-    border-radius: 0 0 10px 10px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    width: 340px;
+    height: 230px;
+    background: #fbf9f6;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #dfd5cb;
   }
-  .envelope-flap {
+
+  .envelope::before {
+    content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 0;
-    height: 0;
-    border-left: 160px solid transparent;
-    border-right: 160px solid transparent;
-    border-top: 120px solid #b27d80;
+    inset: 0;
+    border: solid transparent;
+    border-width: 115px 170px 0 170px;
+    border-top-color: #f2ece4;
     transform-origin: top;
-    transition: transform 0.6s ease;
-    z-index: 3;
-  }
-  .envelope-container.open .envelope-flap {
-    transform: rotateX(180deg);
-    z-index: 1;
-  }
-  .envelope-pocket {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 0;
-    border-left: 160px solid #c89598;
-    border-right: 160px solid #c89598;
-    border-bottom: 110px solid #d4a3a6;
-    border-radius: 0 0 10px 10px;
+    transition: transform 0.8s ease;
     z-index: 2;
   }
+  .envelope.open::before {
+    transform: rotateX(180deg);
+    z-index: 0;
+  }
+
+  .wax-seal {
+    position: absolute;
+    top: 55px;
+    width: 75px;
+    height: 75px;
+    background: radial-gradient(circle, #dfbc6d 0%, #b89237 70%, #947124 100%);
+    border-radius: 50%;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2), inset 0 2px 3px rgba(255,255,255,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 4;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+    border: 3px dashed #82621b;
+  }
+  
+  .wax-seal svg {
+    width: 45px;
+    height: 45px;
+    fill: #614811;
+  }
+
+  .envelope.open .wax-seal {
+    transform: scale(1.5) rotate(45deg);
+    opacity: 0;
+  }
+
   .open-instruction {
-    margin-top: 25px;
-    font-size: 1.1rem;
-    color: #5a4042;
-    font-weight: 600;
-    letter-spacing: 1px;
+    margin-top: 30px;
+    font-size: 0.95rem;
+    color: #6e5f54;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
     animation: pulse 1.5s infinite;
   }
   @keyframes pulse {
     0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+    50% { opacity: 0.4; }
   }
 
-  /* ── MAIN CONTENT ── */
+  /* ── MAIN INVITATION FRAME ── */
   .main-content {
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 1s ease 0.3s, transform 1s ease 0.3s;
+    transition: opacity 1.2s ease 0.3s, transform 1.2s ease 0.3s;
+    width: 100%;
     min-height: 100vh;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    padding: 60px 20px;
+    padding: 30px;
   }
+  
   .main-content.visible {
     opacity: 1;
     transform: translateY(0);
   }
 
-  /* ── SECTION 1: INVITATION CARD ── */
-  .invite-card {
-    text-align: center;
-    background: #ffffff;
-    padding: 50px 40px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-    max-width: 600px;
+  .invite-frame {
+    position: relative;
     width: 100%;
-    margin-bottom: 60px;
-    border: 1px solid #f0e1e2;
-  }
-  .invite-subtitle {
-    font-size: 0.95rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: #8c6d70;
-    margin-bottom: 20px;
-  }
-  .couple-names {
-    font-size: 3rem;
-    font-weight: 700;
-    color: #4a2e31;
-    margin: 20px 0;
-    animation: gentle-shake 3s ease-in-out infinite;
-  }
-  .couple-names span {
-    display: block;
-    font-size: 2rem;
-    font-weight: 400;
-    color: #b27d80;
-    margin: 10px 0;
-  }
-  @keyframes gentle-shake {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    25% { transform: translateY(-4px) rotate(-1deg); }
-    75% { transform: translateY(4px) rotate(1deg); }
+    max-width: 750px;
+    background: #fdfbf7;
+    border: 2px solid #d4c5b9;
+    outline: 6px solid #fdfbf7;
+    outline-offset: -10px;
+    padding: 60px 30px;
+    text-align: center;
+    box-shadow: 0 15px 35px rgba(74, 59, 50, 0.08);
   }
 
-  /* ── SECTION 2: DATE & COUNTDOWN ── */
-  .date-section {
-    text-align: center;
-    margin-bottom: 60px;
-  }
-  .wedding-date {
-    font-size: 1.6rem;
-    color: #4a2e31;
-    font-weight: 600;
-    margin-bottom: 20px;
-  }
-  .countdown-box {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-  }
-  .time-block {
-    background: #ffffff;
-    padding: 15px 20px;
-    border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.04);
-    min-width: 80px;
-    border: 1px solid #f0e1e2;
-  }
-  .time-num {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #b27d80;
-    font-family: 'Cairo', sans-serif;
-  }
-  .time-lbl {
+  /* عناصر النص والزخرفة */
+  .top-invite-text {
     font-size: 0.75rem;
+    letter-spacing: 4px;
+    color: #8c786d;
     text-transform: uppercase;
-    color: #8c6d70;
-    margin-top: 5px;
+    margin-bottom: 30px;
+  }
+
+  .names-container {
+    margin: 20px 0 40px 0;
+    animation: gentle-shake 3s ease-in-out infinite;
+  }
+
+  .name {
+    font-family: 'Great Vibes', cursive;
+    font-size: 4.5rem;
+    color: #3d2f28;
+    line-height: 1.1;
+  }
+
+  .ampersand {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    color: #9c8253;
+    margin: 10px 0;
+    font-style: italic;
+  }
+
+  @keyframes gentle-shake {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-4px) rotate(-0.5deg); }
+    75% { transform: translateY(4px) rotate(0.5deg); }
+  }
+
+  .divider {
+    width: 60px;
+    height: 1px;
+    background: #c8b5a6;
+    margin: 30px auto;
+  }
+
+  .date-display {
+    font-size: 1.25rem;
+    letter-spacing: 3px;
+    color: #59473d;
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+
+  .until-text {
+    font-size: 0.8rem;
+    font-style: italic;
+    color: #8c786d;
+    margin-bottom: 25px;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  /* العد التنازلي المنسق */
+  .countdown-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 45px;
+  }
+
+  .time-box {
+    border: 1px solid #d4c5b9;
+    padding: 10px 14px;
+    min-width: 65px;
+    border-radius: 4px;
+    background: #fff;
+  }
+
+  .time-num {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #4a3b32;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  .time-lbl {
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    color: #8c786d;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .time-colon {
+    font-size: 1.2rem;
+    color: #b5a293;
+    font-weight: 300;
+  }
+
+  /* رسالة الترحيب */
+  .welcome-box {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .welcome-title {
+    font-size: 1.5rem;
+    color: #3d2f28;
+    margin-bottom: 12px;
     letter-spacing: 1px;
   }
 
-  /* ── SECTION 3: WELCOME MESSAGE ── */
-  .welcome-section {
-    text-align: center;
-    max-width: 550px;
-    background: #ffffff;
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-    border: 1px solid #f0e1e2;
-  }
-  .welcome-title {
-    font-size: 2rem;
-    color: #4a2e31;
-    margin-bottom: 15px;
-  }
   .welcome-desc {
-    font-size: 1.1rem;
-    color: #6c5a5c;
-    line-height: 1.6;
-    font-family: 'Cairo', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: #6b5b52;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
   }
 </style>
 </head>
 <body>
 
-  <!-- شاشة الظرف الأولية -->
+  <!-- شاشة الظرف مع الختم الشمعي -->
   <div id="envelope-screen" onclick="openEnvelope()">
-    <div class="envelope-container" id="envelope">
-      <div class="envelope-flap"></div>
-      <div class="envelope-pocket"></div>
+    <div class="envelope" id="envelope">
+      <div class="wax-seal">
+        <svg viewBox="0 0 24 24">
+          <path d="M17.83 2.17c-1.5-.63-3.21-.14-4.27 1.09-1.39 1.6-1.59 4.14-.54 6.06L4.7 15.65c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l8.32-8.33c1.92 1.05 4.46.85 6.06-.54 1.23-1.06 1.72-2.77 1.09-4.27-.63-1.5-2.02-2.58-3.75-2.75zm-1.4 6.78l-4.24 4.24c-.39.39-1.02.39-1.41 0s-.39-1.02 0-1.41l4.24-4.24c.39-.39 1.02-.39 1.41 0s.39 1.02 0 1.41z"/>
+        </svg>
+      </div>
     </div>
-    <div class="open-instruction">اضغط في أي مكان لفتح الظرف ✨</div>
+    <div class="open-instruction">Tap to open your invitation ✨</div>
   </div>
 
-  <!-- محتوى الدعوة الأساسي -->
+  <!-- محتوى الدعوة الأساسي بتصميم الإطار والخطوط المطلوبة -->
   <div class="main-content" id="mainContent">
-    
-    <!-- كارت الاسماء ودعوة الزفاف -->
-    <div class="invite-card">
-      <div class="invite-subtitle">You are invited to the wedding party of</div>
-      <div class="couple-names">
-        Ahmed
-        <span>&</span>
-        Yara
+    <div class="invite-frame">
+      
+      <div class="top-invite-text">You are invited to the wedding party of</div>
+      
+      <div class="names-container">
+        <div class="name">Ahmed</div>
+        <div class="ampersand">&</div>
+        <div class="name">Yara</div>
       </div>
-    </div>
 
-    <!-- التاريخ والعد التنازلي -->
-    <div class="date-section">
-      <div class="wedding-date">📅 31-7-2026</div>
-      <div class="countdown-box">
-        <div class="time-block">
+      <div class="divider"></div>
+
+      <div class="date-display">31 . 07 . 2026</div>
+      <div class="until-text">until the big day</div>
+
+      <!-- العد التنازلي بالنقط والفواصل -->
+      <div class="countdown-container">
+        <div class="time-box">
           <div class="time-num" id="days">00</div>
-          <div class="time-lbl">أيام</div>
+          <div class="time-lbl">Days</div>
         </div>
-        <div class="time-block">
+        <div class="time-colon">:</div>
+        <div class="time-box">
           <div class="time-num" id="hours">00</div>
-          <div class="time-lbl">ساعات</div>
+          <div class="time-lbl">Hrs</div>
         </div>
-        <div class="time-block">
+        <div class="time-colon">:</div>
+        <div class="time-box">
           <div class="time-num" id="minutes">00</div>
-          <div class="time-lbl">دقائق</div>
+          <div class="time-lbl">Min</div>
         </div>
-        <div class="time-block">
+        <div class="time-colon">:</div>
+        <div class="time-box">
           <div class="time-num" id="seconds">00</div>
-          <div class="time-lbl">ثواني</div>
+          <div class="time-lbl">Sec</div>
         </div>
       </div>
-    </div>
 
-    <!-- رسالة الترحيب -->
-    <div class="welcome-section">
-      <h2 class="welcome-title">Welcome!</h2>
-      <p class="welcome-desc">We joyfully invite you to celebrate the beginning of our forever. Here you'll find everything you need for our special day.</p>
-    </div>
+      <div class="welcome-box">
+        <div class="welcome-title">Welcome!</div>
+        <div class="welcome-desc">
+          We joyfully invite you to celebrate the beginning of our forever. Here you'll find everything you need for our special day.
+        </div>
+      </div>
 
+    </div>
   </div>
 
 <script>
@@ -266,7 +334,7 @@
     setTimeout(() => {
       screen.classList.add('hidden');
       main.classList.add('visible');
-    }, 500);
+    }, 600);
   }
 
   // عداد تنازلي لحد يوم 31 يوليو 2026
@@ -282,10 +350,10 @@
       const hour = minute * 60;
       const day = hour * 24;
 
-      document.getElementById('days').innerText = Math.floor(gap / day);
-      document.getElementById('hours').innerText = Math.floor((gap % day) / hour);
-      document.getElementById('minutes').innerText = Math.floor((gap % hour) / minute);
-      document.getElementById('seconds').innerText = Math.floor((gap % minute) / second);
+      document.getElementById('days').innerText = String(Math.floor(gap / day)).padStart(2, '0');
+      document.getElementById('hours').innerText = String(Math.floor((gap % day) / hour)).padStart(2, '0');
+      document.getElementById('minutes').innerText = String(Math.floor((gap % hour) / minute)).padStart(2, '0');
+      document.getElementById('seconds').innerText = String(Math.floor((gap % minute) / second)).padStart(2, '0');
     }
   }
 
