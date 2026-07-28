@@ -9,8 +9,7 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   
   body {
-    /* خلفية كوشة عريس وعروسة في مكان أخضر وطبيعة ساحرة */
-    background: linear-gradient(rgba(15, 30, 20, 0.75), rgba(10, 20, 15, 0.85)), 
+    background: linear-gradient(rgba(15, 30, 20, 0.78), rgba(10, 20, 15, 0.88)), 
                 url('https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1600&auto=format&fit=crop') no-repeat center center fixed;
     background-size: cover;
     font-family: 'Cinzel', serif;
@@ -66,8 +65,8 @@
   .envelope-wrapper {
     position: relative;
     width: 100%;
-    max-width: 360px;
-    height: 250px;
+    max-width: 340px;
+    height: 230px;
     background: linear-gradient(135deg, #fbf7ee 0%, #f0e6d2 100%);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 0 25px rgba(184, 146, 55, 0.15);
     border-radius: 4px;
@@ -94,9 +93,9 @@
     left: 0;
     width: 0;
     height: 0;
-    border-left: 180px solid transparent;
-    border-right: 180px solid transparent;
-    border-top: 130px solid #e4d3b8;
+    border-left: 170px solid transparent;
+    border-right: 170px solid transparent;
+    border-top: 120px solid #e4d3b8;
     transform-origin: top;
     transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 4;
@@ -111,7 +110,7 @@
     position: absolute;
     inset: 0;
     border: solid transparent;
-    border-width: 120px 180px;
+    border-width: 110px 170px;
     border-top-color: transparent;
     border-left-color: #f7f1e5;
     border-right-color: #f7f1e5;
@@ -123,9 +122,9 @@
 
   .wax-seal {
     position: absolute;
-    top: 60px;
-    width: 76px;
-    height: 76px;
+    top: 55px;
+    width: 70px;
+    height: 70px;
     background: radial-gradient(circle, #f3d482 0%, #c59b3a 65%, #8c6718 100%);
     border-radius: 50%;
     box-shadow: 0 8px 20px rgba(0,0,0,0.4), inset 0 3px 6px rgba(255,255,255,0.6), inset 0 -3px 6px rgba(0,0,0,0.3);
@@ -137,7 +136,7 @@
     border: 3px double #523b0e;
   }
   
-  .wax-seal svg { width: 42px; height: 42px; fill: #4a340b; filter: drop-shadow(0 1px 1px rgba(255,255,255,0.3)); }
+  .wax-seal svg { width: 38px; height: 38px; fill: #4a340b; filter: drop-shadow(0 1px 1px rgba(255,255,255,0.3)); }
 
   .envelope-wrapper.open .wax-seal {
     transform: scale(1.5) rotate(45deg);
@@ -145,11 +144,11 @@
   }
 
   .open-instruction {
-    margin-top: 30px;
-    font-size: 0.85rem;
+    margin-top: 25px;
+    font-size: 0.8rem;
     color: #d4af37;
     font-weight: 500;
-    letter-spacing: 3px;
+    letter-spacing: 2px;
     text-transform: uppercase;
     animation: pulse 1.5s infinite;
     text-align: center;
@@ -164,11 +163,11 @@
   /* ── MUSIC CONTROL BUTTON ── */
   .music-control {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    bottom: 16px;
+    right: 16px;
     background: rgba(20, 35, 25, 0.9);
     border: 1px solid #b89237;
-    padding: 8px 15px;
+    padding: 6px 12px;
     border-radius: 30px;
     display: flex;
     align-items: center;
@@ -176,7 +175,7 @@
     cursor: pointer;
     z-index: 10000;
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-family: 'Montserrat', sans-serif;
     color: #f4ecdf;
     opacity: 0;
@@ -187,7 +186,7 @@
     opacity: 1;
     visibility: visible;
   }
-  .music-control span { font-size: 1.1rem; }
+  .music-control span { font-size: 1rem; }
 
   /* ── MAIN WEBSITE SECTIONS ── */
   .page-container {
@@ -202,7 +201,7 @@
     opacity: 1;
   }
 
-  /* Common Section Styling for mobile clarity */
+  /* Mobile-first section sizing to eliminate crowding */
   section {
     width: 100%;
     min-height: 100vh;
@@ -210,50 +209,50 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 50px 16px;
+    padding: 40px 14px;
   }
 
   /* SECTION 1: HERO */
   .invite-frame {
     position: relative;
     width: 100%;
-    max-width: 650px;
+    max-width: 500px;
     background: rgba(18, 30, 22, 0.88);
     backdrop-filter: blur(10px);
     border: 2px solid #b89237;
     outline: 4px solid rgba(18, 30, 22, 0.5);
-    outline-offset: -8px;
-    padding: 40px 20px;
+    outline-offset: -6px;
+    padding: 30px 16px;
     text-align: center;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-    border-radius: 12px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
   }
 
   .top-invite-text {
-    font-size: 0.7rem;
-    letter-spacing: 3px;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
     color: #c5b299;
     text-transform: uppercase;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
   }
 
   .names-container {
-    margin: 15px 0 30px 0;
+    margin: 10px 0 20px 0;
     animation: gentle-shake 3s ease-in-out infinite;
   }
 
   .name {
     font-family: 'Great Vibes', cursive;
-    font-size: 3.8rem;
+    font-size: 3.2rem;
     color: #f7e6b0;
     line-height: 1.1;
   }
 
   .ampersand {
     font-family: 'Cinzel', serif;
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     color: #b89237;
-    margin: 8px 0;
+    margin: 4px 0;
     font-style: italic;
   }
 
@@ -264,25 +263,25 @@
   }
 
   .divider {
-    width: 50px;
+    width: 40px;
     height: 1px;
     background: #b89237;
-    margin: 25px auto;
+    margin: 18px auto;
   }
 
   .date-display {
-    font-size: 1.15rem;
+    font-size: 1.05rem;
     letter-spacing: 2px;
     color: #f4ecdf;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     font-weight: 500;
   }
 
   .until-text {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-style: italic;
     color: #c5b299;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     font-family: 'Montserrat', sans-serif;
   }
 
@@ -290,139 +289,139 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 35px;
+    gap: 6px;
+    margin-bottom: 25px;
     flex-wrap: wrap;
   }
 
   .time-box {
     border: 1px solid rgba(184, 146, 55, 0.5);
-    padding: 8px 10px;
-    min-width: 55px;
+    padding: 6px 8px;
+    min-width: 48px;
     border-radius: 6px;
     background: rgba(10, 20, 14, 0.6);
   }
 
   .time-num {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 600;
     color: #f7e6b0;
     font-family: 'Montserrat', sans-serif;
   }
 
   .time-lbl {
-    font-size: 0.55rem;
+    font-size: 0.5rem;
     letter-spacing: 1px;
     color: #c5b299;
     text-transform: uppercase;
-    margin-top: 3px;
+    margin-top: 2px;
   }
 
-  .time-colon { font-size: 1rem; color: #b89237; font-weight: 300; }
+  .time-colon { font-size: 0.9rem; color: #b89237; font-weight: 300; }
 
-  .welcome-box { max-width: 450px; margin: 0 auto; }
-  .welcome-title { font-size: 1.3rem; color: #f7e6b0; margin-bottom: 10px; letter-spacing: 1px; }
-  .welcome-desc { font-size: 0.88rem; line-height: 1.6; color: #d8ccbe; font-family: 'Montserrat', sans-serif; font-weight: 300; }
+  .welcome-box { max-width: 400px; margin: 0 auto; }
+  .welcome-title { font-size: 1.15rem; color: #f7e6b0; margin-bottom: 6px; letter-spacing: 1px; }
+  .welcome-desc { font-size: 0.82rem; line-height: 1.5; color: #d8ccbe; font-family: 'Montserrat', sans-serif; font-weight: 300; }
 
   /* SECTION 2: THE HAPPY COUPLE & QURANIC VERSE */
   .section-couple {
     background: linear-gradient(to bottom, rgba(10, 20, 15, 0.85), rgba(15, 30, 20, 0.9));
+    padding: 40px 14px;
   }
 
   .couple-header {
     text-align: center;
-    margin-bottom: 35px;
+    margin-bottom: 25px;
   }
 
   .couple-title-main {
     font-family: 'Great Vibes', cursive;
-    font-size: 3rem;
+    font-size: 2.6rem;
     color: #f7e6b0;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
   }
 
   .couple-subtitle-sub {
-    font-size: 0.7rem;
-    letter-spacing: 3px;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
     color: #c5b299;
     text-transform: uppercase;
   }
 
+  /* تصغير حجم الدوائر والمسافة بينها لمنع التداخل تماماً على الموبايل */
   .circles-wrapper {
     display: flex;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 25px;
-    margin-bottom: 30px;
-    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 25px;
   }
 
   .name-circle {
-    width: 170px;
-    height: 170px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     border: 2px solid #b89237;
-    background: rgba(18, 30, 22, 0.8);
-    box-shadow: 0 8px 20px rgba(184, 146, 55, 0.2);
+    background: rgba(18, 30, 22, 0.85);
+    box-shadow: 0 6px 15px rgba(184, 146, 55, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    transition: transform 0.4s ease;
   }
-  .name-circle:hover { transform: scale(1.05); }
 
   .circle-name-text {
     font-family: 'Great Vibes', cursive;
-    font-size: 2.5rem;
+    font-size: 1.8rem;
     color: #f7e6b0;
   }
 
   .heart-icon-middle {
-    font-size: 1.8rem;
+    font-size: 1.4rem;
     color: #b89237;
     animation: pulse 2s infinite;
   }
 
   .couple-divider-line {
-    width: 100px;
+    width: 80px;
     height: 1px;
     background: #b89237;
-    margin: 10px auto 30px auto;
+    margin: 5px auto 20px auto;
   }
 
   .verse-card {
     background: rgba(18, 30, 22, 0.88);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(184, 146, 55, 0.5);
-    border-radius: 14px;
-    padding: 30px 20px;
-    max-width: 650px;
+    border-radius: 12px;
+    padding: 22px 16px;
+    max-width: 500px;
     width: 100%;
     text-align: center;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
   }
 
   .bismillah-img {
     font-family: 'Amiri', serif;
-    font-size: 1.2rem;
+    font-size: 1.05rem;
     color: #f7e6b0;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     display: block;
   }
 
   .verse-text {
     font-family: 'Amiri', serif;
-    font-size: 1.35rem;
+    font-size: 1.15rem;
     color: #f4ecdf;
-    line-height: 2.1;
+    line-height: 1.9;
     direction: rtl;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
   }
 
   .verse-reference {
     font-family: 'Amiri', serif;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     color: #c5b299;
     direction: rtl;
   }
@@ -434,69 +433,69 @@
 
   .ww-header {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
   }
 
   .ww-title {
     font-family: 'Great Vibes', cursive;
-    font-size: 3rem;
+    font-size: 2.6rem;
     color: #f7e6b0;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
   }
 
   .ww-subtitle {
-    font-size: 0.7rem;
-    letter-spacing: 3px;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
     color: #c5b299;
     text-transform: uppercase;
   }
 
   .ww-card-main {
     background: linear-gradient(135deg, #a68a4b 0%, #7d632c 100%);
-    border-radius: 16px;
-    padding: 35px 20px;
-    max-width: 550px;
+    border-radius: 14px;
+    padding: 25px 16px;
+    max-width: 450px;
     width: 100%;
     text-align: center;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-    margin-bottom: 25px;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+    margin-bottom: 18px;
     color: #fff;
     border: 1px solid #f7e6b0;
   }
 
   .ww-party-label {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     letter-spacing: 2px;
     text-transform: uppercase;
     color: #f4ecdf;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
   }
 
   .ww-date-big {
     font-family: 'Cinzel', serif;
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     font-weight: 500;
     letter-spacing: 2px;
     color: #ffffff;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
   }
 
   .ww-sparkle {
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: #fff3d1;
-    margin: 12px 0;
+    margin: 8px 0;
   }
 
   .ww-day-text {
     font-family: 'Great Vibes', cursive;
-    font-size: 2.2rem;
+    font-size: 1.9rem;
     color: #fff3d1;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
 
   .ww-time-range {
     font-family: 'Cinzel', serif;
-    font-size: 1.35rem;
+    font-size: 1.15rem;
     letter-spacing: 1px;
     color: #ffffff;
     font-weight: 500;
@@ -506,17 +505,17 @@
     background: rgba(18, 30, 22, 0.88);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(184, 146, 55, 0.5);
-    border-radius: 14px;
-    padding: 25px 20px;
-    max-width: 550px;
+    border-radius: 12px;
+    padding: 20px 16px;
+    max-width: 450px;
     width: 100%;
     text-align: center;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
   }
 
-  .ww-venue-icon { font-size: 1.6rem; margin-bottom: 6px; }
-  .ww-venue-label { font-size: 0.65rem; letter-spacing: 3px; color: #c5b299; text-transform: uppercase; margin-bottom: 8px; }
-  .ww-venue-name { font-family: 'Cinzel', serif; font-size: 1.05rem; color: #f7e6b0; font-weight: 600; line-height: 1.5; }
+  .ww-venue-icon { font-size: 1.4rem; margin-bottom: 4px; }
+  .ww-venue-label { font-size: 0.6rem; letter-spacing: 2px; color: #c5b299; text-transform: uppercase; margin-bottom: 6px; }
+  .ww-venue-name { font-family: 'Cinzel', serif; font-size: 0.95rem; color: #f7e6b0; font-weight: 600; line-height: 1.4; }
 
   /* SECTION 4: LOCATION */
   .section-location {
@@ -525,21 +524,21 @@
 
   .loc-header {
     text-align: center;
-    margin-bottom: 25px;
+    margin-bottom: 18px;
   }
 
   .loc-title {
     font-family: 'Great Vibes', cursive;
-    font-size: 3rem;
+    font-size: 2.6rem;
     color: #f7e6b0;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
   }
 
   .loc-address-top {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     letter-spacing: 1px;
     color: #c5b299;
-    margin-bottom: 25px;
+    margin-bottom: 18px;
     font-family: 'Montserrat', sans-serif;
     padding: 0 10px;
     text-align: center;
@@ -549,21 +548,21 @@
     background: rgba(18, 30, 22, 0.88);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(184, 146, 55, 0.5);
-    border-radius: 16px;
-    padding: 15px;
-    max-width: 650px;
+    border-radius: 14px;
+    padding: 12px;
+    max-width: 500px;
     width: 100%;
     text-align: center;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
   }
 
   .map-embed-container {
     width: 100%;
-    height: 280px;
-    border-radius: 10px;
+    height: 240px;
+    border-radius: 8px;
     overflow: hidden;
     border: 1px solid rgba(184, 146, 55, 0.4);
-    margin-bottom: 20px;
+    margin-bottom: 15px;
   }
 
   .map-embed-container iframe {
@@ -574,23 +573,22 @@
 
   .view-maps-btn {
     display: inline-block;
-    padding: 10px 30px;
+    padding: 8px 24px;
     border: 1px solid #b89237;
     border-radius: 30px;
     font-family: 'Cinzel', serif;
-    font-size: 0.85rem;
-    letter-spacing: 2px;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
     color: #f7e6b0;
     text-decoration: none;
     background: rgba(10, 20, 14, 0.8);
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   }
 
   .view-maps-btn:hover {
     background: #b89237;
     color: #fff;
-    transform: translateY(-2px);
   }
 </style>
 </head>
@@ -616,7 +614,7 @@
       <div class="envelope-pocket"></div>
       <div class="wax-seal">
         <svg viewBox="0 0 24 24">
-          <path d="M17.83 2.17c-1.5-.63-3.21-.14-4.27 1.09-1.39 1.6-1.59 4.14-.54 6.06L4.7 15.65c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l8.32-8.33c1.92 1.05 4.46.85 6.06-.54 1.23-1.06 1.72-2.77 1.09-4.27-.63-1.5-2.02-2.58-3.75-2.75zm-1.4 6.78l-4.24 4.24c-.39.39-1.02.39-1.41 0s-.39-1.02 0-1.41l4.24-4.24c.39-.39 1.02-.39 1.41 0s.39 1.02 0 1.41z"/>
+          <path d="M17.83 2.17c-1.5-.63-3.21-.14-4.27 1.09-1.39 1.6-1.59 4.14-.54 6.06L4.7 15.65c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l8.32-8.33c1.92 1.05 4.46.85 6.06-.54 1.23-1.06 1.72-2.77 1.09-4.27-.63-1.5-2.02-2.58-3.75-2.75zm-1.4 6.78l-4.24 4.24c-.39.39-1.02.39-1.41 0s-.39-1.02 0-1.41l4.24-4.24c-.39-.39 1.02-.39 1.41 0s.39 1.02 0 1.41z"/>
         </svg>
       </div>
     </div>
@@ -728,10 +726,10 @@
 <script>
   function createPetals() {
     const container = document.getElementById('petalsContainer');
-    for (let i = 0; i < 70; i++) {
+    for (let i = 0; i < 50; i++) {
       const petal = document.createElement('div');
       petal.classList.add('petal');
-      const size = Math.random() * 12 + 5 + 'px';
+      const size = Math.random() * 10 + 4 + 'px';
       petal.style.width = size;
       petal.style.height = size;
       petal.style.left = Math.random() * 100 + 'vw';
