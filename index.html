@@ -1,1198 +1,621 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ahmed & Yara's Wedding Invitation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #f7f2ee;
+            font-family: 'Poppins', sans-serif;
+            color: #4a3b32;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ── ENVELOPE OVERLAY ── */
+        #envelope-container {
+            position: fixed;
+            inset: 0;
+            background: #e8ded5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        #envelope-container.hide {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .envelope {
+            position: relative;
+            width: 320px;
+            height: 220px;
+            background: #d4c5b9;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            cursor: pointer;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 160px solid transparent;
+            border-right: 160px solid transparent;
+            border-top: 120px solid #c2b0a2;
+            transform-origin: top;
+            transition: transform 0.6s ease;
+            z-index: 3;
+        }
+
+        .envelope.open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        .envelope-pocket {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #d4c5b9;
+            clip-path: polygon(0 40%, 50% 70%, 100% 40%, 100% 100%, 0 100%);
+            border-radius: 0 0 10px 10px;
+            z-index: 2;
+        }
+
+        .envelope-text {
+            position: absolute;
+            bottom: 30px;
+            width: 100%;
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 14px;
+            letter-spacing: 2px;
+            color: #6b5b52;
+            z-index: 4;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        /* ── MAIN INVITATION CONTENT ── */
+        .main-content {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease 0.5s, transform 1s ease 0.5s;
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            padding: 40px 20px;
+            margin: auto;
+        }
+
+        .main-content.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card {
+            background: #ffffff;
+            border: 1px solid #ebdcd0;
+            border-radius: 16px;
+            padding: 40px 30px;
+            box-shadow: 0 10px 30px rgba(74, 59, 50, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .invite-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: #8c786d;
+            margin-bottom: 15px;
+        }
+
+        .names {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #362922;
+            margin: 20px 0;
+            line-height: 1.2;
+            animation: floatNames 3s ease-in-out infinite;
+        }
+
+        .names span {
+            display: block;
+            font-size: 1.8rem;
+            font-weight: 400;
+            color: #b09b8e;
+            margin: 5px 0;
+        }
+
+        @keyframes floatNames {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        /* ── COUNTDOWN ── */
+        .countdown-section {
+            margin: 30px 0;
+        }
+
+        .wedding-date {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            color: #6b5b52;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .countdown-grid {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .time-box {
+            background: #fcf9f6;
+            border: 1px solid #ebdcd0;
+            border-radius: 10px;
+            padding: 12px 15px;
+            min-width: 70px;
+        }
+
+        .time-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #4a3b32;
+        }
+
+        .time-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #8c786d;
+            margin-top: 4px;
+        }
+
+        /* ── WELCOME MESSAGE ── */
+        .welcome-card {
+            background: #ffffff;
+            border: 1px solid #ebdcd0;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(74, 59, 50, 0.05);
+        }
+
+        .welcome-heading {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: #362922;
+            margin-bottom: 12px;
+        }
+
+        .welcome-text {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: #6b5b52;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- الظرف الواجهة -->
+    <div id="envelope-container" onclick="openEnvelope()">
+        <div class="envelope" id="envelope">
+            <div class="envelope-flap"></div>
+            <div class="envelope-pocket"></div>
+            <div class="envelope-text">Click to Open Invitation</div>
+        </div>
+    </div>
+
+    <!-- محتوى الدعوة الأساسي -->
+    <div class="main-content" id="mainContent">
+        
+        <!-- كارت الأسماء والدعوة -->
+        <div class="card">
+            <div class="invite-title">You are invited to the wedding party of</div>
+            <div class="names">
+                Ahmed
+                <span>&</span>
+                Yara
+            </div>
+        </div>
+
+        <!-- تاريخ وزفاف والعداد -->
+        <div class="card">
+            <div class="wedding-date">📅 31 - 07 - 2026</div>
+            <div class="countdown-grid">
+                <div class="time-box">
+                    <div class="time-num" id="days">00</div>
+                    <div class="time-label">Days</div>
+                </div>
+                <div class="time-box">
+                    <div class="time-num" id="hours">00</div>
+                    <div class="time-label">Hours</div>
+                </div>
+                <div class="time-box">
+                    <div class="time-num" id="minutes">00</div>
+                    <div class="time-label">Mins</div>
+                </div>
+                <div class="time-box">
+                    <div class="time-num" id="seconds">00</div>
+                    <div class="time-label">Secs</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- رسالة الترحيب -->
+        <div class="welcome-card">
+            <div class="welcome-heading">Welcome!</div>
+            <div class="welcome-text">
+                We joyfully invite you to celebrate the beginning of our forever. Here you'll find everything you need for our special day.
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function openEnvelope() {
+            const envelope = document.getElementById('envelope');
+            const container = document.getElementById('envelope-container');
+            const mainContent = document.getElementById('mainContent');
+
+            envelope.classList.add('open');
+            
+            setTimeout(() => {
+                container.classList.add('hide');
+                mainContent.classList.add('show');
+            }, 600);
+        }
+
+        // عداد الوقت التنازلي لحد تاريخ 31-7-2026
+        const weddingDate = new Date('July 31, 2026 00:00:00').getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+
+            if (distance < 0) {
+                document.getElementById('days').innerText = '0';
+                document.getElementById('hours').innerText = '0';
+                document.getElementById('minutes').innerText = '0';
+                document.getElementById('seconds').innerText = '0';
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * فكرة ممتازة جداً ورومانسية جداً! هنقسم الصفحة لثلاثة أقسام رئيسية بالتصميم الحركي المطلوب:
+
+1. **واجهة الظرف (The Envelope):** ظرف أنيق في أول الصفحة، وأول ما المستخدم يضغط على مكان الفتح، الظرف بيفتح بتأثير حركي سلس (Animation).
+2. **كارت الدعوة والأسماء:** بعد فتح الظرف، يظهر كارت في منتصف الشاشة مكتوب عليه عبارة الدعوة والأسماء (Ahmed & Yara) بخط فخم، مع حركة اهتزاز أو ظهور جذابة (Floating/Shaking effect).
+3. **التفاصيل والعد التنازلي:** لما ننزل بالسكرول، نلاقي تاريخ الفتح (31-7-2026) وجنبه عداد تنازلي دقيق بيحسب الأيام والساعات والدقائق الباقية، وتحتهم رسالة الترحيب الدافئة (Welcome! We joyfully invite you...).
+
+جهزت لك كود الـ HTML والـ CSS والـ JavaScript المتكامل للصفحة دي بالظبط، وبأعلى جودة وتصميم متجاوب مع الموبايل:
+
+```html
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Returns Console</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<title>Ahmed & Yara's Wedding</title>
+<link href="[https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Cairo:wght@400;600&display=swap](https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Cairo:wght@400;600&display=swap)" rel="stylesheet">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#0a0b14;
-  --panel:rgba(18,19,31,.72);
-  --panel-solid:#12131f;
-  --panel-raised:#171929;
-  --border:rgba(255,255,255,.08);
-  --border-strong:rgba(255,255,255,.16);
-  --text:#edEdf5;
-  --muted:#8388a3;
-  --muted2:#5d6079;
-  --violet:#7c6cf6;
-  --violet-dim:rgba(124,108,246,.15);
-  --cyan:#22d3ee;
-  --cyan-dim:rgba(34,211,238,.15);
-  --good:#34d399;
-  --good-dim:rgba(52,211,153,.14);
-  --warn:#fbbf24;
-  --warn-dim:rgba(251,191,36,.14);
-  --bad:#fb6b6b;
-  --bad-dim:rgba(251,107,107,.14);
-  --font:'Cairo',sans-serif;
-  --mono:'JetBrains Mono',monospace;
-  --radius:16px;
-}
-html,body{height:100%;overflow:hidden;font-family:var(--font);background:var(--bg);color:var(--text)}
-body{
-  background-image:
-    radial-gradient(ellipse 900px 500px at 15% -10%, rgba(124,108,246,.10), transparent),
-    radial-gradient(ellipse 700px 500px at 100% 10%, rgba(34,211,238,.07), transparent);
-}
-::-webkit-scrollbar{width:5px;height:5px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:3px}
-::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.18)}
-:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: #fcf6f5;
+    font-family: 'Playfair Display', serif;
+    color: #2c2c2c;
+    overflow-x: hidden;
+  }
 
-/* ── LOADER ── */
-#loader{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity .7s ease,visibility .7s ease}
-#loader.gone{opacity:0;visibility:hidden;pointer-events:none}
-.ld-radar{position:relative;width:64px;height:64px;margin-bottom:22px}
-.ld-radar::before{content:'';position:absolute;inset:0;border-radius:50%;border:1.5px solid rgba(124,108,246,.25)}
-.ld-radar::after{content:'';position:absolute;inset:14px;border-radius:50%;border:1.5px solid rgba(124,108,246,.35)}
-.ld-sweep{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg, var(--violet), transparent 30%);animation:spin 1.4s linear infinite;-webkit-mask:radial-gradient(closest-side, transparent 62%, #000 63%)}
-.ld-dot{position:absolute;top:50%;left:50%;width:6px;height:6px;margin:-3px 0 0 -3px;background:var(--cyan);border-radius:50%;box-shadow:0 0 10px var(--cyan)}
-@keyframes spin{to{transform:rotate(360deg)}}
-.ld-title{font-size:1.05rem;font-weight:800;letter-spacing:.5px}
-.ld-sub{margin-top:8px;font-size:.68rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted)}
+  /* ── ENVELOPE OVERLAY ── */
+  #envelope-screen {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #f3e7e8 0%, #d8c2c4 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+  }
+  #envelope-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .envelope-container {
+    position: relative;
+    width: 320px;
+    height: 220px;
+    background: #c89598;
+    border-radius: 0 0 10px 10px;
+    cursor: pointer;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .envelope-flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 160px solid transparent;
+    border-right: 160px solid transparent;
+    border-top: 120px solid #b27d80;
+    transform-origin: top;
+    transition: transform 0.6s ease;
+    z-index: 3;
+  }
+  .envelope-container.open .envelope-flap {
+    transform: rotateX(180deg);
+    z-index: 1;
+  }
+  .envelope-pocket {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 160px solid #c89598;
+    border-right: 160px solid #c89598;
+    border-bottom: 110px solid #d4a3a6;
+    border-radius: 0 0 10px 10px;
+    z-index: 2;
+  }
+  .open-instruction {
+    margin-top: 25px;
+    font-size: 1.1rem;
+    color: #5a4042;
+    font-weight: 600;
+    letter-spacing: 1px;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
 
-/* ── COMMAND BAR ── */
-.cmdbar{height:60px;background:rgba(13,14,24,.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:18px;padding:0 20px;flex-shrink:0;z-index:20;position:relative}
-.brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:.98rem;letter-spacing:.2px;flex-shrink:0}
-.brand-dot{position:relative;width:20px;height:20px;flex-shrink:0}
-.brand-dot::before{content:'';position:absolute;inset:0;border-radius:50%;border:1.5px solid rgba(124,108,246,.3)}
-.brand-dot i{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg, var(--violet), transparent 40%);animation:spin 3s linear infinite;-webkit-mask:radial-gradient(closest-side, transparent 55%, #000 56%)}
-.brand-dot b{position:absolute;top:50%;left:50%;width:5px;height:5px;margin:-2.5px 0 0 -2.5px;background:var(--cyan);border-radius:50%;box-shadow:0 0 8px var(--cyan)}
+  /* ── MAIN CONTENT ── */
+  .main-content {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1s ease 0.5s, transform 1s ease 0.5s;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 20px;
+  }
+  .main-content.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
-.tabs-nav{display:flex;align-items:center;gap:3px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:11px;padding:3px;flex-wrap:wrap}
-.tab-pill{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-size:.78rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all .18s;white-space:nowrap;background:transparent;border:none;font-family:var(--font)}
-.tab-pill:hover{color:var(--text)}
-.tab-pill.active{background:var(--violet);color:#fff;box-shadow:0 2px 12px rgba(124,108,246,.35)}
+  /* ── SECTION 1: INVITATION CARD ── */
+  .invite-card {
+    text-align: center;
+    background: #ffffff;
+    padding: 50px 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    max-width: 600px;
+    width: 100%;
+    margin-bottom: 60px;
+    border: 1px solid #f0e1e2;
+  }
+  .invite-subtitle {
+    font-size: 0.95rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #8c6d70;
+    margin-bottom: 20px;
+  }
+  .couple-names {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #4a2e31;
+    margin: 20px 0;
+    animation: gentle-shake 3s ease-in-out infinite;
+  }
+  .couple-names span {
+    display: block;
+    font-size: 2rem;
+    font-weight: 400;
+    color: #b27d80;
+    margin: 10px 0;
+  }
+  @keyframes gentle-shake {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-4px) rotate(-1deg); }
+    75% { transform: translateY(4px) rotate(1deg); }
+  }
 
-.cmd-right{display:flex;align-items:center;gap:8px;margin-left:auto;flex-shrink:0}
-.cmd-search{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:0 12px;height:36px;width:220px;transition:all .2s}
-.cmd-search:focus-within{border-color:rgba(124,108,246,.5);width:270px}
-.cmd-search input{background:transparent;border:none;outline:none;color:var(--text);font-family:var(--font);font-size:.78rem;width:100%}
-.cmd-search input::placeholder{color:var(--muted2)}
-.icon-btn{width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;cursor:pointer;font-size:.92rem;transition:all .2s;color:var(--muted);position:relative;flex-shrink:0}
-.icon-btn:hover{background:rgba(255,255,255,.07);color:var(--text)}
-.icon-btn.filter-active{border-color:rgba(124,108,246,.5);color:var(--violet)}
-.badge-pip{position:absolute;top:-3px;right:-3px;background:var(--bad);color:#fff;font-size:.5rem;font-weight:800;border-radius:50%;width:15px;height:15px;display:flex;align-items:center;justify-content:center;border:2px solid var(--bg)}
-.user-chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:5px 12px 5px 5px;cursor:pointer;font-size:.8rem;font-weight:600;flex-shrink:0}
-.user-avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--violet),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:800;color:#0a0b14;font-family:var(--mono)}
+  /* ── SECTION 2: DATE & COUNTDOWN ── */
+  .date-section {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+  .wedding-date {
+    font-size: 1.6rem;
+    color: #4a2e31;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+  .countdown-box {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+  }
+  .time-block {
+    background: #ffffff;
+    padding: 15px 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.04);
+    min-width: 80px;
+    border: 1px solid #f0e1e2;
+  }
+  .time-num {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #b27d80;
+    font-family: 'Cairo', sans-serif;
+  }
+  .time-lbl {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #8c6d70;
+    margin-top: 5px;
+    letter-spacing: 1px;
+  }
 
-/* ── FILTER DRAWER ── */
-#filterDrawer{max-height:0;overflow:hidden;background:rgba(13,14,24,.7);backdrop-filter:blur(10px);border-bottom:1px solid transparent;transition:max-height .3s ease,border-color .3s;flex-shrink:0}
-#filterDrawer.open{max-height:74px;border-color:var(--border)}
-.filter-row{display:flex;align-items:center;gap:10px;padding:14px 20px;flex-wrap:wrap}
-.f-select,.f-input{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:9px;padding:8px 12px;color:var(--text);font-family:var(--font);font-size:.76rem;outline:none;color-scheme:dark;transition:border-color .2s}
-.f-select:focus,.f-input:focus{border-color:rgba(124,108,246,.5)}
-.f-label{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-right:4px}
-.f-btn{padding:8px 14px;border-radius:9px;font-family:var(--font);font-size:.76rem;font-weight:700;cursor:pointer;transition:all .2s;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--text)}
-.f-btn:hover{background:rgba(255,255,255,.08)}
-.f-btn.primary{background:var(--violet);border-color:var(--violet);color:#fff}
-.f-btn.primary:hover{background:#6d5ce8;box-shadow:0 0 14px rgba(124,108,246,.4)}
-
-/* ── MAIN ── */
-.main{flex:1;overflow-y:auto;padding:20px 24px 40px}
-.page{display:none}
-.page.active{display:block}
-.page-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
-.page-title{font-size:1.15rem;font-weight:800;letter-spacing:-.2px}
-.page-sub{font-size:.72rem;color:var(--muted);margin-top:2px}
-
-/* ── KPI STRIP ── */
-.kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
-.kpi-chip{background:var(--panel);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;display:flex;align-items:center;gap:14px;position:relative;overflow:hidden;transition:border-color .2s}
-.kpi-chip:hover{border-color:var(--border-strong)}
-.kpi-chip .ring-box{position:relative;width:44px;height:44px;flex-shrink:0}
-.kpi-chip .ring-box canvas{position:absolute;inset:0}
-.kpi-ico{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:.85rem}
-.kpi-body{flex:1;min-width:0}
-.kpi-label{font-size:.63rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}
-.kpi-num{font-family:var(--mono);font-size:1.45rem;font-weight:700;letter-spacing:-.5px;line-height:1.1}
-.kpi-sub{font-size:.66rem;color:var(--muted2);margin-top:2px}
-.kpi-trend{display:none;align-items:center;gap:3px;font-size:.63rem;font-weight:700;margin-top:5px;width:fit-content;padding:2px 6px;border-radius:5px}
-.kpi-trend.up{color:var(--good);background:var(--good-dim)}
-.kpi-trend.down{color:var(--bad);background:var(--bad-dim)}
-
-/* ── BENTO GRID ── */
-.bento{display:grid;grid-template-columns:repeat(12,1fr);gap:14px;margin-bottom:14px}
-.span-8{grid-column:span 8}
-.span-4{grid-column:span 4}
-.span-6{grid-column:span 6}
-.span-12{grid-column:span 12}
-@media(max-width:1150px){.span-8,.span-4,.span-6{grid-column:span 12}}
-
-.panel{background:var(--panel);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:var(--radius);padding:18px}
-.panel-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
-.panel-title{font-size:.86rem;font-weight:700;display:flex;align-items:center;gap:7px}
-.panel-title .dim{color:var(--muted);font-weight:500;font-size:.72rem}
-.seg{display:flex;gap:3px;background:rgba(255,255,255,.03);border-radius:8px;padding:3px}
-.seg-btn{padding:5px 12px;border-radius:6px;font-size:.7rem;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--muted);font-family:var(--font);transition:all .15s}
-.seg-btn.active{background:var(--violet);color:#fff}
-
-.cw{height:230px;position:relative}
-.legend-row{display:flex;gap:14px}
-.leg{display:flex;align-items:center;gap:5px;font-size:.68rem;color:var(--muted)}
-.leg i{width:8px;height:8px;border-radius:50%;display:inline-block}
-
-/* rank list */
-.rank-row{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--border)}
-.rank-row:last-child{border-bottom:none}
-.rank-idx{font-family:var(--mono);font-size:.65rem;color:var(--muted2);width:16px;flex-shrink:0}
-.rank-nm{flex:1;min-width:0;font-size:.76rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rank-nm.mono{font-family:var(--mono);color:var(--cyan)}
-.rank-track{flex:1;height:3px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;max-width:90px}
-.rank-fill{height:100%;border-radius:2px}
-.rank-v{font-family:var(--mono);font-size:.68rem;font-weight:700;flex-shrink:0;white-space:nowrap}
-
-/* watchlist (serial returners) */
-.watch-row{display:flex;align-items:center;justify-content:space-between;padding:9px 11px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:9px;margin-bottom:7px;cursor:default;transition:all .2s}
-.watch-row:hover{border-color:rgba(251,107,107,.35);background:rgba(251,107,107,.05)}
-.watch-row:last-child{margin-bottom:0}
-.watch-name{font-size:.76rem;font-weight:500}
-.watch-badge{font-family:var(--mono);background:var(--bad-dim);color:var(--bad);border:1px solid rgba(251,107,107,.25);border-radius:5px;padding:2px 8px;font-size:.64rem;font-weight:700}
-
-/* ── TABLE ── */
-.tbl-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse}
-thead th{font-size:.6rem;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;color:var(--muted);padding:10px 14px;text-align:left;position:sticky;top:0;background:var(--panel-solid)}
-th.sortable{cursor:pointer;user-select:none}
-th.sortable:hover{color:var(--text)}
-th.sortable .sico{opacity:.4;margin-left:3px}
-th.sortable.active .sico{opacity:1;color:var(--violet)}
-tbody tr{border-top:1px solid var(--border);cursor:pointer;transition:background .12s}
-tbody tr:hover{background:rgba(124,108,246,.06)}
-tbody td{padding:11px 14px;font-size:.78rem}
-.td-mono{font-family:var(--mono);font-size:.68rem;color:var(--muted)}
-.td-asin{font-family:var(--mono);font-size:.7rem;color:var(--cyan);font-weight:700}
-.td-price{font-family:var(--mono);font-weight:700;color:var(--good);text-align:right}
-.td-badge{display:inline-flex;padding:3px 9px;border-radius:5px;font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;background:var(--violet-dim);color:#c4b8ff;border:1px solid rgba(124,108,246,.25)}
-.td-merchant-id{font-family:var(--mono);font-size:.63rem;color:var(--muted2);margin-top:2px}
-.empty-row td{padding:44px 20px !important;text-align:center;color:var(--muted);font-size:.8rem;line-height:1.7}
-
-.tbl-foot{display:flex;align-items:center;justify-content:space-between;padding:12px 4px 0;flex-wrap:wrap;gap:10px}
-.pg-info{font-size:.68rem;color:var(--muted);font-family:var(--mono)}
-.pg-btns{display:flex;gap:6px}
-.pg-btn{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:7px;padding:5px 11px;font-size:.72rem;font-weight:600;color:var(--text);cursor:pointer;font-family:var(--font);transition:all .2s}
-.pg-btn:hover:not(:disabled){background:rgba(255,255,255,.08)}
-.pg-btn:disabled{opacity:.3;cursor:not-allowed}
-
-/* ── SIDE PEEK ── */
-#peek{position:fixed;top:0;right:-460px;width:420px;height:100vh;background:rgba(15,16,26,.9);backdrop-filter:blur(20px);border-left:1px solid var(--border);z-index:1000;display:flex;flex-direction:column;transition:right .4s cubic-bezier(.23,1,.32,1)}
-#peek.open{right:0}
-.pk-hd{padding:26px 26px 18px;border-bottom:1px solid var(--border);position:relative}
-.pk-close{position:absolute;top:20px;right:20px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:1.1rem;color:var(--muted);background:transparent;transition:all .2s}
-.pk-close:hover{border-color:var(--bad);color:var(--bad)}
-.pk-lbl{font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
-.pk-val{font-size:.92rem;font-weight:600;margin-bottom:16px;font-family:var(--mono)}
-.pk-val.hero{color:var(--good);font-size:1.6rem;font-weight:800}
-.pk-val.cyan{color:var(--cyan)}
-.pk-val.bad{color:var(--bad);font-family:var(--font)}
-.pk-val.warn{color:var(--warn);font-family:var(--font)}
-.pk-val.plain{font-family:var(--font)}
-.pk-body{padding:22px 26px;flex:1;overflow-y:auto}
-.pk-div{height:1px;background:var(--border);margin:14px 0}
-
-/* ── ALERTS PANEL ── */
-#alertsPanel{position:fixed;top:64px;right:10px;width:340px;background:rgba(15,16,26,.92);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:14px;z-index:3000;box-shadow:0 24px 60px rgba(0,0,0,.55);overflow:hidden;opacity:0;visibility:hidden;transform:translateY(-8px);transition:all .22s}
-#alertsPanel.open{opacity:1;visibility:visible;transform:translateY(0)}
-.ap-hd{padding:15px 17px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.ap-title{font-size:.84rem;font-weight:700;display:flex;align-items:center;gap:8px}
-.ap-close{background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer;line-height:1}
-.ap-close:hover{color:var(--text)}
-.ap-body{max-height:420px;overflow-y:auto;padding:10px}
-.al-item{display:flex;gap:11px;padding:12px;border-radius:10px;margin-bottom:6px;background:rgba(255,255,255,.03);border:1px solid var(--border)}
-.al-item:last-child{margin-bottom:0}
-.al-ico{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0}
-.al-title{font-size:.77rem;font-weight:600;margin-bottom:3px;unicode-bidi:plaintext}
-.al-sub{font-size:.67rem;color:var(--muted);line-height:1.45;unicode-bidi:plaintext}
-.al-empty{text-align:center;padding:30px 18px;color:var(--muted);font-size:.8rem}
-.thresh-box{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:9px}
-.thresh-title{font-size:.63rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:9px}
-.thresh-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}
-.thresh-grid div div:first-child{font-size:.58rem;color:var(--muted);margin-bottom:3px}
-.thresh-grid input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:5px 6px;color:var(--text);font-size:.7rem;text-align:center;font-family:var(--mono)}
-
-/* ── CHAT PANEL ── */
-#chatPanel{position:fixed;bottom:20px;right:20px;width:370px;height:510px;background:rgba(15,16,26,.94);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:16px;z-index:3000;box-shadow:0 24px 70px rgba(0,0,0,.6);display:flex;flex-direction:column;overflow:hidden;opacity:0;visibility:hidden;transform:translateY(16px) scale(.97);transition:all .28s}
-#chatPanel.open{opacity:1;visibility:visible;transform:translateY(0) scale(1)}
-.ch-hd{padding:13px 15px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
-.ch-ico{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--violet),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0}
-.ch-info{flex:1}
-.ch-title{font-size:.8rem;font-weight:700}
-.ch-sub{font-size:.6rem;color:var(--muted)}
-.ch-close{background:none;border:none;color:var(--muted);font-size:1.3rem;cursor:pointer;line-height:1}
-.ch-close:hover{color:var(--text)}
-.ch-msgs{flex:1;overflow-y:auto;padding:13px;display:flex;flex-direction:column;gap:9px}
-.ch-chips{display:flex;gap:6px;flex-wrap:wrap;padding:0 13px 11px}
-.ch-chip{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:18px;padding:6px 11px;font-size:.66rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap}
-.ch-chip:hover{background:var(--violet-dim);color:#c4b8ff;border-color:rgba(124,108,246,.4)}
-.bub{max-width:85%;padding:9px 12px;border-radius:12px;font-size:.77rem;line-height:1.5;unicode-bidi:plaintext}
-.bub.user{align-self:flex-end;background:var(--violet);color:#fff;border-bottom-right-radius:4px}
-.bub.ai{align-self:flex-start;background:rgba(255,255,255,.05);border:1px solid var(--border);border-bottom-left-radius:4px}
-.bub.ai.typing{opacity:.55}
-.ch-bar{padding:11px 13px;border-top:1px solid var(--border);display:flex;gap:8px}
-.ch-input{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:9px 12px;color:var(--text);font-family:var(--font);font-size:.79rem;outline:none;resize:none;height:38px;transition:border-color .2s}
-.ch-input:focus{border-color:rgba(124,108,246,.5)}
-.ch-send{width:38px;height:38px;background:var(--violet);border:none;border-radius:10px;color:#fff;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
-.ch-send:hover{background:#6d5ce8;box-shadow:0 0 14px rgba(124,108,246,.4)}
-.ch-send:disabled{background:rgba(255,255,255,.06);color:var(--muted);cursor:not-allowed}
+  /* ── SECTION 3: WELCOME MESSAGE ── */
+  .welcome-section {
+    text-align: center;
+    max-width: 550px;
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    border: 1px solid #f0e1e2;
+  }
+  .welcome-title {
+    font-size: 2rem;
+    color: #4a2e31;
+    margin-bottom: 15px;
+  }
+  .welcome-desc {
+    font-size: 1.1rem;
+    color: #6c5a5c;
+    line-height: 1.6;
+    font-family: 'Cairo', sans-serif;
+  }
 </style>
 </head>
 <body>
 
-<!-- LOADER -->
-<div id="loader">
-  <div class="ld-radar"><div class="ld-sweep"></div><div class="ld-dot"></div></div>
-  <div class="ld-title">Returns Console</div>
-  <div class="ld-sub">Scanning returns data…</div>
-</div>
-
-<!-- SIDE PEEK -->
-<div id="peek">
-  <div class="pk-hd">
-    <div class="pk-lbl">Order ID</div>
-    <div id="pk-order" style="font-size:1.05rem;font-weight:800;font-family:var(--mono)">—</div>
-    <button class="pk-close" onclick="closePeek()">×</button>
-  </div>
-  <div class="pk-body">
-    <div class="pk-lbl">ASIN</div><div class="pk-val cyan" id="pk-asin">—</div>
-    <div class="pk-lbl">Value (EGP)</div><div class="pk-val hero" id="pk-price">—</div>
-    <div class="pk-div"></div>
-    <div class="pk-lbl">Issue / Root Cause</div><div class="pk-val bad" id="pk-issue">—</div>
-    <div class="pk-lbl">ROAD / Status</div><div class="pk-val warn" id="pk-road">—</div>
-    <div class="pk-div"></div>
-    <div class="pk-lbl">Merchant Name</div><div class="pk-val plain" id="pk-merchant">—</div>
-    <div class="pk-lbl">Merchant ID</div><div class="pk-val cyan" id="pk-mid">—</div>
-    <div class="pk-lbl">Action Taken</div><div class="pk-val plain" id="pk-action">—</div>
-    <div class="pk-div"></div>
-    <div class="pk-lbl">Date</div><div class="pk-val" id="pk-date">—</div>
-  </div>
-</div>
-
-<!-- COMMAND BAR -->
-<div class="cmdbar">
-  <div class="brand"><div class="brand-dot"><i></i><b></b></div>Returns Console</div>
-  <div class="tabs-nav" id="tabsNav">
-    <button class="tab-pill active" data-tab="overview" onclick="switchTab('overview')">Overview</button>
-    <button class="tab-pill" data-tab="asin" onclick="switchTab('asin')">ASINs</button>
-    <button class="tab-pill" data-tab="merchants" onclick="switchTab('merchants')">Merchants</button>
-    <button class="tab-pill" data-tab="issues" onclick="switchTab('issues')">Issues / ROAD</button>
-    <button class="tab-pill" data-tab="serial" onclick="switchTab('serial')">Serial Returners</button>
-    <button class="tab-pill" data-tab="logs" onclick="switchTab('logs')">Full Logs</button>
-  </div>
-  <div class="cmd-right">
-    <div class="cmd-search">
-      <span style="color:var(--muted2)">⌕</span>
-      <input id="topSearch" placeholder="Search order, ASIN, merchant…" oninput="renderTable();renderFullTable()">
+  <!-- شاشة الظرف الأولية -->
+  <div id="envelope-screen">
+    <div class="envelope-container" id="envelope" onclick="openEnvelope()">
+      <div class="envelope-flap"></div>
+      <div class="envelope-pocket"></div>
     </div>
-    <div class="icon-btn" id="filterBtn" title="Filters" onclick="toggleFilters()">▤</div>
-    <div class="icon-btn" title="Smart Alerts" onclick="toggleAlerts()" style="position:relative">
-      🔔<span id="alertBadge" class="badge-pip" style="display:none">0</span>
-    </div>
-    <div class="icon-btn" title="AI Analyst" onclick="toggleChat()">✦</div>
-    <div class="icon-btn" title="Sync" onclick="window.location.reload()">↻</div>
-    <div class="user-chip"><div class="user-avatar">YA</div>Youssef</div>
+    <div class="open-instruction">اضغط لفتح الظرف ✨</div>
   </div>
-</div>
 
-<!-- FILTER DRAWER -->
-<div id="filterDrawer">
-  <div class="filter-row">
-    <span class="f-label">Merchant</span>
-    <select id="merchantFilter" class="f-select" onchange="updateUI()"></select>
-    <span class="f-label">From</span>
-    <input type="date" id="startDate" class="f-input" onchange="updateUI()">
-    <span class="f-label">To</span>
-    <input type="date" id="endDate" class="f-input" onchange="updateUI()">
-    <button class="f-btn" onclick="clearFilters()">✕ Clear</button>
-    <button class="f-btn primary" onclick="exportCSV()">↑ Export CSV</button>
-  </div>
-</div>
-
-<!-- MAIN -->
-<main class="main">
-
-  <!-- KPI STRIP (shared across pages) -->
-  <div class="kpi-strip">
-    <div class="kpi-chip">
-      <div class="ring-box"><canvas id="ring1" width="44" height="44"></canvas><div class="kpi-ico">📅</div></div>
-      <div class="kpi-body">
-        <div class="kpi-label">Daily Savings</div>
-        <div class="kpi-num" id="dailyTotal">0</div>
-        <div class="kpi-sub" id="dailySub">0 orders today</div>
-        <div class="kpi-trend" id="dailyTrend"></div>
+  <!-- محتوى الدعوة الأساسي -->
+  <div class="main-content" id="mainContent">
+    
+    <!-- كارت الاسماء ودعوة الزفاف -->
+    <div class="invite-card">
+      <div class="invite-subtitle">You are invited to the wedding party of</div>
+      <div class="couple-names">
+        Ahmed
+        <span>&</span>
+        Yara
       </div>
     </div>
-    <div class="kpi-chip">
-      <div class="ring-box"><canvas id="ring2" width="44" height="44"></canvas><div class="kpi-ico">📊</div></div>
-      <div class="kpi-body">
-        <div class="kpi-label">Monthly Recovery</div>
-        <div class="kpi-num" id="monthlyTotal">0</div>
-        <div class="kpi-sub" id="monthlySub">0 orders this month</div>
-        <div class="kpi-trend" id="monthlyTrend"></div>
-      </div>
-    </div>
-    <div class="kpi-chip">
-      <div class="ring-box"><canvas id="ring3" width="44" height="44"></canvas><div class="kpi-ico">🗓️</div></div>
-      <div class="kpi-body">
-        <div class="kpi-label">Annual Saved</div>
-        <div class="kpi-num" id="yearlyTotal">0</div>
-        <div class="kpi-sub" id="yearlySub">0 orders this year</div>
-        <div class="kpi-trend" id="yearlyTrend"></div>
-      </div>
-    </div>
-    <div class="kpi-chip">
-      <div class="ring-box"><canvas id="ring4" width="44" height="44"></canvas><div class="kpi-ico">📦</div></div>
-      <div class="kpi-body">
-        <div class="kpi-label">Total Items</div>
-        <div class="kpi-num" id="totalItems">0</div>
-        <div class="kpi-sub">items in dataset</div>
-      </div>
-    </div>
-  </div>
 
-  <!-- ══ OVERVIEW ══ -->
-  <div class="page active" id="page-overview">
-    <div class="bento">
-      <div class="panel span-8">
-        <div class="panel-hd">
-          <div class="panel-title">Returns Over Time <span class="dim">value & order volume</span></div>
-          <div style="display:flex;align-items:center;gap:12px">
-            <div class="legend-row"><div class="leg"><i style="background:var(--violet)"></i>Value (EGP)</div><div class="leg"><i style="background:var(--cyan)"></i>Orders</div></div>
-            <div class="seg">
-              <button class="seg-btn active" id="btn-monthly" onclick="switchView('monthly')">Monthly</button>
-              <button class="seg-btn" id="btn-quarterly" onclick="switchView('quarterly')">Quarterly</button>
-            </div>
-          </div>
+    <!-- التاريخ والعد التنازلي -->
+    <div class="date-section">
+      <div class="wedding-date">📅 31-7-2026</div>
+      <div class="countdown-box">
+        <div class="time-block">
+          <div class="time-num" id="days">00</div>
+          <div class="time-lbl">أيام</div>
         </div>
-        <div class="cw"><canvas id="timeChart"></canvas></div>
-      </div>
-      <div class="panel span-4">
-        <div class="panel-hd"><div class="panel-title">Root Cause Radar</div></div>
-        <div class="cw" style="height:230px"><canvas id="issueChart"></canvas></div>
-      </div>
-    </div>
-
-    <div class="bento">
-      <div class="panel span-4">
-        <div class="panel-hd"><div class="panel-title">Top ASINs</div></div>
-        <div id="topAsinMini"></div>
-      </div>
-      <div class="panel span-4">
-        <div class="panel-hd"><div class="panel-title">Top Merchants</div></div>
-        <div id="topMerchantMini"></div>
-      </div>
-      <div class="panel span-4">
-        <div class="panel-hd"><div class="panel-title">🚨 Serial Returners Watchlist</div></div>
-        <div id="serialMini"></div>
-      </div>
-    </div>
-
-    <div class="panel">
-      <div class="panel-hd">
-        <div>
-          <div class="panel-title">Recent Activity</div>
-          <div style="font-size:.68rem;color:var(--muted);margin-top:2px">Latest 25 entries — <span style="color:var(--cyan);cursor:pointer" onclick="switchTab('logs')">view all logs →</span></div>
+        <div class="time-block">
+          <div class="time-num" id="hours">00</div>
+          <div class="time-lbl">ساعات</div>
         </div>
-      </div>
-      <div class="tbl-wrap">
-        <table><thead><tr>
-          <th>Date</th><th>Order ID</th><th>ASIN</th><th>Merchant</th><th style="text-align:right">Value (EGP)</th><th style="text-align:center">Status</th>
-        </tr></thead><tbody id="tableBody"></tbody></table>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══ ASIN ══ -->
-  <div class="page" id="page-asin">
-    <div class="page-hd"><div><div class="page-title">📦 ASIN Analysis</div><div class="page-sub">Top 20 ASINs ranked by total returned value</div></div></div>
-    <div class="panel"><div id="fullAsinList"></div></div>
-  </div>
-
-  <!-- ══ MERCHANTS ══ -->
-  <div class="page" id="page-merchants">
-    <div class="page-hd"><div><div class="page-title">🏢 Merchant Rankings</div><div class="page-sub">Top 20 merchants ranked by total returned value</div></div></div>
-    <div class="panel"><div id="fullMerchantList"></div></div>
-  </div>
-
-  <!-- ══ ISSUES ══ -->
-  <div class="page" id="page-issues">
-    <div class="page-hd"><div><div class="page-title">⚠️ Issues & ROAD</div><div class="page-sub">Root cause and resolution status breakdown</div></div></div>
-    <div class="bento">
-      <div class="panel span-4"><div class="panel-hd"><div class="panel-title">Root Cause Breakdown</div></div><div class="cw"><canvas id="issueChart2"></canvas></div></div>
-      <div class="panel span-4"><div class="panel-hd"><div class="panel-title">ROAD Distribution</div></div><div class="cw"><canvas id="roadChart2"></canvas></div></div>
-      <div class="panel span-4"><div class="panel-hd"><div class="panel-title">Issue Counts</div></div><div id="issueCounts" style="max-height:230px;overflow-y:auto"></div></div>
-    </div>
-    <div class="bento">
-      <div class="panel span-6">
-        <div class="panel-hd"><div class="panel-title">Orders Per Month</div><div class="dim">2026</div></div>
-        <div class="cw"><canvas id="monthlyOrdersChart"></canvas></div>
-      </div>
-      <div class="panel span-6">
-        <div class="panel-hd"><div class="panel-title">Monthly Breakdown</div></div>
-        <div id="monthlyOrdersList" style="max-height:230px;overflow-y:auto"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══ SERIAL ══ -->
-  <div class="page" id="page-serial">
-    <div class="page-hd"><div><div class="page-title">🚨 Serial Returners</div><div class="page-sub">Merchants ranked by return frequency</div></div></div>
-    <div class="panel"><div id="fullSerialList"></div></div>
-  </div>
-
-  <!-- ══ LOGS ══ -->
-  <div class="page" id="page-logs">
-    <div class="page-hd"><div><div class="page-title">📋 Full Logs</div><div class="page-sub" id="fullSearchSub">All matching entries</div></div></div>
-    <div class="panel">
-      <div class="tbl-wrap">
-        <table><thead><tr>
-          <th class="sortable" onclick="sortFullTable('date')">Date <span class="sico">⇅</span></th>
-          <th>Order ID</th><th>ASIN</th><th>Merchant</th><th>Issue</th><th>ROAD</th>
-          <th class="sortable" style="text-align:right" onclick="sortFullTable('price')">Value (EGP) <span class="sico">⇅</span></th>
-          <th style="text-align:center">Status</th>
-        </tr></thead><tbody id="fullTableBody"></tbody></table>
-      </div>
-      <div class="tbl-foot">
-        <div class="pg-info" id="fullPgInfo">—</div>
-        <div class="pg-btns">
-          <button class="pg-btn" id="fullPgPrev" onclick="changeFullPage(-1)">‹ Prev</button>
-          <button class="pg-btn" id="fullPgNext" onclick="changeFullPage(1)">Next ›</button>
+        <div class="time-block">
+          <div class="time-num" id="minutes">00</div>
+          <div class="time-lbl">دقائق</div>
+        </div>
+        <div class="time-block">
+          <div class="time-num" id="seconds">00</div>
+          <div class="time-lbl">ثواني</div>
         </div>
       </div>
     </div>
-  </div>
 
-</main>
+    <!-- رسالة الترحيب -->
+    <div class="welcome-section">
+      <h2 class="welcome-title">Welcome!</h2>
+      <p class="welcome-desc">We joyfully invite you to celebrate the beginning of our forever. Here you'll find everything you need for our special day.</p>
+    </div>
 
-<!-- ALERTS PANEL -->
-<div id="alertsPanel">
-  <div class="ap-hd">
-    <div class="ap-title">🔔 Smart Alerts <span id="alertCount" style="background:var(--bad-dim);color:var(--bad);border:1px solid rgba(251,107,107,.25);border-radius:5px;padding:1px 7px;font-size:.63rem;font-family:var(--mono)">0</span></div>
-    <button class="ap-close" onclick="toggleAlerts()">×</button>
   </div>
-  <div class="ap-body" id="alertsBody"><div class="al-empty">Loading alerts…</div></div>
-</div>
-
-<!-- CHAT PANEL -->
-<div id="chatPanel">
-  <div class="ch-hd">
-    <div class="ch-ico">✦</div>
-    <div class="ch-info"><div class="ch-title">AI Returns Analyst</div><div class="ch-sub">اسأل بالعربي أو الإنجليزي</div></div>
-    <button class="ch-close" onclick="toggleChat()">×</button>
-  </div>
-  <div class="ch-msgs" id="chatMsgs">
-    <div class="bub ai" dir="auto">مرحباً! 👋 أنا محلل الـ Returns بتاعك. اسألني أي حاجة عن بياناتك، أو دوس على واحد من الاقتراحات تحت.</div>
-  </div>
-  <div class="ch-chips" id="chatChips">
-    <div class="ch-chip" onclick="quickAsk('إيه أكتر تاجر بيرجع منتجات كتير؟')">🏢 أكتر تاجر مشكلة</div>
-    <div class="ch-chip" onclick="quickAsk('وضّح ليا تريند المرتجعات آخر 3 شهور')">📈 تريند المرتجعات</div>
-    <div class="ch-chip" onclick="quickAsk('Which ASIN has the highest return value?')">📦 Top ASIN</div>
-    <div class="ch-chip" onclick="quickAsk('إيه أكتر سبب Root Cause بيتكرر؟')">⚠️ أكتر سبب</div>
-  </div>
-  <div class="ch-bar">
-    <input class="ch-input" id="chatInput" placeholder="اكتب سؤالك هنا…" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}">
-    <button class="ch-send" id="chatSendBtn" onclick="sendChat()">➤</button>
-  </div>
-</div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyFAht24zvBJ4o0DddZyqFtaBrl3K06_R7bnagwxFM5VhuC70jIZKbxCQuk9UF5-qOU/exec";
-let allData = [], filteredData = [];
-let charts = {}, currentView = 'monthly', currentTab = 'overview';
-let filtersOpen = false;
+  function openEnvelope() {
+    const envelope = document.getElementById('envelope');
+    const screen = document.getElementById('envelope-screen');
+    const main = document.getElementById('mainContent');
 
-window.onload = () => {
-  fetchData();
-  setTimeout(() => document.getElementById('loader').classList.add('gone'), 1600);
-  document.addEventListener('keydown', e => { if(e.key==='Escape') closePeek(); });
-};
+    envelope.classList.add('open');
+    
+    setTimeout(() => {
+      screen.classList.add('hidden');
+      main.classList.add('visible');
+    }, 600);
+  }
 
-// ── FETCH ──
-async function fetchData() {
-  try {
-    const res = await fetch(SCRIPT_URL);
-    const raw = await res.json();
-    allData = raw.map(item => {
-      let d = (item.date||item.Date||'').toString();
-      d = d.includes('T') ? d.split('T')[0] : d.split(' ')[0];
-      let action = item.action||item.Action||'Done';
-      if (action.toLowerCase()==='pending') action = 'Done';
-      return {
-        date: d,
-        orderId: String(item.orderId||item['Order ID']||''),
-        asin: String(item.asin||item.ASIN||'').toUpperCase(),
-        price: parseFloat(item.price||item.Price||0),
-        merchantId: String(item.merchantId||item['Merchant ID']||'N/A'),
-        merchantName: String(item.merchantName||item['Merchant Name']||'N/A'),
-        issue: String(item.issue||item.Issue||'Unknown'),
-        road: String(item.road||item.Road||'N/A'),
-        action
-      };
-    });
-    buildMerchantSelect();
-    updateUI();
-    buildAlertBadge();
-  } catch(e) { console.error('Fetch error:', e); }
-}
+  // عداد تنازلي لحد يوم 31 يوليو 2026
+  const weddingDate = new Date('July 31, 2026 00:00:00').getTime();
 
-// ── FILTERS ──
-function toggleFilters(){
-  filtersOpen = !filtersOpen;
-  document.getElementById('filterDrawer').classList.toggle('open', filtersOpen);
-  document.getElementById('filterBtn').classList.toggle('filter-active', filtersOpen);
-}
-function buildMerchantSelect() {
-  const sel = document.getElementById('merchantFilter');
-  const names = [...new Set(allData.map(e=>e.merchantName))].sort();
-  sel.innerHTML = '<option value="all">🌐 All Merchants</option>';
-  names.forEach(n => sel.innerHTML += `<option value="${n}">${n}</option>`);
-}
-function clearFilters() {
-  document.getElementById('merchantFilter').value = 'all';
-  document.getElementById('startDate').value = '';
-  document.getElementById('endDate').value = '';
-  updateUI();
-}
-function getFiltered() {
-  const m = document.getElementById('merchantFilter').value;
-  const s = document.getElementById('startDate').value;
-  const e = document.getElementById('endDate').value;
-  let data = allData;
-  if (m !== 'all') data = data.filter(x => x.merchantName === m);
-  if (s) data = data.filter(x => x.date >= s);
-  if (e) data = data.filter(x => x.date <= e);
-  return data;
-}
+  function updateCountdown() {
+    const now = new Date().getTime();
+    const gap = weddingDate - now;
 
-// ── MAIN UPDATE ──
-function updateUI() {
-  filteredData = getFiltered();
-  fullPage = 1;
-  updateStats(filteredData);
-  renderTimeChart(filteredData);
-  renderPies(filteredData);
-  renderTopAsinMini(filteredData);
-  renderTopMerchantMini(filteredData);
-  renderSerialMini(filteredData);
-  renderTable();
-  if (currentTab === 'asin') renderFullAsin(filteredData);
-  if (currentTab === 'merchants') renderFullMerchants(filteredData);
-  if (currentTab === 'issues') renderIssuesSection(filteredData);
-  if (currentTab === 'serial') renderFullSerial(filteredData);
-  if (currentTab === 'logs') renderFullTable();
-}
+    if (gap > 0) {
+      const second = 1000;
+      const minute = second * 60;
+      const hour = minute * 60;
+      const day = hour * 24;
 
-// ── STATS ──
-function updateStats(data) {
-  const now = new Date();
-  const today = now.toLocaleDateString('en-CA');
-  const yr = now.getFullYear(), mo = now.getMonth()+1;
-  let dv=0,dc=0,mv=0,mc=0,yv=0,yc=0;
-
-  data.forEach(x => {
-    const p = x.date.split('-');
-    if (x.date === today) { dv+=x.price; dc++; }
-    if (parseInt(p[0])===yr) { yv+=x.price; yc++;
-      if (parseInt(p[1])===mo) { mv+=x.price; mc++; }
-    }
-  });
-
-  set('dailyTotal', fmtNum(dv));
-  set('monthlyTotal', fmtNum(mv));
-  set('yearlyTotal', fmtNum(yv));
-  set('totalItems', data.length.toLocaleString());
-  set('dailySub', dc + ' orders today');
-  set('monthlySub', mc + ' orders this month');
-  set('yearlySub', yc + ' orders this year');
-
-  const max = Math.max(dv, mv, yv, 1);
-  drawRing('ring1', pct(dv,max), '#7c6cf6');
-  drawRing('ring2', pct(mv,max), '#22d3ee');
-  drawRing('ring3', pct(yv,max), '#c4b8ff');
-  drawRing('ring4', pct(data.length, Math.max(allData.length,1)), '#fb6b6b');
-
-  renderTrends();
-}
-function pct(a,b){ return Math.round((a/Math.max(b,1))*100); }
-function fmtNum(n){
-  if(n>=1000000000) return (n/1000000000).toFixed(2)+'B';
-  if(n>=1000000)    return (n/1000000).toFixed(2)+'M';
-  if(n>=1000)       return (n/1000).toFixed(1)+'K';
-  return n.toLocaleString();
-}
-function set(id,v){ const el=document.getElementById(id); if(el) el.textContent=v; }
-
-function drawRing(id, p, color) {
-  const c = document.getElementById(id); if (!c) return;
-  const ctx = c.getContext('2d');
-  ctx.clearRect(0,0,44,44);
-  const cx=22,cy=22,r=17,lw=3.5;
-  ctx.beginPath(); ctx.arc(cx,cy,r,-Math.PI/2,Math.PI*1.5);
-  ctx.strokeStyle='rgba(255,255,255,0.08)'; ctx.lineWidth=lw; ctx.lineCap='round'; ctx.stroke();
-  const end = -Math.PI/2 + (p/100)*Math.PI*2;
-  ctx.beginPath(); ctx.arc(cx,cy,r,-Math.PI/2,end);
-  ctx.strokeStyle=color; ctx.lineWidth=lw; ctx.lineCap='round'; ctx.stroke();
-}
-
-// ── TRENDS ──
-function deltaPct(cur, prev) {
-  if (prev === 0) return cur > 0 ? {p:100,dir:'up'} : {p:0,dir:'flat'};
-  const p = Math.round(((cur - prev) / prev) * 100);
-  return { p: Math.abs(p), dir: p > 0 ? 'up' : p < 0 ? 'down' : 'flat' };
-}
-function setTrend(id, delta, label) {
-  const el = document.getElementById(id); if (!el) return;
-  if (delta.dir === 'flat' && delta.p === 0) { el.style.display = 'none'; return; }
-  const arrow = delta.dir === 'up' ? '▲' : delta.dir === 'down' ? '▼' : '—';
-  el.style.display = 'flex';
-  el.className = 'kpi-trend ' + delta.dir;
-  el.textContent = `${arrow} ${delta.p}% ${label}`;
-}
-function renderTrends() {
-  const merchant = document.getElementById('merchantFilter')?.value || 'all';
-  let base = allData;
-  if (merchant !== 'all') base = base.filter(x => x.merchantName === merchant);
-
-  const now = new Date();
-  const todayStr = now.toLocaleDateString('en-CA');
-  const yest = new Date(now); yest.setDate(yest.getDate() - 1);
-  const yestStr = yest.toLocaleDateString('en-CA');
-  const y = now.getFullYear(), m = now.getMonth() + 1;
-  const lm = m === 1 ? 12 : m - 1, lmY = m === 1 ? y - 1 : y;
-  const ly = y - 1;
-
-  let dToday = 0, dYest = 0, mThis = 0, mLast = 0, yThis = 0, yLast = 0;
-  base.forEach(x => {
-    if (x.date === todayStr) dToday += x.price;
-    if (x.date === yestStr) dYest += x.price;
-    const p = x.date.split('-'); const yr = parseInt(p[0]), mo = parseInt(p[1]);
-    if (yr === y && mo === m) mThis += x.price;
-    if (yr === lmY && mo === lm) mLast += x.price;
-    if (yr === y) yThis += x.price;
-    if (yr === ly) yLast += x.price;
-  });
-
-  setTrend('dailyTrend', deltaPct(dToday, dYest), 'vs yesterday');
-  setTrend('monthlyTrend', deltaPct(mThis, mLast), 'vs last month');
-  setTrend('yearlyTrend', deltaPct(yThis, yLast), 'vs last year');
-}
-
-// ── TIME CHART ──
-function renderTimeChart(data) {
-  const labels = currentView==='monthly'
-    ? ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-    : ['Q1','Q2','Q3','Q4'];
-  const vals = Array(labels.length).fill(0);
-  const cnts = Array(labels.length).fill(0);
-
-  data.forEach(x => {
-    const p = x.date.split('-');
-    if (parseInt(p[0])===2026) {
-      const mi = parseInt(p[1])-1;
-      const idx = currentView==='monthly' ? mi : Math.floor(mi/3);
-      if (idx>=0 && idx<vals.length) { vals[idx]+=x.price; cnts[idx]++; }
-    }
-  });
-
-  if (charts.time) charts.time.destroy();
-  const ctx = document.getElementById('timeChart').getContext('2d');
-  const g1=ctx.createLinearGradient(0,0,0,180); g1.addColorStop(0,'rgba(124,108,246,.25)'); g1.addColorStop(1,'rgba(124,108,246,0)');
-  const g2=ctx.createLinearGradient(0,0,0,180); g2.addColorStop(0,'rgba(34,211,238,.2)'); g2.addColorStop(1,'rgba(34,211,238,0)');
-
-  charts.time = new Chart(ctx, {
-    type:'line',
-    data:{ labels, datasets:[
-      { label:'Value EGP', data:vals, borderColor:'#7c6cf6', backgroundColor:g1, fill:true, tension:.4, pointRadius:3, pointBackgroundColor:'#7c6cf6', borderWidth:2 },
-      { label:'Orders', data:cnts, borderColor:'#22d3ee', backgroundColor:g2, fill:true, tension:.4, pointRadius:3, pointBackgroundColor:'#22d3ee', borderWidth:2 }
-    ]},
-    options:{
-      maintainAspectRatio:false,
-      plugins:{ legend:{display:false},
-        tooltip:{ backgroundColor:'rgba(15,16,26,.97)', borderColor:'rgba(255,255,255,.1)', borderWidth:1,
-          titleFont:{family:'Cairo',size:11}, bodyFont:{family:'JetBrains Mono',size:11},
-          callbacks:{ label: c => ` ${c.dataset.label}: ${c.parsed.y.toLocaleString()}` } } },
-      scales:{
-        x:{ grid:{color:'rgba(255,255,255,.04)'}, ticks:{color:'#5d6079',font:{family:'Cairo',size:10}} },
-        y:{ grid:{color:'rgba(255,255,255,.04)'}, ticks:{color:'#5d6079',font:{family:'JetBrains Mono',size:10}} }
-      }
-    }
-  });
-}
-
-// ── PIE CHARTS ──
-function renderPies(data) { mkDoughnut('issueChart','issue',data,['#7c6cf6','#22d3ee','#fbbf24','#34d399','#fb6b6b','#c4b8ff']); }
-function mkDoughnut(id, key, data, colors) {
-  const counts={};
-  data.forEach(x=>counts[x[key]]=(counts[x[key]]||0)+1);
-  const total=Object.values(counts).reduce((a,b)=>a+b,0);
-  if(charts[id]) charts[id].destroy();
-  const el=document.getElementById(id); if(!el)return;
-  charts[id]=new Chart(el,{
-    type:'doughnut',
-    data:{ labels:Object.keys(counts), datasets:[{data:Object.values(counts),backgroundColor:colors,borderColor:'#12131f',borderWidth:2}]},
-    options:{ maintainAspectRatio:false, cutout:'62%',
-      plugins:{
-        legend:{position:'bottom',labels:{color:'#8388a3',font:{family:'Cairo',size:9},usePointStyle:true,pointStyle:'circle',padding:9}},
-        tooltip:{ backgroundColor:'rgba(15,16,26,.97)', borderColor:'rgba(255,255,255,.1)', borderWidth:1,
-          callbacks:{ label: c=>`  ${c.label}: ${c.raw} (${((c.raw/total)*100).toFixed(1)}%)` }}
-      }
-    }
-  });
-}
-
-// ── TOP ASIN / MERCHANT MINI ──
-function renderTopAsinMini(data) {
-  const stats={};
-  data.forEach(x=>{ if(!stats[x.asin])stats[x.asin]=0; stats[x.asin]+=x.price; });
-  const sorted=Object.entries(stats).sort((a,b)=>b[1]-a[1]).slice(0,5);
-  const max=sorted[0]?.[1]||1;
-  const colors=['#7c6cf6','#22d3ee','#c4b8ff','#fbbf24','#34d399'];
-  const el=document.getElementById('topAsinMini'); if(!el)return;
-  el.innerHTML=sorted.map(([asin,val],i)=>`
-    <div class="rank-row">
-      <div class="rank-idx">${String(i+1).padStart(2,'0')}</div>
-      <div class="rank-nm mono">${asin}</div>
-      <div class="rank-track"><div class="rank-fill" style="width:${(val/max*100).toFixed(0)}%;background:${colors[i]}"></div></div>
-      <div class="rank-v" style="color:${colors[i]}">${fmtNum(val)}</div>
-    </div>`).join('') || emptyMini();
-}
-function renderTopMerchantMini(data) {
-  const stats={};
-  data.forEach(x=>{ if(!stats[x.merchantName])stats[x.merchantName]=0; stats[x.merchantName]+=x.price; });
-  const sorted=Object.entries(stats).sort((a,b)=>b[1]-a[1]).slice(0,5);
-  const max=sorted[0]?.[1]||1;
-  const colors=['#7c6cf6','#22d3ee','#c4b8ff','#fbbf24','#34d399'];
-  const el=document.getElementById('topMerchantMini'); if(!el)return;
-  el.innerHTML=sorted.map(([name,val],i)=>`
-    <div class="rank-row">
-      <div class="rank-idx">${String(i+1).padStart(2,'0')}</div>
-      <div class="rank-nm">${name}</div>
-      <div class="rank-track"><div class="rank-fill" style="width:${(val/max*100).toFixed(0)}%;background:${colors[i]}"></div></div>
-      <div class="rank-v" style="color:${colors[i]}">${fmtNum(val)}</div>
-    </div>`).join('') || emptyMini();
-}
-function emptyMini(){ return `<div style="text-align:center;color:var(--muted);font-size:.75rem;padding:20px 0">No data for this filter</div>`; }
-
-// ── SERIAL MINI ──
-function renderSerialMini(data) {
-  const counts={};
-  data.forEach(x=>counts[x.merchantName]=(counts[x.merchantName]||0)+1);
-  const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,5);
-  const el=document.getElementById('serialMini'); if(!el)return;
-  el.innerHTML=sorted.map(([name,count])=>`
-    <div class="watch-row"><span class="watch-name">${name}</span><span class="watch-badge">${count} returns</span></div>
-  `).join('') || emptyMini();
-}
-
-// ── TABLE (overview preview) ──
-function renderTable() {
-  const q = (document.getElementById('topSearch')?.value || '').toLowerCase();
-  const body = document.getElementById('tableBody'); if(!body)return;
-  const rows = filteredData.slice().reverse().filter(x =>
-    x.orderId.toLowerCase().includes(q) || x.asin.toLowerCase().includes(q) ||
-    x.merchantName.toLowerCase().includes(q) || x.merchantId.toLowerCase().includes(q)
-  ).slice(0,25);
-  body.innerHTML = rows.length ? rows.map(x=>rowHTML(x)).join('') : emptyRow(6);
-}
-function rowHTML(x){
-  return `<tr onclick="openPeek('${esc(x.orderId)}','${x.date}','${x.asin}','${esc(x.merchantName)}','${esc(x.merchantId)}',${x.price},'${esc(x.action)}','${esc(x.issue)}','${esc(x.road)}')">
-    <td class="td-mono">${x.date}</td>
-    <td style="font-family:var(--mono);font-size:.72rem">${x.orderId}</td>
-    <td class="td-asin">${x.asin}</td>
-    <td>${x.merchantName}<div class="td-merchant-id">${x.merchantId}</div></td>
-    <td class="td-price">${x.price.toLocaleString()}</td>
-    <td style="text-align:center"><span class="td-badge">${x.action}</span></td>
-  </tr>`;
-}
-function esc(s){ return String(s).replace(/'/g,"\\'"); }
-function emptyRow(cols){
-  return `<tr class="empty-row"><td colspan="${cols}">لا توجد نتائج مطابقة — جرّب تغيير الفلاتر أو كلمة البحث<br><span style="font-size:.68rem">No matching results — try adjusting your filters or search</span></td></tr>`;
-}
-
-// ── FULL TABLE (logs) — sortable + paginated ──
-let fullSort = { key:'date', dir:-1 };
-let fullPage = 1;
-const FULL_PAGE_SIZE = 50;
-
-function sortFullTable(key) {
-  fullSort.dir = (fullSort.key === key) ? -fullSort.dir : -1;
-  fullSort.key = key;
-  fullPage = 1;
-  document.querySelectorAll('#page-logs th.sortable').forEach(th => th.classList.remove('active'));
-  const activeTh = Array.from(document.querySelectorAll('#page-logs th.sortable')).find(th => th.getAttribute('onclick')?.includes(key));
-  if (activeTh) activeTh.classList.add('active');
-  renderFullTable();
-}
-function changeFullPage(delta) { fullPage = Math.max(1, fullPage + delta); renderFullTable(); }
-
-function renderFullTable() {
-  const q = (document.getElementById('topSearch')?.value || '').toLowerCase();
-  const body = document.getElementById('fullTableBody'); if(!body)return;
-  let rows = filteredData.filter(x =>
-    x.orderId.toLowerCase().includes(q) || x.asin.toLowerCase().includes(q) ||
-    x.merchantName.toLowerCase().includes(q) || x.merchantId.toLowerCase().includes(q) || x.issue.toLowerCase().includes(q)
-  );
-  rows = rows.slice().sort((a,b) => {
-    let av=a[fullSort.key], bv=b[fullSort.key];
-    if (fullSort.key==='price') return (av-bv)*fullSort.dir;
-    return (av>bv?1:av<bv?-1:0)*fullSort.dir;
-  });
-
-  const totalPages = Math.max(1, Math.ceil(rows.length / FULL_PAGE_SIZE));
-  fullPage = Math.min(fullPage, totalPages);
-  const start = (fullPage-1)*FULL_PAGE_SIZE;
-  const pageRows = rows.slice(start, start+FULL_PAGE_SIZE);
-
-  body.innerHTML = pageRows.length ? pageRows.map(x=>`
-    <tr onclick="openPeek('${esc(x.orderId)}','${x.date}','${x.asin}','${esc(x.merchantName)}','${esc(x.merchantId)}',${x.price},'${esc(x.action)}','${esc(x.issue)}','${esc(x.road)}')">
-      <td class="td-mono">${x.date}</td>
-      <td style="font-family:var(--mono);font-size:.72rem">${x.orderId}</td>
-      <td class="td-asin">${x.asin}</td>
-      <td>${x.merchantName}</td>
-      <td style="font-size:.74rem;color:var(--warn)">${x.issue}</td>
-      <td style="font-size:.74rem;color:var(--cyan)">${x.road}</td>
-      <td class="td-price">${x.price.toLocaleString()}</td>
-      <td style="text-align:center"><span class="td-badge">${x.action}</span></td>
-    </tr>`).join('') : emptyRow(8);
-
-  const info = document.getElementById('fullPgInfo');
-  if (info) info.textContent = rows.length ? `${start+1}–${Math.min(start+FULL_PAGE_SIZE, rows.length)} of ${rows.length.toLocaleString()}` : 'No records';
-  const prevBtn=document.getElementById('fullPgPrev'), nextBtn=document.getElementById('fullPgNext');
-  if (prevBtn) prevBtn.disabled = fullPage<=1;
-  if (nextBtn) nextBtn.disabled = fullPage>=totalPages;
-}
-
-// ── FULL ASIN ──
-function renderFullAsin(data) {
-  const stats={};
-  data.forEach(x=>{ if(!stats[x.asin])stats[x.asin]={val:0,count:0}; stats[x.asin].val+=x.price; stats[x.asin].count++; });
-  const sorted=Object.entries(stats).sort((a,b)=>b[1].val-a[1].val).slice(0,20);
-  const max=sorted[0]?.[1]?.val||1;
-  const colors=['#7c6cf6','#22d3ee','#c4b8ff','#fbbf24','#34d399','#fb6b6b'];
-  const el=document.getElementById('fullAsinList'); if(!el)return;
-  el.innerHTML=sorted.length ? sorted.map(([asin,obj],i)=>`
-    <div class="rank-row" style="padding:11px 0">
-      <div class="rank-idx" style="font-size:.72rem">${i+1}</div>
-      <div style="width:130px;font-family:var(--mono);color:var(--cyan);font-size:.8rem;font-weight:700;flex-shrink:0">${asin}</div>
-      <div class="rank-track" style="max-width:none;height:4px"><div class="rank-fill" style="width:${(obj.val/max*100).toFixed(0)}%;background:${colors[i%colors.length]}"></div></div>
-      <div style="width:64px;text-align:right;font-size:.7rem;color:var(--muted);font-family:var(--mono)">${obj.count}</div>
-      <div class="rank-v" style="color:${colors[i%colors.length]};width:100px;text-align:right">${obj.val.toLocaleString()} EGP</div>
-    </div>`).join('') : `<div style="text-align:center;color:var(--muted);padding:30px 0">No data for this filter</div>`;
-}
-// ── FULL MERCHANTS ──
-function renderFullMerchants(data) {
-  const stats={};
-  data.forEach(x=>{ if(!stats[x.merchantName])stats[x.merchantName]={val:0,count:0,id:x.merchantId}; stats[x.merchantName].val+=x.price; stats[x.merchantName].count++; });
-  const sorted=Object.entries(stats).sort((a,b)=>b[1].val-a[1].val).slice(0,20);
-  const max=sorted[0]?.[1]?.val||1;
-  const colors=['#7c6cf6','#22d3ee','#c4b8ff','#fbbf24','#34d399','#fb6b6b'];
-  const el=document.getElementById('fullMerchantList'); if(!el)return;
-  el.innerHTML=sorted.length ? sorted.map(([name,obj],i)=>`
-    <div class="rank-row" style="padding:11px 0">
-      <div class="rank-idx" style="font-size:.72rem">${i+1}</div>
-      <div style="flex:1;min-width:0">
-        <div style="font-size:.8rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${name}</div>
-        <div style="font-size:.63rem;font-family:var(--mono);color:var(--muted)">${obj.id}</div>
-      </div>
-      <div class="rank-track" style="max-width:200px;flex:1;height:4px"><div class="rank-fill" style="width:${(obj.val/max*100).toFixed(0)}%;background:${colors[i%colors.length]}"></div></div>
-      <div style="width:64px;text-align:right;font-size:.7rem;color:var(--muted);font-family:var(--mono)">${obj.count}</div>
-      <div class="rank-v" style="color:${colors[i%colors.length]};width:110px;text-align:right">${obj.val.toLocaleString()} EGP</div>
-    </div>`).join('') : `<div style="text-align:center;color:var(--muted);padding:30px 0">No data for this filter</div>`;
-}
-
-// ── ISSUES SECTION ──
-function renderIssuesSection(data) {
-  mkDoughnut('issueChart2','issue',data,['#7c6cf6','#22d3ee','#fbbf24','#34d399','#fb6b6b','#c4b8ff']);
-  mkDoughnut('roadChart2','road',data,['#34d399','#fb6b6b','#fbbf24','#22d3ee','#7c6cf6']);
-
-  const counts={};
-  data.forEach(x=>counts[x.issue]=(counts[x.issue]||0)+1);
-  const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
-  const el=document.getElementById('issueCounts'); if(el)
-  el.innerHTML=sorted.map(([issue,count])=>`
-    <div class="watch-row" style="border-color:var(--border)"><span class="watch-name">${issue}</span><span class="watch-badge" style="color:var(--warn);background:var(--warn-dim);border-color:rgba(251,191,36,.25)">${count}</span></div>
-  `).join('') || `<div style="text-align:center;color:var(--muted);padding:20px 0">No data</div>`;
-
-  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const mCounts=Array(12).fill(0), mVals=Array(12).fill(0);
-  data.forEach(x=>{
-    const p=x.date.split('-');
-    if(parseInt(p[0])===2026){ const mi=parseInt(p[1])-1; if(mi>=0&&mi<12){mCounts[mi]++;mVals[mi]+=x.price;} }
-  });
-
-  if(charts.monthlyOrders) charts.monthlyOrders.destroy();
-  const mctx=document.getElementById('monthlyOrdersChart'); if(!mctx) return;
-  const mCtx=mctx.getContext('2d');
-  const barGrad=mCtx.createLinearGradient(0,0,0,220);
-  barGrad.addColorStop(0,'rgba(124,108,246,.9)'); barGrad.addColorStop(1,'rgba(124,108,246,.25)');
-  charts.monthlyOrders=new Chart(mCtx,{
-    type:'bar',
-    data:{ labels:months, datasets:[{ label:'Orders', data:mCounts, backgroundColor:barGrad, borderRadius:6, borderSkipped:false }]},
-    options:{ maintainAspectRatio:false,
-      plugins:{ legend:{display:false},
-        tooltip:{ backgroundColor:'rgba(15,16,26,.97)',borderColor:'rgba(255,255,255,.1)',borderWidth:1,
-          titleFont:{family:'Cairo',size:11},bodyFont:{family:'JetBrains Mono',size:11},
-          callbacks:{ label: c=>[` Orders: ${c.parsed.y}`,` Value: ${mVals[c.dataIndex].toLocaleString()} EGP`] } } },
-      scales:{
-        x:{grid:{display:false},ticks:{color:'#5d6079',font:{family:'Cairo',size:10}}},
-        y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#5d6079',font:{family:'JetBrains Mono',size:10}}}
-      }
-    }
-  });
-
-  const listEl=document.getElementById('monthlyOrdersList'); if(!listEl) return;
-  const monthNames=['January','February','March','April','May','June','July','August','September','October','November','December'];
-  const colors=['#7c6cf6','#22d3ee','#c4b8ff','#fbbf24','#34d399','#fb6b6b','#a78bfa','#38bdf8','#84cc16','#f97316','#e879f9','#2dd4bf'];
-  const maxC=Math.max(...mCounts,1);
-  listEl.innerHTML=monthNames.map((name,i)=>{
-    if(mCounts[i]===0) return '';
-    return `<div class="rank-row" style="padding:9px 0">
-      <div class="rank-idx" style="width:30px;font-size:.68rem">${name.slice(0,3)}</div>
-      <div style="flex:1;min-width:0">
-        <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-          <span style="font-size:.74rem;font-weight:600">${mCounts[i]} orders</span>
-          <span style="font-size:.67rem;color:${colors[i]};font-weight:700;font-family:var(--mono)">${mVals[i].toLocaleString()} EGP</span>
-        </div>
-        <div class="rank-track" style="max-width:none;height:4px"><div class="rank-fill" style="width:${(mCounts[i]/maxC*100).toFixed(0)}%;background:${colors[i]}"></div></div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-// ── FULL SERIAL ──
-function renderFullSerial(data) {
-  const counts={};
-  data.forEach(x=>counts[x.merchantName]=(counts[x.merchantName]||0)+1);
-  const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
-  const el=document.getElementById('fullSerialList'); if(!el)return;
-  el.innerHTML=sorted.length ? sorted.map(([name,count])=>`
-    <div class="watch-row" style="padding:12px 14px"><span class="watch-name">${name}</span><span class="watch-badge">${count} returns</span></div>
-  `).join('') : `<div style="text-align:center;color:var(--muted);padding:30px 0">No data for this filter</div>`;
-}
-
-// ── TAB NAVIGATION ──
-function switchTab(tab) {
-  currentTab = tab;
-  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
-  document.getElementById('page-'+tab)?.classList.add('active');
-  document.querySelectorAll('.tab-pill').forEach(el => el.classList.toggle('active', el.dataset.tab===tab));
-
-  if(tab==='asin') renderFullAsin(filteredData);
-  if(tab==='merchants') renderFullMerchants(filteredData);
-  if(tab==='issues') renderIssuesSection(filteredData);
-  if(tab==='serial') renderFullSerial(filteredData);
-  if(tab==='logs') renderFullTable();
-}
-
-// ── VIEW SWITCH ──
-function switchView(v) {
-  currentView=v;
-  document.getElementById('btn-monthly').className='seg-btn'+(v==='monthly'?' active':'');
-  document.getElementById('btn-quarterly').className='seg-btn'+(v==='quarterly'?' active':'');
-  renderTimeChart(filteredData);
-}
-
-// ── SIDE PEEK ──
-function openPeek(orderId,date,asin,merchant,mid,price,action,issue,road){
-  document.getElementById('pk-order').textContent=orderId;
-  document.getElementById('pk-asin').textContent=asin;
-  document.getElementById('pk-price').textContent=price.toLocaleString()+' EGP';
-  document.getElementById('pk-issue').textContent=issue;
-  document.getElementById('pk-road').textContent=road;
-  document.getElementById('pk-merchant').textContent=merchant;
-  document.getElementById('pk-mid').textContent=mid;
-  document.getElementById('pk-action').textContent=action;
-  document.getElementById('pk-date').textContent=date;
-  document.getElementById('peek').classList.add('open');
-}
-function closePeek(){ document.getElementById('peek').classList.remove('open'); }
-
-// ── EXPORT ──
-function exportCSV(){
-  let csv="Date,Order ID,ASIN,Price (EGP),Merchant ID,Merchant Name,Issue,Road,Action\n";
-  filteredData.forEach(e=>csv+=`${e.date},${e.orderId},${e.asin},${e.price},${e.merchantId},${e.merchantName},${e.issue},${e.road},${e.action}\n`);
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
-  a.download='returns_console_export.csv'; a.click();
-}
-
-// ══════════════════════════════════════
-// SMART ALERTS
-// ══════════════════════════════════════
-let alertsOpen = false;
-let thresholds = { merchantReturns: 5, asinValue: 5000, monthlySpike: 30 };
-
-function toggleAlerts(){
-  alertsOpen = !alertsOpen;
-  document.getElementById('alertsPanel').classList.toggle('open', alertsOpen);
-  if(alertsOpen) buildAlerts();
-}
-
-function buildAlerts(){
-  const data = allData;
-  const now = new Date();
-  const thisYear = now.getFullYear();
-  const thisMonth = now.getMonth() + 1;
-  const lastMonth = thisMonth === 1 ? 12 : thisMonth - 1;
-  const lastMonthYear = thisMonth === 1 ? thisYear - 1 : thisYear;
-  const alerts = [];
-
-  const mThisMonth = {};
-  data.forEach(x => {
-    const p = x.date.split('-');
-    if (parseInt(p[0]) === thisYear && parseInt(p[1]) === thisMonth)
-      mThisMonth[x.merchantName] = (mThisMonth[x.merchantName]||0) + 1;
-  });
-  Object.entries(mThisMonth).filter(([,c]) => c >= thresholds.merchantReturns).sort((a,b) => b[1]-a[1])
-    .forEach(([name, count]) => {
-      alerts.push({ ico:'🚨', title:`تاجر تجاوز الحد: ${name}`, sub:`${count} returns هذا الشهر — الحد: ${thresholds.merchantReturns}`, tag:'HIGH', color:'var(--bad-dim)', icoColor:'rgba(251,107,107,.2)' });
-    });
-
-  const aStats = {};
-  data.forEach(x => { if(!aStats[x.asin]) aStats[x.asin]={val:0,count:0}; aStats[x.asin].val+=x.price; aStats[x.asin].count++; });
-  Object.entries(aStats).filter(([,o]) => o.val >= thresholds.asinValue).sort((a,b) => b[1].val - a[1].val).slice(0, 3)
-    .forEach(([asin, obj]) => {
-      alerts.push({ ico:'📦', title:`ASIN عالي القيمة: ${asin}`, sub:`إجمالي ${obj.val.toLocaleString()} EGP — ${obj.count} orders`, tag:'WARN', color:'var(--warn-dim)', icoColor:'rgba(251,191,36,.15)' });
-    });
-
-  let thisMonthCount = 0, lastMonthCount = 0;
-  data.forEach(x => {
-    const p = x.date.split('-'); const y = parseInt(p[0]), m = parseInt(p[1]);
-    if (y === thisYear && m === thisMonth) thisMonthCount++;
-    if (y === lastMonthYear && m === lastMonth) lastMonthCount++;
-  });
-  if (lastMonthCount > 0) {
-    const changePct = Math.round(((thisMonthCount - lastMonthCount) / lastMonthCount) * 100);
-    if (changePct >= thresholds.monthlySpike) {
-      alerts.push({ ico:'📈', title:`ارتفاع مفاجئ في المرتجعات`, sub:`هذا الشهر: ${thisMonthCount} — الشهر اللي فات: ${lastMonthCount} — زيادة: +${changePct}%`, tag:'SPIKE', color:'var(--bad-dim)', icoColor:'rgba(251,107,107,.2)' });
-    } else if (changePct <= -thresholds.monthlySpike) {
-      alerts.push({ ico:'📉', title:`انخفاض ممتاز في المرتجعات`, sub:`هذا الشهر: ${thisMonthCount} — الشهر اللي فات: ${lastMonthCount} — انخفاض: ${changePct}%`, tag:'GOOD', color:'var(--good-dim)', icoColor:'rgba(52,211,153,.15)' });
+      document.getElementById('days').innerText = Math.floor(gap / day);
+      document.getElementById('hours').innerText = Math.floor((gap % day) / hour);
+      document.getElementById('minutes').innerText = Math.floor((gap % hour) / minute);
+      document.getElementById('seconds').innerText = Math.floor((gap % minute) / second);
     }
   }
 
-  let thisMonthVal = 0;
-  data.forEach(x => { const p = x.date.split('-'); if (parseInt(p[0]) === thisYear && parseInt(p[1]) === thisMonth) thisMonthVal += x.price; });
-  if (thisMonthVal > 0) {
-    alerts.push({ ico:'💰', title:`إجمالي الشهر الحالي`, sub:`${thisMonthVal.toLocaleString()} EGP من ${thisMonthCount} return`, tag:'INFO', color:'var(--cyan-dim)', icoColor:'rgba(34,211,238,.15)' });
-  }
-
-  const dangerCount = alerts.filter(a => a.tag==='HIGH' || a.tag==='WARN' || a.tag==='SPIKE').length;
-  const badge = document.getElementById('alertBadge'); const cnt = document.getElementById('alertCount');
-  if (badge) { badge.style.display = dangerCount>0 ? 'flex' : 'none'; badge.textContent = dangerCount; }
-  if (cnt) cnt.textContent = alerts.length;
-
-  const body = document.getElementById('alertsBody'); if (!body) return;
-  const settingsHTML = `
-    <div class="thresh-box">
-      <div class="thresh-title">⚙️ ضبط الحدود</div>
-      <div class="thresh-grid">
-        <div><div>Returns/شهر</div><input type="number" value="${thresholds.merchantReturns}" onchange="thresholds.merchantReturns=+this.value;buildAlerts()"></div>
-        <div><div>ASIN EGP</div><input type="number" value="${thresholds.asinValue}" onchange="thresholds.asinValue=+this.value;buildAlerts()"></div>
-        <div><div>Spike %</div><input type="number" value="${thresholds.monthlySpike}" onchange="thresholds.monthlySpike=+this.value;buildAlerts()"></div>
-      </div>
-    </div>`;
-
-  if (!alerts.length) { body.innerHTML = settingsHTML + '<div class="al-empty">✅ كل حاجة تمام — مفيش تنبيهات</div>'; return; }
-  const tagColors = { HIGH:'var(--bad)', WARN:'var(--warn)', SPIKE:'var(--bad)', GOOD:'var(--good)', INFO:'var(--cyan)' };
-  body.innerHTML = settingsHTML + alerts.map(a => `
-    <div class="al-item" style="background:${a.color}">
-      <div class="al-ico" style="background:${a.icoColor}">${a.ico}</div>
-      <div style="flex:1;min-width:0">
-        <div style="display:flex;align-items:center;gap:6px">
-          <span class="al-title" style="flex:1">${a.title}</span>
-          <span style="font-size:.55rem;font-weight:800;color:${tagColors[a.tag]};background:${a.icoColor};padding:2px 6px;border-radius:4px;font-family:var(--mono)">${a.tag}</span>
-        </div>
-        <div class="al-sub">${a.sub}</div>
-      </div>
-    </div>`).join('');
-}
-function buildAlertBadge(){
-  const now = new Date();
-  const thisYear = now.getFullYear(), thisMonth = now.getMonth()+1;
-  const mC = {};
-  allData.forEach(x => {
-    const p = x.date.split('-');
-    if(parseInt(p[0])===thisYear && parseInt(p[1])===thisMonth) mC[x.merchantName]=(mC[x.merchantName]||0)+1;
-  });
-  const dangerCount = Object.values(mC).filter(v=>v>=thresholds.merchantReturns).length;
-  const badge = document.getElementById('alertBadge');
-  if(badge && dangerCount>0){ badge.style.display='flex'; badge.textContent=dangerCount; }
-}
-
-// ══════════════════════════════════════
-// AI CHAT — secure, no exposed key (uses built-in Claude API)
-// ══════════════════════════════════════
-let chatOpen=false;
-let chatHistory=[];
-
-function toggleChat(){
-  chatOpen=!chatOpen;
-  document.getElementById('chatPanel').classList.toggle('open',chatOpen);
-}
-function quickAsk(q){ document.getElementById('chatInput').value=q; sendChat(); }
-function addBubble(role, text){
-  const msgs=document.getElementById('chatMsgs');
-  const div=document.createElement('div');
-  div.className='bub '+(role==='user'?'user':'ai');
-  div.setAttribute('dir','auto');
-  div.textContent=text;
-  msgs.appendChild(div);
-  msgs.scrollTop=msgs.scrollHeight;
-  return div;
-}
-function getDataContext(){
-  const data=filteredData.length?filteredData:allData;
-  const total=data.reduce((s,x)=>s+x.price,0);
-  const mC={},aC={},iC={};
-  data.forEach(x=>{
-    mC[x.merchantName]=(mC[x.merchantName]||0)+1;
-    if(!aC[x.asin])aC[x.asin]=0; aC[x.asin]+=x.price;
-    iC[x.issue]=(iC[x.issue]||0)+1;
-  });
-  const topM=Object.entries(mC).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([n,c])=>`${n}: ${c} returns`).join(', ');
-  const topA=Object.entries(aC).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([n,v])=>`${n}: ${v.toLocaleString()} EGP`).join(', ');
-  const topI=Object.entries(iC).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([n,c])=>`${n}: ${c}`).join(', ');
-  const recent=[...data].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,3).map(x=>`${x.orderId} (${x.merchantName}, ${x.price} EGP)`).join('; ');
-  return `You are a Returns & Refunds data analyst assistant for an Egyptian e-commerce returns dashboard. Answer in the same language the user uses (Arabic or English). Be concise and insightful.
-
-Current Data Summary (${data.length} records):
-- Total Value Recovered: ${total.toLocaleString()} EGP
-- Top Merchants by Returns: ${topM}
-- Top ASINs by Value: ${topA}
-- Top Issues: ${topI}
-- Most Recent Returns: ${recent}`;
-}
-async function sendChat(){
-  const inp=document.getElementById('chatInput');
-  const btn=document.getElementById('chatSendBtn');
-  const msg=(inp.value||'').trim();
-  if(!msg) return;
-  inp.value=''; btn.disabled=true;
-  const chips=document.getElementById('chatChips'); if(chips) chips.style.display='none';
-  addBubble('user', msg);
-  chatHistory.push({role:'user', content: msg});
-  const typingDiv=addBubble('ai','...'); typingDiv.classList.add('typing');
-  try {
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ model:"claude-sonnet-4-6", max_tokens:1000, system: getDataContext(), messages: chatHistory })
-    });
-    const json = await res.json();
-    const reply = (json?.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n') || 'حصل خطأ، حاول تاني.';
-    typingDiv.classList.remove('typing'); typingDiv.textContent = reply;
-    chatHistory.push({role:'assistant', content: reply});
-  } catch(err){
-    typingDiv.classList.remove('typing'); typingDiv.textContent='❌ حصل خطأ في الاتصال. حاول تاني.';
-  }
-  btn.disabled=false;
-  document.getElementById('chatMsgs').scrollTop=9999;
-}
+  setInterval(updateCountdown, 1000);
+  updateCountdown();
 </script>
+
 </body>
 </html>
