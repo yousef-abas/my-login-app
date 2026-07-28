@@ -2,18 +2,22 @@
 <html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Ahmed & Yara's Wedding Invitation</title>
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cinzel:wght@400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cinzel:wght@400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   
   body {
-    background-color: #fcf9f5;
+    /* خلفية كوشة عريس وعروسة في مكان أخضر وطبيعة ساحرة */
+    background: linear-gradient(rgba(15, 30, 20, 0.75), rgba(10, 20, 15, 0.85)), 
+                url('https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1600&auto=format&fit=crop') no-repeat center center fixed;
+    background-size: cover;
     font-family: 'Cinzel', serif;
-    color: #4a3b32;
+    color: #f4ecdf;
     overflow-x: hidden;
     position: relative;
+    width: 100%;
   }
 
   /* ── FALLING PETALS ── */
@@ -43,7 +47,7 @@
   #envelope-screen {
     position: fixed;
     inset: 0;
-    background: radial-gradient(circle, #231b15 0%, #0f0b08 100%);
+    background: radial-gradient(circle, rgba(15,30,20,0.95) 0%, rgba(5,10,7,0.98) 100%);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -51,6 +55,7 @@
     z-index: 10000;
     cursor: pointer;
     transition: opacity 0.8s ease, visibility 0.8s ease;
+    padding: 20px;
   }
   #envelope-screen.hidden {
     opacity: 0;
@@ -60,10 +65,11 @@
   
   .envelope-wrapper {
     position: relative;
-    width: 380px;
-    height: 260px;
+    width: 100%;
+    max-width: 360px;
+    height: 250px;
     background: linear-gradient(135deg, #fbf7ee 0%, #f0e6d2 100%);
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 0 30px rgba(184, 146, 55, 0.15);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 0 25px rgba(184, 146, 55, 0.15);
     border-radius: 4px;
     display: flex;
     align-items: center;
@@ -71,7 +77,6 @@
     border: 2px solid #b89237;
   }
 
-  /* إطار ملكي زخرفي داخلي للظرف */
   .envelope-wrapper::before {
     content: '';
     position: absolute;
@@ -89,9 +94,9 @@
     left: 0;
     width: 0;
     height: 0;
-    border-left: 190px solid transparent;
-    border-right: 190px solid transparent;
-    border-top: 140px solid #e4d3b8;
+    border-left: 180px solid transparent;
+    border-right: 180px solid transparent;
+    border-top: 130px solid #e4d3b8;
     transform-origin: top;
     transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 4;
@@ -106,7 +111,7 @@
     position: absolute;
     inset: 0;
     border: solid transparent;
-    border-width: 130px 190px;
+    border-width: 120px 180px;
     border-top-color: transparent;
     border-left-color: #f7f1e5;
     border-right-color: #f7f1e5;
@@ -118,37 +123,37 @@
 
   .wax-seal {
     position: absolute;
-    top: 65px;
-    width: 86px;
-    height: 86px;
+    top: 60px;
+    width: 76px;
+    height: 76px;
     background: radial-gradient(circle, #f3d482 0%, #c59b3a 65%, #8c6718 100%);
     border-radius: 50%;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.4), inset 0 3px 6px rgba(255,255,255,0.6), inset 0 -3px 6px rgba(0,0,0,0.3);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4), inset 0 3px 6px rgba(255,255,255,0.6), inset 0 -3px 6px rgba(0,0,0,0.3);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 6;
     transition: transform 0.5s ease, opacity 0.5s ease;
-    border: 4px double #523b0e;
+    border: 3px double #523b0e;
   }
   
-  .wax-seal svg { width: 50px; height: 50px; fill: #4a340b; filter: drop-shadow(0 1px 1px rgba(255,255,255,0.3)); }
+  .wax-seal svg { width: 42px; height: 42px; fill: #4a340b; filter: drop-shadow(0 1px 1px rgba(255,255,255,0.3)); }
 
   .envelope-wrapper.open .wax-seal {
-    transform: scale(1.6) rotate(45deg);
+    transform: scale(1.5) rotate(45deg);
     opacity: 0;
   }
 
   .open-instruction {
-    margin-top: 35px;
-    font-size: 0.9rem;
+    margin-top: 30px;
+    font-size: 0.85rem;
     color: #d4af37;
     font-weight: 500;
-    letter-spacing: 4px;
+    letter-spacing: 3px;
     text-transform: uppercase;
     animation: pulse 1.5s infinite;
     text-align: center;
-    padding: 0 20px;
+    padding: 0 15px;
     font-family: 'Cinzel', serif;
   }
   @keyframes pulse {
@@ -159,21 +164,21 @@
   /* ── MUSIC CONTROL BUTTON ── */
   .music-control {
     position: fixed;
-    bottom: 25px;
-    right: 25px;
-    background: rgba(253, 251, 247, 0.95);
-    border: 1px solid #d4c5b9;
-    padding: 10px 18px;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(20, 35, 25, 0.9);
+    border: 1px solid #b89237;
+    padding: 8px 15px;
     border-radius: 30px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     cursor: pointer;
     z-index: 10000;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-    font-size: 0.85rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    font-size: 0.8rem;
     font-family: 'Montserrat', sans-serif;
-    color: #4a3b32;
+    color: #f4ecdf;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.5s ease;
@@ -182,7 +187,7 @@
     opacity: 1;
     visibility: visible;
   }
-  .music-control span { font-size: 1.2rem; }
+  .music-control span { font-size: 1.1rem; }
 
   /* ── MAIN WEBSITE SECTIONS ── */
   .page-container {
@@ -197,84 +202,87 @@
     opacity: 1;
   }
 
-  /* SECTION 1: HERO */
-  .section-hero {
-    min-height: 100vh;
+  /* Common Section Styling for mobile clarity */
+  section {
     width: 100%;
+    min-height: 100vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 40px 20px;
+    padding: 50px 16px;
   }
 
+  /* SECTION 1: HERO */
   .invite-frame {
     position: relative;
     width: 100%;
-    max-width: 750px;
-    background: rgba(253, 251, 247, 0.95);
-    backdrop-filter: blur(5px);
-    border: 2px solid #d4c5b9;
-    outline: 6px solid #fdfbf7;
-    outline-offset: -10px;
-    padding: 60px 30px;
+    max-width: 650px;
+    background: rgba(18, 30, 22, 0.88);
+    backdrop-filter: blur(10px);
+    border: 2px solid #b89237;
+    outline: 4px solid rgba(18, 30, 22, 0.5);
+    outline-offset: -8px;
+    padding: 40px 20px;
     text-align: center;
-    box-shadow: 0 15px 35px rgba(74, 59, 50, 0.08);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
   }
 
   .top-invite-text {
-    font-size: 0.75rem;
-    letter-spacing: 4px;
-    color: #8c786d;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    color: #c5b299;
     text-transform: uppercase;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
   }
 
   .names-container {
-    margin: 20px 0 40px 0;
+    margin: 15px 0 30px 0;
     animation: gentle-shake 3s ease-in-out infinite;
   }
 
   .name {
     font-family: 'Great Vibes', cursive;
-    font-size: 4.5rem;
-    color: #3d2f28;
+    font-size: 3.8rem;
+    color: #f7e6b0;
     line-height: 1.1;
   }
 
   .ampersand {
     font-family: 'Cinzel', serif;
-    font-size: 2rem;
-    color: #9c8253;
-    margin: 10px 0;
+    font-size: 1.6rem;
+    color: #b89237;
+    margin: 8px 0;
     font-style: italic;
   }
 
   @keyframes gentle-shake {
     0%, 100% { transform: translateY(0) rotate(0deg); }
-    25% { transform: translateY(-4px) rotate(-0.5deg); }
-    75% { transform: translateY(4px) rotate(0.5deg); }
+    25% { transform: translateY(-3px) rotate(-0.5deg); }
+    75% { transform: translateY(3px) rotate(0.5deg); }
   }
 
   .divider {
-    width: 60px;
+    width: 50px;
     height: 1px;
-    background: #c8b5a6;
-    margin: 30px auto;
+    background: #b89237;
+    margin: 25px auto;
   }
 
   .date-display {
-    font-size: 1.25rem;
-    letter-spacing: 3px;
-    color: #59473d;
-    margin-bottom: 10px;
+    font-size: 1.15rem;
+    letter-spacing: 2px;
+    color: #f4ecdf;
+    margin-bottom: 8px;
     font-weight: 500;
   }
 
   .until-text {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-style: italic;
-    color: #8c786d;
-    margin-bottom: 25px;
+    color: #c5b299;
+    margin-bottom: 20px;
     font-family: 'Montserrat', sans-serif;
   }
 
@@ -282,67 +290,61 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 45px;
+    gap: 8px;
+    margin-bottom: 35px;
+    flex-wrap: wrap;
   }
 
   .time-box {
-    border: 1px solid #d4c5b9;
-    padding: 10px 14px;
-    min-width: 65px;
-    border-radius: 4px;
-    background: #fff;
+    border: 1px solid rgba(184, 146, 55, 0.5);
+    padding: 8px 10px;
+    min-width: 55px;
+    border-radius: 6px;
+    background: rgba(10, 20, 14, 0.6);
   }
 
   .time-num {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     font-weight: 600;
-    color: #4a3b32;
+    color: #f7e6b0;
     font-family: 'Montserrat', sans-serif;
   }
 
   .time-lbl {
-    font-size: 0.6rem;
-    letter-spacing: 2px;
-    color: #8c786d;
+    font-size: 0.55rem;
+    letter-spacing: 1px;
+    color: #c5b299;
     text-transform: uppercase;
-    margin-top: 4px;
+    margin-top: 3px;
   }
 
-  .time-colon { font-size: 1.2rem; color: #b5a293; font-weight: 300; }
+  .time-colon { font-size: 1rem; color: #b89237; font-weight: 300; }
 
-  .welcome-box { max-width: 500px; margin: 0 auto; }
-  .welcome-title { font-size: 1.5rem; color: #3d2f28; margin-bottom: 12px; letter-spacing: 1px; }
-  .welcome-desc { font-size: 0.95rem; line-height: 1.8; color: #6b5b52; font-family: 'Montserrat', sans-serif; font-weight: 300; }
+  .welcome-box { max-width: 450px; margin: 0 auto; }
+  .welcome-title { font-size: 1.3rem; color: #f7e6b0; margin-bottom: 10px; letter-spacing: 1px; }
+  .welcome-desc { font-size: 0.88rem; line-height: 1.6; color: #d8ccbe; font-family: 'Montserrat', sans-serif; font-weight: 300; }
 
   /* SECTION 2: THE HAPPY COUPLE & QURANIC VERSE */
   .section-couple {
-    min-height: 100vh;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 60px 20px;
-    background: linear-gradient(to bottom, #fcf9f5, #f4ebe1);
+    background: linear-gradient(to bottom, rgba(10, 20, 15, 0.85), rgba(15, 30, 20, 0.9));
   }
 
   .couple-header {
     text-align: center;
-    margin-bottom: 45px;
+    margin-bottom: 35px;
   }
 
   .couple-title-main {
     font-family: 'Great Vibes', cursive;
-    font-size: 3.5rem;
-    color: #6b5230;
-    margin-bottom: 8px;
+    font-size: 3rem;
+    color: #f7e6b0;
+    margin-bottom: 6px;
   }
 
   .couple-subtitle-sub {
-    font-size: 0.75rem;
-    letter-spacing: 4px;
-    color: #8c786d;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    color: #c5b299;
     text-transform: uppercase;
   }
 
@@ -350,18 +352,18 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 40px;
-    margin-bottom: 40px;
+    gap: 25px;
+    margin-bottom: 30px;
     flex-wrap: wrap;
   }
 
   .name-circle {
-    width: 220px;
-    height: 220px;
+    width: 170px;
+    height: 170px;
     border-radius: 50%;
     border: 2px solid #b89237;
-    background: rgba(255, 255, 255, 0.6);
-    box-shadow: 0 10px 25px rgba(184, 146, 55, 0.15);
+    background: rgba(18, 30, 22, 0.8);
+    box-shadow: 0 8px 20px rgba(184, 146, 55, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -372,204 +374,196 @@
 
   .circle-name-text {
     font-family: 'Great Vibes', cursive;
-    font-size: 3rem;
-    color: #4a3b32;
+    font-size: 2.5rem;
+    color: #f7e6b0;
   }
 
   .heart-icon-middle {
-    font-size: 2.2rem;
+    font-size: 1.8rem;
     color: #b89237;
     animation: pulse 2s infinite;
   }
 
   .couple-divider-line {
-    width: 120px;
+    width: 100px;
     height: 1px;
-    background: #c8b5a6;
-    margin: 10px auto 40px auto;
+    background: #b89237;
+    margin: 10px auto 30px auto;
   }
 
   .verse-card {
-    background: #fdfbf7;
-    border: 1px solid #e0d1c3;
-    border-radius: 16px;
-    padding: 40px 30px;
-    max-width: 750px;
+    background: rgba(18, 30, 22, 0.88);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(184, 146, 55, 0.5);
+    border-radius: 14px;
+    padding: 30px 20px;
+    max-width: 650px;
     width: 100%;
     text-align: center;
-    box-shadow: 0 15px 35px rgba(74, 59, 50, 0.05);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
   }
 
   .bismillah-img {
     font-family: 'Amiri', serif;
-    font-size: 1.3rem;
-    color: #6b5230;
-    margin-bottom: 20px;
+    font-size: 1.2rem;
+    color: #f7e6b0;
+    margin-bottom: 15px;
     display: block;
   }
 
   .verse-text {
     font-family: 'Amiri', serif;
-    font-size: 1.5rem;
-    color: #3d2f28;
-    line-height: 2.2;
+    font-size: 1.35rem;
+    color: #f4ecdf;
+    line-height: 2.1;
     direction: rtl;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
   }
 
   .verse-reference {
     font-family: 'Amiri', serif;
-    font-size: 1rem;
-    color: #8c786d;
+    font-size: 0.95rem;
+    color: #c5b299;
     direction: rtl;
   }
 
   /* SECTION 3: WHEN & WHERE */
   .section-when-where {
-    min-height: 100vh;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 60px 20px;
-    background: #fcf9f5;
+    background: linear-gradient(to bottom, rgba(15, 30, 20, 0.9), rgba(10, 20, 15, 0.85));
   }
 
   .ww-header {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
   }
 
   .ww-title {
     font-family: 'Great Vibes', cursive;
-    font-size: 3.5rem;
-    color: #8c786d;
+    font-size: 3rem;
+    color: #f7e6b0;
     margin-bottom: 5px;
   }
 
   .ww-subtitle {
-    font-size: 0.75rem;
-    letter-spacing: 4px;
-    color: #9c8253;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    color: #c5b299;
     text-transform: uppercase;
   }
 
   .ww-card-main {
     background: linear-gradient(135deg, #a68a4b 0%, #7d632c 100%);
-    border-radius: 18px;
-    padding: 45px 30px;
-    max-width: 600px;
+    border-radius: 16px;
+    padding: 35px 20px;
+    max-width: 550px;
     width: 100%;
     text-align: center;
-    box-shadow: 0 20px 40px rgba(125, 99, 44, 0.25);
-    margin-bottom: 30px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    margin-bottom: 25px;
     color: #fff;
+    border: 1px solid #f7e6b0;
   }
 
   .ww-party-label {
-    font-size: 0.8rem;
-    letter-spacing: 3px;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
     text-transform: uppercase;
     color: #f4ecdf;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
   }
 
   .ww-date-big {
     font-family: 'Cinzel', serif;
-    font-size: 2.2rem;
+    font-size: 1.8rem;
     font-weight: 500;
     letter-spacing: 2px;
     color: #ffffff;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
   }
 
   .ww-sparkle {
-    font-size: 1.2rem;
-    color: #f7e6b0;
-    margin: 15px 0;
+    font-size: 1.1rem;
+    color: #fff3d1;
+    margin: 12px 0;
   }
 
   .ww-day-text {
     font-family: 'Great Vibes', cursive;
-    font-size: 2.5rem;
+    font-size: 2.2rem;
     color: #fff3d1;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
 
   .ww-time-range {
     font-family: 'Cinzel', serif;
-    font-size: 1.6rem;
+    font-size: 1.35rem;
     letter-spacing: 1px;
     color: #ffffff;
     font-weight: 500;
   }
 
   .ww-venue-box {
-    background: #fdfbf7;
-    border: 1px solid #e0d1c3;
-    border-radius: 16px;
-    padding: 30px;
-    max-width: 600px;
+    background: rgba(18, 30, 22, 0.88);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(184, 146, 55, 0.5);
+    border-radius: 14px;
+    padding: 25px 20px;
+    max-width: 550px;
     width: 100%;
     text-align: center;
-    box-shadow: 0 10px 30px rgba(74, 59, 50, 0.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   }
 
-  .ww-venue-icon { font-size: 1.8rem; margin-bottom: 8px; }
-  .ww-venue-label { font-size: 0.7rem; letter-spacing: 4px; color: #8c786d; text-transform: uppercase; margin-bottom: 10px; }
-  .ww-venue-name { font-family: 'Cinzel', serif; font-size: 1.15rem; color: #4a3b32; font-weight: 600; line-height: 1.6; }
+  .ww-venue-icon { font-size: 1.6rem; margin-bottom: 6px; }
+  .ww-venue-label { font-size: 0.65rem; letter-spacing: 3px; color: #c5b299; text-transform: uppercase; margin-bottom: 8px; }
+  .ww-venue-name { font-family: 'Cinzel', serif; font-size: 1.05rem; color: #f7e6b0; font-weight: 600; line-height: 1.5; }
 
   /* SECTION 4: LOCATION */
   .section-location {
-    min-height: 100vh;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 60px 20px;
-    background: linear-gradient(to top, #fcf9f5, #f4ebe1);
+    background: linear-gradient(to top, rgba(10, 20, 15, 0.9), rgba(15, 30, 20, 0.85));
   }
 
   .loc-header {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
   }
 
   .loc-title {
     font-family: 'Great Vibes', cursive;
-    font-size: 3.5rem;
-    color: #8c786d;
+    font-size: 3rem;
+    color: #f7e6b0;
     margin-bottom: 5px;
   }
 
   .loc-address-top {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     letter-spacing: 1px;
-    color: #735e53;
-    margin-bottom: 30px;
+    color: #c5b299;
+    margin-bottom: 25px;
     font-family: 'Montserrat', sans-serif;
+    padding: 0 10px;
+    text-align: center;
   }
 
   .map-card-frame {
-    background: #fdfbf7;
-    border: 1px solid #e0d1c3;
-    border-radius: 18px;
-    padding: 20px;
-    max-width: 700px;
+    background: rgba(18, 30, 22, 0.88);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(184, 146, 55, 0.5);
+    border-radius: 16px;
+    padding: 15px;
+    max-width: 650px;
     width: 100%;
     text-align: center;
-    box-shadow: 0 20px 40px rgba(74, 59, 50, 0.08);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
   }
 
   .map-embed-container {
     width: 100%;
-    height: 340px;
-    border-radius: 12px;
+    height: 280px;
+    border-radius: 10px;
     overflow: hidden;
-    border: 1px solid #d4c5b9;
-    margin-bottom: 25px;
+    border: 1px solid rgba(184, 146, 55, 0.4);
+    margin-bottom: 20px;
   }
 
   .map-embed-container iframe {
@@ -580,24 +574,23 @@
 
   .view-maps-btn {
     display: inline-block;
-    padding: 12px 35px;
+    padding: 10px 30px;
     border: 1px solid #b89237;
     border-radius: 30px;
     font-family: 'Cinzel', serif;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     letter-spacing: 2px;
-    color: #523b0e;
+    color: #f7e6b0;
     text-decoration: none;
-    background: transparent;
+    background: rgba(10, 20, 14, 0.8);
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(184, 146, 55, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   }
 
   .view-maps-btn:hover {
     background: #b89237;
     color: #fff;
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(184, 146, 55, 0.3);
   }
 </style>
 </head>
@@ -634,7 +627,7 @@
   <div class="page-container" id="pageContainer">
     
     <!-- القسم الأول: بطاقة الدعوة والعد التنازلي -->
-    <section class="section-hero">
+    <section>
       <div class="invite-frame">
         <div class="top-invite-text">You are invited to the wedding party of</div>
         <div class="names-container">
@@ -735,10 +728,10 @@
 <script>
   function createPetals() {
     const container = document.getElementById('petalsContainer');
-    for (let i = 0; i < 90; i++) {
+    for (let i = 0; i < 70; i++) {
       const petal = document.createElement('div');
       petal.classList.add('petal');
-      const size = Math.random() * 14 + 6 + 'px';
+      const size = Math.random() * 12 + 5 + 'px';
       petal.style.width = size;
       petal.style.height = size;
       petal.style.left = Math.random() * 100 + 'vw';
