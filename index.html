@@ -20,12 +20,12 @@
     position: relative;
   }
 
-  /* ── FALLING PETALS (INCREASED QUANTITY) ── */
+  /* ── FALLING PETALS (ABUNDANT & OVER EVERYTHING) ── */
   .petals-container {
     position: fixed;
     inset: 0;
     pointer-events: none;
-    z-index: 1;
+    z-index: 9999; /* يخليه ينزل فوق كل العناصر بما فيها الأسماء والإطار */
     overflow: hidden;
   }
 
@@ -34,7 +34,7 @@
     background: #e8a5b2;
     border-radius: 150% 0 150% 0;
     animation: fall linear infinite;
-    opacity: 0.65;
+    opacity: 0.75;
   }
 
   @keyframes fall {
@@ -42,11 +42,11 @@
       transform: translateY(-10vh) translateX(0) rotate(0deg);
       opacity: 0;
     }
-    15% {
-      opacity: 0.7;
+    10% {
+      opacity: 0.8;
     }
     100% {
-      transform: translateY(110vh) translateX(120px) rotate(360deg);
+      transform: translateY(110vh) translateX(150px) rotate(360deg);
       opacity: 0;
     }
   }
@@ -151,6 +151,8 @@
     letter-spacing: 3px;
     text-transform: uppercase;
     animation: pulse 1.5s infinite;
+    text-align: center;
+    padding: 0 20px;
   }
   @keyframes pulse {
     0%, 100% { opacity: 1; }
@@ -162,17 +164,17 @@
     position: fixed;
     bottom: 25px;
     right: 25px;
-    background: rgba(253, 251, 247, 0.9);
+    background: rgba(253, 251, 247, 0.95);
     border: 1px solid #d4c5b9;
-    padding: 10px 15px;
+    padding: 10px 18px;
     border-radius: 30px;
     display: flex;
     align-items: center;
     gap: 8px;
     cursor: pointer;
-    z-index: 100;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    font-size: 0.8rem;
+    z-index: 10000;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    font-size: 0.85rem;
     font-family: 'Montserrat', sans-serif;
     color: #4a3b32;
     opacity: 0;
@@ -184,7 +186,7 @@
     visibility: visible;
   }
   .music-control span {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
   }
 
   /* ── MAIN INVITATION FRAME ── */
@@ -342,12 +344,12 @@
     <source src="https://archive.org/download/Wael_Jassar_Helm_Hayati/Wael%20Jassar%20-%20Helm%20Hayati.mp3" type="audio/mp3">
   </audio>
 
-  <!-- زر التحكم في الموسيقى (تشغيل وإيقاف) -->
+  <!-- زر التحكم الواضح للموسيقى (تشغيل / إيقاف) -->
   <div class="music-control" id="musicControl" onclick="toggleMusic()">
-    <span id="musicIcon">🎵</span> <b id="musicText">Play Song</b>
+    <span id="musicIcon">🔊</span> <b id="musicText">Pause Song</b>
   </div>
 
-  <!-- حاوية الورود المتساقطة بكثافة أكبر -->
+  <!-- حاوية الورود الكثيفة التي تنزل فوق كل شيء -->
   <div class="petals-container" id="petalsContainer"></div>
 
   <!-- شاشة الظرف الفاخر -->
@@ -361,7 +363,7 @@
         </svg>
       </div>
     </div>
-    <div class="open-instruction">Tap to open your invitation ✨</div>
+    <div class="open-instruction">Tap anywhere to open & play music ✨</div>
   </div>
 
   <!-- محتوى الدعوة -->
@@ -414,23 +416,23 @@
   </div>
 
 <script>
-  // زيادة عدد الورود في الخلفية للضعف
+  // زيادة عدد الورود لتكون كثيفة جداً وتنزل فوق كل العناصر
   function createPetals() {
     const container = document.getElementById('petalsContainer');
-    const petalsCount = 45;
+    const petalsCount = 80; // عدد كبير جداً لملء الشاشة
 
     for (let i = 0; i < petalsCount; i++) {
       const petal = document.createElement('div');
       petal.classList.add('petal');
       
-      const size = Math.random() * 10 + 6 + 'px';
+      const size = Math.random() * 12 + 6 + 'px';
       petal.style.width = size;
       petal.style.height = size;
       petal.style.left = Math.random() * 100 + 'vw';
-      petal.style.animationDuration = Math.random() * 4 + 4 + 's';
+      petal.style.animationDuration = Math.random() * 4 + 3 + 's'; // سرعة انسيابية
       petal.style.animationDelay = Math.random() * 5 + 's';
       
-      const colors = ['#e8a5b2', '#f2c6d0', '#dfb1be', '#f7d1dc', '#f9d5e5'];
+      const colors = ['#e8a5b2', '#f2c6d0', '#dfb1be', '#f7d1dc', '#ffccd5'];
       petal.style.background = colors[Math.floor(Math.random() * colors.length)];
 
       container.appendChild(petal);
@@ -452,13 +454,13 @@
 
     if (envelope.classList.contains('open')) return;
 
-    // محاولة تشغيل الأغنية
+    // تشغيل الأغنية بالتفاعل المباشر للضغطة
     bgMusic.play().then(() => {
       isPlaying = true;
       musicIcon.innerText = "🔊";
       musicText.innerText = "Pause Song";
     }).catch(error => {
-      console.log("Auto-play prevented", error);
+      console.log("Audio play error", error);
     });
 
     envelope.classList.add('open');
@@ -470,7 +472,7 @@
     }, 600);
   }
 
-  // التحكم اليدوي في زر الأغنية لتجنب حظر المتصفحات
+  // التحكم اليدوي في زر الأغنية
   function toggleMusic() {
     if (isPlaying) {
       bgMusic.pause();
