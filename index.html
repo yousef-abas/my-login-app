@@ -83,7 +83,6 @@
     border: 1px solid #d4c5b9;
   }
 
-  /* غطاء الظرف المتحرك */
   .envelope-flap {
     position: absolute;
     top: 0;
@@ -103,7 +102,6 @@
     z-index: 0;
   }
 
-  /* جيوب الظرف الجانبية لتصميم أفخم */
   .envelope-pocket {
     position: absolute;
     inset: 0;
@@ -118,7 +116,6 @@
     pointer-events: none;
   }
 
-  /* الختم الشمعي الملكي الأنيق */
   .wax-seal {
     position: absolute;
     top: 60px;
@@ -310,6 +307,11 @@
 </head>
 <body>
 
+  <!-- عنصر الصوت (ملف الأغنيه في الخلفية) -->
+  <audio id="bgMusic" loop>
+    <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mp3">
+  </audio>
+
   <!-- حاوية الورود المتساقطة في الخلفية -->
   <div class="petals-container" id="petalsContainer"></div>
 
@@ -377,7 +379,7 @@
   </div>
 
 <script>
-  // إنشاء الورود المتساقطة في الخلفية تلقائياً
+  // إنشاء الورود المتساقطة
   function createPetals() {
     const container = document.getElementById('petalsContainer');
     const petalsCount = 20;
@@ -386,15 +388,13 @@
       const petal = document.createElement('div');
       petal.classList.add('petal');
       
-      // أحجام وأماكن عشوائية لكل ورقة
       const size = Math.random() * 8 + 8 + 'px';
       petal.style.width = size;
       petal.style.height = size;
       petal.style.left = Math.random() * 100 + 'vw';
-      petal.style.animationDuration = Math.random() * 5 + 5 + 's'; // السرعة
+      petal.style.animationDuration = Math.random() * 5 + 5 + 's';
       petal.style.animationDelay = Math.random() * 5 + 's';
       
-      // تدرجات ألوان رقيقة للورود
       const colors = ['#e8a5b2', '#f2c6d0', '#dfb1be', '#f7d1dc'];
       petal.style.background = colors[Math.floor(Math.random() * colors.length)];
 
@@ -408,8 +408,14 @@
     const envelope = document.getElementById('envelope');
     const screen = document.getElementById('envelope-screen');
     const main = document.getElementById('mainContent');
+    const bgMusic = document.getElementById('bgMusic');
 
     if (envelope.classList.contains('open')) return;
+
+    // تشغيل الأغنية فور الضغط على الظرف
+    bgMusic.play().catch(error => {
+      console.log("Audio play blocked or needs interaction", error);
+    });
 
     envelope.classList.add('open');
     
