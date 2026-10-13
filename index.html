@@ -61,6 +61,7 @@ input:focus,select:focus,textarea:focus,.search:focus{outline:2px solid var(--pr
 .col{background:color-mix(in srgb,var(--c) 7%,var(--bg));border:1px solid var(--bd);border-top:3px solid var(--c);border-radius:14px;padding:10px;display:flex;flex-direction:column;gap:8px;min-height:140px}.ch{display:flex;justify-content:space-between;font-weight:700;font-size:.85rem;color:var(--c)}
 .mini{padding:10px;gap:4px;cursor:grab}.mini:hover{transform:none}.mini select{width:auto;max-width:58%;padding:3px 6px;font-size:.72rem}
 .tw{overflow-x:auto;background:var(--card);border:1px solid var(--bd);border-radius:14px;box-shadow:var(--sh)}table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:720px}th{text-align:right;padding:12px;color:var(--mut);font-size:.78rem;cursor:pointer;white-space:nowrap;border-bottom:1px solid var(--bd);user-select:none}td{padding:11px 12px;border-bottom:1px solid var(--bd)}tbody tr{cursor:pointer}tbody tr:hover{background:color-mix(in srgb,var(--pri) 7%,transparent)}
+.ir{display:flex;gap:10px;align-items:center;padding:8px 4px;border-bottom:1px solid var(--bd);font-size:.85rem;color:var(--tx);cursor:pointer;margin:0}.ir input{width:auto}
 @media(max-width:560px){.db{grid-template-columns:1fr}}
 </style>
 </head>
@@ -69,6 +70,7 @@ input:focus,select:focus,textarea:focus,.search:focus{outline:2px solid var(--pr
   <header>
     <div><h1>📋 متابعة التجار</h1><div class="sub" id="sub"></div></div>
     <div class="bar">
+      <button class="btn" id="impx">📥 استيراد من شيت</button>
       <button class="btn" id="exp">تصدير نسخة</button>
       <button class="btn" id="imp">استيراد</button>
       <button class="btn p" id="add">+ تاجر جديد</button>
@@ -95,9 +97,20 @@ input:focus,select:focus,textarea:focus,.search:focus{outline:2px solid var(--pr
   </div>
   <div class="df"><button class="btn d" id="del">🗑 حذف</button><button class="btn p" id="save">حفظ</button></div>
 </dialog>
+<dialog id="dlg2">
+  <div class="dh"><span>📥 استيراد تجارك من شيت</span><button class="btn" id="i_x">✕</button></div>
+  <div class="db">
+    <div class="full"><label>ملف الشيت (xlsx / xls / csv) — بيتقرا في متصفحك بس ومبيتبعتش لأي مكان</label><input type="file" id="i_file" accept=".xlsx,.xls,.csv"></div>
+    <div class="full"><label>اسمك زي ما هو مكتوب في عمود Empower name (تقدر تكتب أكتر من شكل بفاصلة)</label><input id="i_name" class="ltr"></div>
+    <div class="full" id="i_sum" style="font-size:.88rem"></div>
+    <div class="full" id="i_list"></div>
+  </div>
+  <div class="df"><span></span><button class="btn p" id="i_go">استيراد المحدد</button></div>
+</dialog>
 <input type="file" id="file" accept="application/json" hidden>
 <div class="toast" id="toast"></div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 const KEY='sellerTracker.v1';
 const STAGES=[
@@ -175,7 +188,7 @@ function openDlg(id){
   cur=data.find(d=>d.id===id)||null;
   $('dt').textContent=cur?cur.name||cur.sid:'تاجر جديد';
   $('f_sid').value=cur?.sid||'';$('f_name').value=cur?.name||'';$('f_phone').value=cur?.phone||'';
-  $('f_issue').value=cur?.issue||ISSUES[0];$('f_det').value=cur?.det||'';$('f_stage').value=cur?.stage||'new';$('f_note').value='';
+  if(cur?.issue&&![...$('f_issue').options].some(o=>o.value===cur.issue))$('f_issue').add(new Option(cur.issue,cur.issue));$('f_issue').value=cur?.issue||ISSUES[0];$('f_det').value=cur?.det||'';$('f_stage').value=cur?.stage||'new';$('f_note').value='';
   $('del').style.display=cur?'':'none';$('tlbox').style.display=cur?'':'none';
   $('tl').innerHTML=cur?[...cur.log].reverse().map(l=>`<li><b>${esc(st(l.stage).l)}</b>${l.text?' — '+esc(l.text):''}<small>${fd(l.t)}</small></li>`).join(''):'';
   $('dlg').showModal();
@@ -208,6 +221,52 @@ $('grid').addEventListener('click',e=>{const h=e.target.closest('th[data-s]');if
 $('grid').addEventListener('dragstart',e=>{const c=e.target.closest('[data-id]');if(c)e.dataTransfer.setData('text/plain',c.dataset.id)});
 $('grid').addEventListener('dragover',e=>{if(e.target.closest('.col'))e.preventDefault()});
 $('grid').addEventListener('drop',e=>{const col=e.target.closest('.col');if(!col)return;e.preventDefault();moveTo(e.dataTransfer.getData('text/plain'),col.dataset.k)});
+const NAME_KEY='sellerTracker.myname';let wbk=null,imp=[];
+try{$('i_name').value=localStorage.getItem(NAME_KEY)||'youssef, yousef'}catch(e){$('i_name').value='youssef, yousef'}
+const norm=s=>String(s??'').trim().toLowerCase();
+function mapStage(acc,cs,sa){acc=norm(acc);cs=norm(cs);sa=norm(sa);
+ if(acc==='reactivated')return 'done';
+ if(cs==='hopeless case'||cs==='abusive sp')return 'rejected';
+ if(sa.includes('risk'))return 'review';
+ if(['pending action from sp','un-responsive','stopped replying','have the required','forgivness'].some(x=>sa.includes(x)))return 'waiting';
+ if(sa.includes('empower'))return 'contacted';
+ return 'new'}
+function scan(){
+ if(!wbk)return;
+ const names=$('i_name').value.split(',').map(norm).filter(Boolean);
+ try{localStorage.setItem(NAME_KEY,$('i_name').value)}catch(_){}
+ const map=new Map();
+ wbk.SheetNames.forEach(sn=>{XLSX.utils.sheet_to_json(wbk.Sheets[sn],{defval:''}).forEach(raw=>{
+  const r={};Object.keys(raw).forEach(k=>r[k.trim()]=raw[k]);
+  if(!('Seller ID' in r)||!('Empower name' in r)||!names.includes(norm(r['Empower name'])))return;
+  const sid=String(r['Seller ID']).trim();if(!sid)return;
+  if(map.has(sid)){map.get(sid).sheets.push(sn);return}
+  const fk=Object.keys(r).find(k=>k.startsWith('Further updates'));
+  const det=[['Received',r['Received WK']],['Channel',r['SP channel']],['AM',r['Account Manager']],['PL',r.PL],['BAs',r.BAs],['T12M GMS',Math.round(+r.T12M_GMS||0)||''],['Case',r['Case status']],['Account',r['Account Status']],['Status',r['status of the account']],['Invoice',r['Invoice status']]].filter(x=>String(x[1]).trim()).map(x=>x[0]+': '+String(x[1]).trim()).join(' | ');
+  map.set(sid,{sid,name:String(r['Merchant Name']).trim(),issue:String(r['Reason of deactivation']).trim()||'أخرى',det,upd:fk?String(r[fk]).trim():'',stage:mapStage(r['Account Status'],r['Case status'],r['status of the account']),sheets:[sn]});
+ })});
+ imp=[...map.values()];
+ const ex=x=>data.some(d=>d.sid===x.sid),nw=imp.filter(x=>!ex(x)).length;
+ $('i_sum').textContent=imp.length?`لقيت ${imp.length} تاجر باسمك: ${nw} جداد و${imp.length-nw} موجودين عندك بالفعل (الموجودين بيتحدّث ليهم المرحلة بس وملاحظاتك متتمسحش).`:'مفيش تجار بالاسم ده. جرّب تكتب الاسم بشكل تاني.';
+ $('i_list').innerHTML=imp.map((x,i)=>{const s=st(x.stage);return `<label class='ir'><input type='checkbox' id='ic${i}' ${ex(x)?'':'checked'}><span style='flex:1;overflow-wrap:anywhere'><b>${esc(x.name)}</b> <span class='sid' style='display:inline'>${esc(x.sid)}</span><br><small style='color:var(--mut)'>${esc(x.issue)}${ex(x)?' • موجود':''}</small></span><span class='badge' style='--c:${s.c}'>${s.l}</span></label>`}).join('');
+}
+$('impx').onclick=()=>$('dlg2').showModal();
+$('i_x').onclick=()=>$('dlg2').close();
+$('i_name').oninput=scan;
+$('i_file').onchange=async e=>{const f=e.target.files[0];if(!f)return;
+ if(typeof XLSX==='undefined'){toast('مكتبة Excel مش اتحملت، اتأكد من النت');return}
+ try{wbk=XLSX.read(await f.arrayBuffer(),{type:'array'});scan()}catch(_){toast('معرفتش أقرا الملف')}};
+$('i_go').onclick=()=>{
+ const now=Date.now();let a=0,u=0;
+ imp.forEach((x,i)=>{const c=$('ic'+i);if(!c||!c.checked)return;
+  const e=data.find(d=>d.sid===x.sid);
+  if(e){const ch=e.stage!==x.stage,last=e.log[e.log.length-1];
+   if(ch||(x.upd&&(!last||last.text!==x.upd))){e.log.push({t:now,stage:x.stage,text:x.upd||'تحديث من الشيت'});e.updated=now}
+   e.stage=x.stage;u++}
+  else{data.push({id:'s'+now+'_'+i,sid:x.sid,name:x.name,phone:'',issue:x.issue,det:x.det,stage:x.stage,created:now,updated:now,log:[{t:now,stage:x.stage,text:x.upd||'اتستورد من الشيت'}]});a++}
+ });
+ persist();$('dlg2').close();render();toast(`✅ اتضاف ${a} وتحدّث ${u}`)
+};
 render();
 </script>
 </body>
