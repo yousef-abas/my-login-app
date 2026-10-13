@@ -101,11 +101,12 @@ input:focus,select:focus,textarea:focus,.search:focus{outline:2px solid var(--pr
   <div class="dh"><span>📥 استيراد تجارك من شيت</span><button class="btn" id="i_x">✕</button></div>
   <div class="db">
     <div class="full"><label>ملف الشيت (xlsx / xls / csv) — بيتقرا في متصفحك بس ومبيتبعتش لأي مكان</label><input type="file" id="i_file" accept=".xlsx,.xls,.csv"></div>
+    <div class="full"><label>الشيت (الصفحة) اللي هتسحب منها</label><select id="i_sheet"></select></div>
     <div class="full"><label>اسمك زي ما هو مكتوب في عمود Empower name (تقدر تكتب أكتر من شكل بفاصلة)</label><input id="i_name" class="ltr"></div>
     <div class="full" id="i_sum" style="font-size:.88rem"></div>
     <div class="full" id="i_list"></div>
   </div>
-  <div class="df"><span></span><button class="btn p" id="i_go">استيراد المحدد</button></div>
+  <div class="df"><button class="btn d" id="i_clr">🧹 مسح المستورد قبل كده</button><button class="btn p" id="i_go">استيراد المحدد</button></div>
 </dialog>
 <input type="file" id="file" accept="application/json" hidden>
 <div class="toast" id="toast"></div>
@@ -236,7 +237,7 @@ function scan(){
  const names=$('i_name').value.split(',').map(norm).filter(Boolean);
  try{localStorage.setItem(NAME_KEY,$('i_name').value)}catch(_){}
  const map=new Map();
- wbk.SheetNames.forEach(sn=>{XLSX.utils.sheet_to_json(wbk.Sheets[sn],{defval:''}).forEach(raw=>{
+ [$('i_sheet').value].filter(Boolean).forEach(sn=>{XLSX.utils.sheet_to_json(wbk.Sheets[sn],{defval:''}).forEach(raw=>{
   const r={};Object.keys(raw).forEach(k=>r[k.trim()]=raw[k]);
   if(!('Seller ID' in r)||!('Empower name' in r)||!names.includes(norm(r['Empower name'])))return;
   const sid=String(r['Seller ID']).trim();if(!sid)return;
@@ -253,9 +254,17 @@ function scan(){
 $('impx').onclick=()=>$('dlg2').showModal();
 $('i_x').onclick=()=>$('dlg2').close();
 $('i_name').oninput=scan;
+$('i_sheet').onchange=scan;
 $('i_file').onchange=async e=>{const f=e.target.files[0];if(!f)return;
  if(typeof XLSX==='undefined'){toast('مكتبة Excel مش اتحملت، اتأكد من النت');return}
- try{wbk=XLSX.read(await f.arrayBuffer(),{type:'array'});scan()}catch(_){toast('معرفتش أقرا الملف')}};
+ try{wbk=XLSX.read(await f.arrayBuffer(),{type:'array'});const ok=wbk.SheetNames.filter(n=>{const t=(XLSX.utils.sheet_to_json(wbk.Sheets[n],{header:1})[0]||[]).map(x=>String(x).trim());return t.includes('Seller ID')&&t.includes('Empower name')});$('i_sheet').innerHTML=ok.map(n=>`<option>${esc(n)}</option>`).join('');const pick=ok.find(n=>/top\s*top/i.test(n));if(pick)$('i_sheet').value=pick;scan()}catch(_){toast('معرفتش أقرا الملف')}};
+$('i_clr').onclick=()=>{
+ const isImp=d=>d.src==='sheet'||/^(Received|Channel|AM|PL|BAs|T12M GMS|Case|Account|Status|Invoice): /.test(d.det||'');
+ const l=data.filter(isImp);
+ if(!l.length){toast('مفيش حاجة مستوردة');return}
+ if(!confirm(`هيتمسح ${l.length} تاجر اتستوردوا من الشيت (بملاحظاتهم). كمّل؟`))return;
+ data=data.filter(d=>!isImp(d));persist();render();scan();toast(`اتمسح ${l.length} تاجر`)
+};
 $('i_go').onclick=()=>{
  const now=Date.now();let a=0,u=0;
  imp.forEach((x,i)=>{const c=$('ic'+i);if(!c||!c.checked)return;
@@ -263,7 +272,7 @@ $('i_go').onclick=()=>{
   if(e){const ch=e.stage!==x.stage,last=e.log[e.log.length-1];
    if(ch||(x.upd&&(!last||last.text!==x.upd))){e.log.push({t:now,stage:x.stage,text:x.upd||'تحديث من الشيت'});e.updated=now}
    e.stage=x.stage;u++}
-  else{data.push({id:'s'+now+'_'+i,sid:x.sid,name:x.name,phone:'',issue:x.issue,det:x.det,stage:x.stage,created:now,updated:now,log:[{t:now,stage:x.stage,text:x.upd||'اتستورد من الشيت'}]});a++}
+  else{data.push({id:'s'+now+'_'+i,src:'sheet',sid:x.sid,name:x.name,phone:'',issue:x.issue,det:x.det,stage:x.stage,created:now,updated:now,log:[{t:now,stage:x.stage,text:x.upd||'اتستورد من الشيت'}]});a++}
  });
  persist();$('dlg2').close();render();toast(`✅ اتضاف ${a} وتحدّث ${u}`)
 };
